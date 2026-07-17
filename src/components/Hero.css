@@ -1,0 +1,372 @@
+/* ===== HERO — STACK → SPREAD → SLIDE ===== */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-top: 64px;
+  background: linear-gradient(170deg, var(--sand-beige-pale) 0%, var(--bg-primary) 25%, var(--sand-beige-lighter) 50%, var(--bg-secondary) 75%, var(--desert-titanium-lighter) 100%);
+}
+
+/* ===== Background ===== */
+.hero__canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+.hero__bg-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(176,160,144,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(176,160,144,0.08) 1px, transparent 1px); background-size: 60px 60px; z-index: 2; }
+.hero__bg-gradient { position: absolute; inset: 0; background: radial-gradient(ellipse 800px 600px at 50% 40%, rgba(212,197,169,0.2), transparent), radial-gradient(ellipse 400px 400px at 30% 70%, rgba(122,139,106,0.06), transparent), radial-gradient(ellipse 400px 400px at 70% 30%, rgba(176,160,144,0.1), transparent); z-index: 3; }
+.hero__scan-line { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, rgba(0,200,83,0.15), rgba(45,90,61,0.1), transparent); z-index: 4; animation: scanLine 6s linear infinite; }
+
+/* ===== Content ===== */
+.hero__content {
+  position: relative; z-index: 10; width: 100%;
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; min-height: 0; padding: 0 20px;
+}
+
+/* ===== Badge ===== */
+.hero__top-badge { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 2vh; margin-bottom: 1vh; animation: fadeInDown 0.8s ease-out; flex-shrink: 0; }
+.hero__badge-text { font-family: 'Orbitron', monospace; font-size: clamp(7px, 1.1vw, 13px); font-weight: 700; color: var(--forest-green); letter-spacing: 5px; white-space: nowrap; }
+.hero__badge-line { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--desert-titanium), transparent); }
+
+/* ===== Typography ===== */
+.hero__typography { margin-bottom: 1vh; max-width: 960px; flex-shrink: 0; }
+.hero__title { display: flex; flex-direction: column; align-items: center; gap: 0; margin-bottom: 1vh; }
+.hero__title-line { font-family: 'Rajdhani', sans-serif; font-size: clamp(30px, 5.5vw, 62px); font-weight: 700; color: var(--forest-green); letter-spacing: 2px; line-height: 1.15; }
+.hero__title-line--2 { font-size: clamp(28px, 5vw, 58px); }
+.hero__cursor { display: inline-block; color: var(--accent-emerald); font-weight: 300; font-family: 'Orbitron', monospace; animation: cursorBlink 0.6s steps(1) infinite; margin-left: 2px; }
+.hero__cursor--blink { animation: cursorBlink 1s steps(1) infinite; }
+
+/* Divider */
+.hero__divider { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 1vh; opacity: 0; transform: translateY(10px); transition: all 0.6s ease-out; flex-shrink: 0; }
+.hero__divider--visible { opacity: 1; transform: translateY(0); }
+.hero__divider-wing { width: clamp(40px, 8vw, 100px); height: 1px; background: linear-gradient(90deg, transparent, var(--desert-titanium)); }
+.hero__divider-wing:last-child { background: linear-gradient(90deg, var(--desert-titanium), transparent); }
+.hero__divider-diamond { width: 8px; height: 8px; background: var(--sage-green); transform: rotate(45deg); opacity: 0.6; }
+
+/* Subtitle */
+.hero__subtitle { font-family: 'Inter', sans-serif; font-size: clamp(13px, 1.5vw, 20px); font-weight: 400; color: var(--text-medium); line-height: 1.6; max-width: 640px; margin: 0 auto; letter-spacing: 0.3px; opacity: 0; transform: translateY(15px); transition: all 0.7s ease-out 0.15s; flex-shrink: 0; }
+.hero__subtitle--visible { opacity: 1; transform: translateY(0); }
+
+/* ========================================================
+   CARDS SECTION — RISE → MERGE INTO PSS → SPREAD → PSS
+   DISSOLVES → SLIDE
+   ======================================================== */
+
+.hero__cards-section {
+  position: relative; z-index: 10; width: 100vw;
+  overflow: hidden; flex: 1; min-height: 0;
+  display: flex; align-items: center;
+  perspective: 1400px;
+}
+
+.hero__cards-wrap {
+  position: relative; width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* === CARD BASE === */
+.hero__card {
+  width: clamp(160px, 15vw, 230px);
+  border-radius: 16px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--forest-green); overflow: hidden;
+  position: absolute; left: 50%;
+  margin-left: calc(clamp(160px, 15vw, 230px) / -2);
+  opacity: 0;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.hero__card--pss {
+  border-color: rgba(0, 200, 83, 0.35);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(200, 168, 78, 0.2),
+    0 0 28px rgba(0, 200, 83, 0.08);
+}
+
+/* ——— Phase: hidden ——— */
+.hero__cards-section--hidden .hero__card {
+  opacity: 0;
+  transform:
+    translateX(calc(var(--stack-offset) * clamp(170px, 17vw, 280px)))
+    translateY(44px)
+    rotateY(calc(var(--stack-offset) * -5deg))
+    scale(0.9);
+}
+
+/* ——— Phase: assembling — cards rise in around the PSS card ——— */
+.hero__cards-section--assembling .hero__card {
+  opacity: 1;
+  transform:
+    translateX(calc(var(--stack-offset) * clamp(170px, 17vw, 280px)))
+    translateY(0)
+    rotateY(calc(var(--stack-offset) * -5deg))
+    scale(0.92);
+  z-index: calc(10 - var(--stack-dist));
+  transition:
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--stack-dist) * 0.08s),
+    opacity 0.6s ease-out calc(var(--stack-dist) * 0.08s);
+}
+
+.hero__cards-section--assembling .hero__card--pss {
+  transform: translateX(0) translateY(0) rotateY(0deg) scale(1.05);
+  z-index: 20;
+}
+
+/* ——— Phase: stacked — every card is absorbed INTO the PSS card ——— */
+.hero__cards-section--stacked .hero__card {
+  opacity: 1;
+  transform:
+    translateX(0)
+    translateY(0)
+    rotateY(0deg)
+    scale(calc(1.02 - var(--stack-dist) * 0.03));
+  z-index: calc(10 - var(--stack-dist));
+  transition:
+    transform 1.05s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--stack-dist) * 0.09s),
+    opacity 0.5s ease;
+}
+
+.hero__cards-section--stacked .hero__card--pss {
+  transform: translateX(0) translateY(0) rotateY(0deg) scale(1.08);
+  z-index: 30;
+  transition:
+    transform 1.05s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.5s ease,
+    box-shadow 0.6s ease;
+  animation: pssAbsorb 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.75s;
+}
+
+@keyframes pssAbsorb {
+  0% { transform: translateX(0) scale(1.08); }
+  40% {
+    transform: translateX(0) scale(1.15);
+    box-shadow:
+      0 14px 48px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(200, 168, 78, 0.45),
+      0 0 56px rgba(0, 200, 83, 0.32);
+  }
+  100% { transform: translateX(0) scale(1.08); }
+}
+
+/* ——— Phase: spreading — PSS pushes the cards back out ——— */
+.hero__cards-section--spreading .hero__card {
+  opacity: 1;
+  transform:
+    translateX(calc(var(--stack-offset) * clamp(140px, 14vw, 240px)))
+    rotateY(calc(var(--stack-offset) * -3deg))
+    scale(1);
+  z-index: calc(10 - var(--stack-dist));
+  transition:
+    transform 1.25s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--stack-dist) * 0.06s),
+    opacity 0.45s ease;
+}
+
+.hero__cards-section--spreading .hero__card--pss {
+  transform: translateX(0) rotateY(0deg) scale(1.04);
+  z-index: 30;
+  transition: transform 1.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease;
+  animation: pssRelease 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pssRelease {
+  0% { transform: translateX(0) scale(1.08); }
+  35% { transform: translateX(0) scale(0.95); }
+  100% { transform: translateX(0) scale(1.04); }
+}
+
+/* ——— Phase: dissolving — PSS fades away, cards settle into carousel slots ——— */
+/* 48px below = CARD_GAP in Hero.jsx; translateY/scale mirror the slider's falloff so the handoff is seamless */
+.hero__cards-section--dissolving .hero__card {
+  opacity: 1;
+  transform:
+    translateX(calc(var(--slide-offset) * (clamp(160px, 15vw, 230px) + 48px)))
+    translateY(calc(var(--slide-dist) * 1px))
+    rotateY(0deg)
+    scale(calc(1 - var(--slide-dist) * 0.017));
+  z-index: calc(10 - var(--stack-dist));
+  transition: transform 1.15s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero__cards-section--dissolving .hero__card--pss {
+  opacity: 0;
+  transform: translateX(0) translateY(-16px) scale(1.22);
+  filter: blur(10px);
+  z-index: 30;
+  pointer-events: none;
+  transition:
+    transform 1s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.8s ease 0.15s,
+    filter 0.95s ease;
+}
+
+/* ——— Phase: sliding — carousel of the remaining cards, PSS is gone ——— */
+.hero__cards-section--sliding .hero__card {
+  position: absolute;
+  left: 50%;
+  margin-left: calc(clamp(160px, 15vw, 230px) / -2);
+  opacity: 1;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.hero__cards-section--sliding .hero__card--pss {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: none;
+}
+
+/* Clones stay invisible until the slider positions them on its first frame */
+.hero__cards-section--sliding .hero__card--clone {
+  opacity: 0;
+}
+
+.hero__cards-section--sliding .hero__card:hover {
+  box-shadow:
+    0 30px 70px rgba(0,0,0,0.35),
+    0 0 0 1px rgba(0,200,83,0.3),
+    0 0 30px rgba(0,200,83,0.1);
+  border-color: rgba(0,200,83,0.4);
+}
+
+/* ===== Card inner ===== */
+/* Faded, parallax background image — text stays the hero of the card */
+.hero__card-bg {
+  position: absolute; inset: -4px;
+  width: calc(100% + 8px); height: calc(100% + 8px);
+  object-fit: cover; z-index: 0;
+  filter: blur(1.4px);
+  opacity: 0.26;
+  transform: translate3d(calc(var(--px, 0) * -1.2px), calc(var(--py, 0) * -1.2px), 0) scale(1.07);
+  transition: transform 0.25s ease-out, opacity 0.45s ease;
+}
+.hero__card:hover .hero__card-bg { opacity: 0.38; }
+
+.hero__card-bg--logo {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  padding: 18% 14%;
+  filter: blur(0) brightness(0.55) contrast(1.05);
+  opacity: 0.6;
+  background: var(--forest-green, #1a3a2a);
+}
+.hero__card-glass { position: absolute; inset: 0; z-index: 1; transition: background 0.4s ease; background: linear-gradient(180deg, rgba(10,26,18,0.58) 0%, rgba(10,26,18,0.4) 40%, rgba(10,26,18,0.66) 100%); }
+.hero__card:hover .hero__card-glass { background: linear-gradient(180deg, rgba(10,26,18,0.48) 0%, rgba(10,26,18,0.3) 40%, rgba(10,26,18,0.56) 100%); }
+.hero__card-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.2) 100%); z-index: 1; transition: opacity 0.4s ease; }
+.hero__card:hover .hero__card-overlay { opacity: 0.6; }
+
+/* Mouse-following glare for the 3D tilt */
+.hero__card-shine {
+  position: absolute; inset: 0; z-index: 2;
+  pointer-events: none; opacity: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.3), rgba(255,255,255,0.07) 42%, transparent 68%);
+  transition: opacity 0.35s ease;
+}
+.hero__cards-section--sliding .hero__card:hover .hero__card-shine { opacity: 1; }
+
+/* === TECHY HUD — scanline sweep + corner brackets === */
+.hero__card-scan {
+  position: absolute; left: 0; right: 0; top: 0; height: 34%;
+  z-index: 2; pointer-events: none; opacity: 0;
+  background: linear-gradient(180deg, rgba(0,200,83,0) 0%, rgba(0,200,83,0.10) 60%, rgba(120,220,160,0.28) 100%);
+  border-bottom: 1px solid rgba(120,220,160,0.35);
+  mix-blend-mode: screen;
+}
+.hero__cards-section--sliding .hero__card .hero__card-scan { animation: cardScan 3.6s linear infinite; }
+.hero__cards-section--sliding .hero__card:hover .hero__card-scan { animation-duration: 1.8s; }
+
+@keyframes cardScan {
+  0% { transform: translateY(-40%); opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { transform: translateY(320%); opacity: 0; }
+}
+
+.hero__card-hud {
+  position: absolute; width: 14px; height: 14px; z-index: 4;
+  pointer-events: none; border: 0 solid rgba(0,200,83,0.55);
+  opacity: 0.5; transition: opacity 0.35s ease, width 0.35s ease, height 0.35s ease, border-color 0.35s ease;
+}
+.hero__card-hud--tl { top: 8px; left: 8px; border-top-width: 2px; border-left-width: 2px; border-top-left-radius: 3px; }
+.hero__card-hud--tr { top: 8px; right: 8px; border-top-width: 2px; border-right-width: 2px; border-top-right-radius: 3px; }
+.hero__card-hud--bl { bottom: 8px; left: 8px; border-bottom-width: 2px; border-left-width: 2px; border-bottom-left-radius: 3px; }
+.hero__card-hud--br { bottom: 8px; right: 8px; border-bottom-width: 2px; border-right-width: 2px; border-bottom-right-radius: 3px; }
+
+.hero__card:hover .hero__card-hud { opacity: 1; width: 20px; height: 20px; border-color: rgba(0,200,83,0.9); }
+.hero__cards-section--sliding .hero__card:hover { box-shadow: 0 18px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,200,83,0.4), 0 0 34px rgba(0,200,83,0.18); border-color: rgba(0,200,83,0.5); }
+
+.hero__card-logo { width: clamp(38px, 4.4vw, 58px); height: clamp(38px, 4.4vw, 58px); object-fit: contain; margin-bottom: 4px; filter: brightness(1.25) drop-shadow(0 3px 8px rgba(0,0,0,0.5)); transition: transform 0.4s ease, filter 0.4s ease; }
+.hero__card:hover .hero__card-logo { transform: scale(1.12); filter: brightness(1.45) drop-shadow(0 4px 14px rgba(0,200,83,0.3)); }
+
+/* Content floats opposite the bg for depth; text sized & shadowed for max legibility */
+.hero__card-content {
+  position: relative; z-index: 3; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: clamp(10px, 2vh, 24px) clamp(10px, 1.2vw, 16px);
+  text-align: center; gap: clamp(4px, 0.8vh, 8px);
+  transform: translate3d(calc(var(--px, 0) * 1px), calc(var(--py, 0) * 1px), 0);
+  transition: transform 0.25s ease-out;
+}
+.hero__card-title {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(11px, 1.15vw, 15px);
+  font-weight: 800; color: #fff;
+  letter-spacing: 1.8px; text-transform: uppercase; line-height: 1.35;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9);
+  transition: text-shadow 0.4s ease;
+}
+.hero__card:hover .hero__card-title { text-shadow: 0 2px 10px rgba(0,0,0,0.85), 0 0 14px rgba(0,200,83,0.35); }
+.hero__card-subtitle {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(11px, 1.05vw, 14px);
+  font-weight: 600; color: rgba(255,255,255,0.93);
+  letter-spacing: 1.2px; margin-top: -4px;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+}
+.hero__card-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(10px, 0.95vw, 13px);
+  font-weight: 500; color: rgba(255,255,255,0.96);
+  line-height: 1.55; letter-spacing: 0.25px;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+}
+
+/* ===== Modal ===== */
+.hero__modal-overlay { position: fixed; inset: 0; z-index: 99999; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0); cursor: pointer; perspective: 1400px; transform-style: preserve-3d; }
+.hero__modal-overlay--visible { background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); transition: background 0.4s ease, backdrop-filter 0.4s ease; }
+.hero__modal-overlay--closing { background: rgba(0,0,0,0); backdrop-filter: blur(0px); transition: background 0.3s ease, backdrop-filter 0.3s ease; }
+
+.hero__modal-card { position: relative; width: min(360px, 85vw); height: min(480px, 75vh); border-radius: 22px; overflow: hidden; background: var(--forest-green, #1a3a2a); border: 1px solid rgba(0,200,83,0.3); cursor: default; transform: translateY(100vh) rotateX(45deg) scale(0.5); opacity: 0; transition: transform 0.15s ease, opacity 0.15s ease; }
+.hero__modal-card--visible { transform: translateY(0) rotateX(0deg) scale(1); opacity: 1; box-shadow: 0 50px 120px rgba(0,0,0,0.6), 0 0 50px rgba(0,200,83,0.1), 0 0 0 1px rgba(0,200,83,0.2); transition: transform 0.7s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease, box-shadow 0.7s ease; }
+.hero__modal-card--closing { transform: translateY(80vh) rotateX(30deg) scale(0.5); opacity: 0; transition: transform 0.4s cubic-bezier(0.55,0,1,0.45), opacity 0.3s ease; }
+
+.hero__modal-bg { position: absolute; top: -4px; left: -4px; width: calc(100% + 8px); height: calc(100% + 8px); object-fit: cover; z-index: 0; filter: blur(2px) brightness(0.7); opacity: 0.4; }
+.hero__modal-glass { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,26,18,0.6) 0%, rgba(10,26,18,0.35) 40%, rgba(10,26,18,0.65) 100%); z-index: 1; }
+.hero__modal-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: clamp(20px, 4vh, 40px) clamp(16px, 3vw, 28px); text-align: center; gap: clamp(8px, 1.5vh, 14px); }
+.hero__modal-logo { width: clamp(48px, 8vw, 72px); height: clamp(48px, 8vw, 72px); object-fit: contain; filter: brightness(1.3); margin-bottom: 6px; }
+.hero__modal-title { font-family: 'Orbitron', monospace; font-size: clamp(13px, 2vw, 18px); font-weight: 700; color: #fff; letter-spacing: 3px; text-transform: uppercase; line-height: 1.3; text-shadow: 0 0 20px rgba(0,200,83,0.2); }
+.hero__modal-subtitle { font-family: 'Rajdhani', sans-serif; font-size: clamp(12px, 1.5vw, 16px); font-weight: 500; color: rgba(255,255,255,0.7); letter-spacing: 1.5px; margin-top: -6px; }
+.hero__modal-desc { font-family: 'Inter', sans-serif; font-size: clamp(12px, 1.4vw, 15px); font-weight: 400; color: rgba(255,255,255,0.8); line-height: 1.7; letter-spacing: 0.3px; max-width: 300px; }
+.hero__modal-close { position: absolute; top: 16px; right: 16px; z-index: 10; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); color: rgba(255,255,255,0.85); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease; }
+.hero__modal-close:hover { background: rgba(0,200,83,0.25); border-color: rgba(0,200,83,0.5); transform: scale(1.1); }
+
+/* ===== Corners ===== */
+.hero__corner { position: absolute; width: 30px; height: 30px; z-index: 5; }
+.hero__corner::before, .hero__corner::after { content: ''; position: absolute; background: var(--desert-titanium); opacity: 0.3; }
+.hero__corner--tl { top: 40px; left: 40px; } .hero__corner--tl::before { top: 0; left: 0; width: 30px; height: 1px; } .hero__corner--tl::after { top: 0; left: 0; width: 1px; height: 30px; }
+.hero__corner--tr { top: 40px; right: 40px; } .hero__corner--tr::before { top: 0; right: 0; width: 30px; height: 1px; } .hero__corner--tr::after { top: 0; right: 0; width: 1px; height: 30px; }
+.hero__corner--bl { bottom: 40px; left: 40px; } .hero__corner--bl::before { bottom: 0; left: 0; width: 30px; height: 1px; } .hero__corner--bl::after { bottom: 0; left: 0; width: 1px; height: 30px; }
+.hero__corner--br { bottom: 40px; right: 40px; } .hero__corner--br::before { bottom: 0; right: 0; width: 30px; height: 1px; } .hero__corner--br::after { bottom: 0; right: 0; width: 1px; height: 30px; }
+
+/* ===== Keyframes ===== */
+@keyframes scanLine { 0% { top: -2px; } 100% { top: 100%; } }
+@keyframes cursorBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }

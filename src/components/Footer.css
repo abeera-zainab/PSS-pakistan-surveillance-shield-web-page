@@ -1,0 +1,106 @@
+.footer {
+  position: relative;
+  background: var(--forest-green, #1a3a2a);
+  padding: 48px 24px 32px;
+  overflow: hidden;
+}
+
+.footer__grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+}
+
+.footer__content {
+  position: relative; z-index: 2;
+  max-width: 1100px; margin: 0 auto;
+}
+
+.footer__top {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 24px;
+}
+
+.footer__brand {
+  display: flex; align-items: center; gap: 14px;
+}
+
+.footer__logo {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1.5px solid rgba(0,200,83,0.25);
+  object-fit: cover;
+}
+
+.footer__brand-text {
+  display: flex; flex-direction: column; gap: 2px;
+}
+
+.footer__brand-name {
+  font-family: 'Orbitron', monospace;
+  font-size: 13px; font-weight: 700; letter-spacing: 2px;
+  color: rgba(255,255,255,0.9);
+}
+
+.footer__brand-tag {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 10px; letter-spacing: 3px;
+  color: rgba(0,200,83,0.5);
+  text-transform: uppercase;
+}
+
+.footer__links {
+  display: flex; align-items: center; gap: 8px;
+}
+
+.footer__link {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px; font-weight: 500; letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.55);
+  background: none; border: none; cursor: pointer;
+  padding: 6px 14px; border-radius: 4px;
+  transition: color 0.25s ease, background 0.25s ease;
+  text-transform: uppercase;
+}
+
+.footer__link:hover {
+  color: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.06);
+}
+
+.footer__divider {
+  height: 1px; margin: 28px 0 20px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+
+.footer__bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+
+.footer__copy {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; color: rgba(255,255,255,0.35);
+  letter-spacing: 0.3px;
+}
+
+.footer__status {
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11px; letter-spacing: 2px;
+  color: rgba(0,200,83,0.6);
+}
+
+.footer__status-icon {
+  width: 14px; height: 14px;
+  color: rgba(0,200,83,0.5);
+}
+
+@media (max-width: 600px) {
+  .footer__top { flex-direction: column; align-items: flex-start; }
+  .footer__links { flex-wrap: wrap; }
+  .footer__bottom { flex-direction: column; align-items: flex-start; }
+  .footer { padding: 36px 16px 24px; }
+}
