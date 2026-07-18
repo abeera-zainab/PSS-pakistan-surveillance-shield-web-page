@@ -24,12 +24,13 @@
 }
 
 /* ===== Badge ===== */
-.hero__top-badge { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 2vh; margin-bottom: 1vh; animation: fadeInDown 0.8s ease-out; flex-shrink: 0; }
+.hero__top-badge { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: clamp(22px, 4.5vh, 54px); margin-bottom: 1vh; animation: fadeInDown 0.8s ease-out; flex-shrink: 0; }
 .hero__badge-text { font-family: 'Orbitron', monospace; font-size: clamp(7px, 1.1vw, 13px); font-weight: 700; color: var(--forest-green); letter-spacing: 5px; white-space: nowrap; }
 .hero__badge-line { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--desert-titanium), transparent); }
 
 /* ===== Typography ===== */
-.hero__typography { margin-bottom: 1vh; max-width: 960px; flex-shrink: 0; }
+/* cap the heading column so it never reaches the corner seals (reserve side room) */
+.hero__typography { margin-bottom: 1vh; max-width: min(960px, calc(100vw - clamp(140px, 32vw, 440px))); flex-shrink: 0; }
 .hero__title { display: flex; flex-direction: column; align-items: center; gap: 0; margin-bottom: 1vh; }
 .hero__title-line { font-family: 'Rajdhani', sans-serif; font-size: clamp(30px, 5.5vw, 62px); font-weight: 700; color: var(--forest-green); letter-spacing: 2px; line-height: 1.15; }
 .hero__title-line--2 { font-size: clamp(28px, 5vw, 58px); }
@@ -44,8 +45,75 @@
 .hero__divider-diamond { width: 8px; height: 8px; background: var(--sage-green); transform: rotate(45deg); opacity: 0.6; }
 
 /* Subtitle */
-.hero__subtitle { font-family: 'Inter', sans-serif; font-size: clamp(13px, 1.5vw, 20px); font-weight: 400; color: var(--text-medium); line-height: 1.6; max-width: 640px; margin: 0 auto; letter-spacing: 0.3px; opacity: 0; transform: translateY(15px); transition: all 0.7s ease-out 0.15s; flex-shrink: 0; }
+.hero__subtitle { font-family: 'Orbitron', 'Inter', sans-serif; font-size: clamp(16px, 2.1vw, 27px); font-weight: 800; color: var(--forest-green); line-height: 1.4; max-width: 720px; margin: 0 auto; letter-spacing: clamp(1px, 0.3vw, 3px); text-align: center; text-transform: uppercase; opacity: 0; transform: translateY(15px); transition: all 0.7s ease-out 0.15s; flex-shrink: 0; }
 .hero__subtitle--visible { opacity: 1; transform: translateY(0); }
+
+/* ===== CORNER SEALS — PSS top-left · NIFTAC top-right, techy drift, clear of the heading ===== */
+.hero__corner-seal {
+  position: absolute; z-index: 12;
+  top: clamp(82px, 12vh, 138px);
+  opacity: 0; transform: translateY(-12px);
+  transition: opacity 0.9s ease 0.4s, transform 0.9s ease 0.4s;
+  pointer-events: none;
+}
+.hero__corner-seal--visible { opacity: 1; transform: translateY(0); }
+.hero__corner-seal--tl { left: clamp(14px, 2.6vw, 54px); }
+.hero__corner-seal--tr { right: clamp(14px, 2.6vw, 54px); }
+
+.hero__seal-wrap {
+  position: relative; pointer-events: auto;
+  display: grid; place-items: center;
+  width: clamp(84px, 9.5vw, 140px); height: clamp(84px, 9.5vw, 140px);
+  animation: sealSway 3.8s ease-in-out infinite;   /* smooth left ↔ right drift, no rotation */
+  will-change: transform;
+}
+/* mirror the pair — one drifts left as the other drifts right */
+.hero__seal-wrap--right { animation-delay: -1.9s; }
+
+/* techy HUD — rotating dashed scanner ring around the (non-rotating) seal */
+.hero__seal-wrap::before {
+  content: ''; position: absolute; inset: -7%; border-radius: 50%;
+  border: 1.5px dashed rgba(0, 200, 83, 0.5);
+  animation: sealRingSpin 13s linear infinite;
+  pointer-events: none;
+}
+/* techy glow — pulsing halo + inner ring */
+.hero__seal-wrap::after {
+  content: ''; position: absolute; inset: 1%; border-radius: 50%;
+  border: 1px solid rgba(0, 200, 83, 0.28);
+  box-shadow: 0 0 28px rgba(0, 200, 83, 0.28), inset 0 0 14px rgba(0, 200, 83, 0.12);
+  animation: sealGlow 2.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.hero__seal {
+  position: relative; z-index: 1;
+  width: 84%; height: 84%;
+  object-fit: contain;
+  animation: sealPulse 2.8s ease-in-out infinite;
+}
+
+.hero__seal-wrap:hover::before { border-color: rgba(0, 200, 83, 0.85); animation-duration: 5s; }
+.hero__seal-wrap:hover .hero__seal { filter: drop-shadow(0 8px 26px rgba(0, 200, 83, 0.5)); }
+
+@keyframes sealSway { 0%, 100% { transform: translateX(-13px); } 50% { transform: translateX(13px); } }
+@keyframes sealRingSpin { to { transform: rotate(360deg); } }
+@keyframes sealGlow { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+@keyframes sealPulse {
+  0%, 100% { filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.3)) brightness(1); }
+  50% { filter: drop-shadow(0 6px 22px rgba(0, 200, 83, 0.28)) brightness(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__seal-wrap, .hero__seal-wrap::before, .hero__seal { animation: none; }
+}
+
+@media (max-width: 760px) {
+  .hero__corner-seal { top: clamp(64px, 8.5vh, 90px); }
+  .hero__seal-wrap { width: 50px; height: 50px; }
+  .hero__corner-seal--tl { left: 8px; }
+  .hero__corner-seal--tr { right: 8px; }
+}
 
 /* ========================================================
    CARDS SECTION — RISE → MERGE INTO PSS → SPREAD → PSS
@@ -66,12 +134,12 @@
 
 /* === CARD BASE === */
 .hero__card {
-  width: clamp(160px, 15vw, 230px);
+  width: clamp(184px, 16.5vw, 256px);
   border-radius: 16px; cursor: pointer;
   border: 1px solid rgba(255,255,255,0.08);
   background: var(--forest-green); overflow: hidden;
   position: absolute; left: 50%;
-  margin-left: calc(clamp(160px, 15vw, 230px) / -2);
+  margin-left: calc(clamp(184px, 16.5vw, 256px) / -2);
   opacity: 0;
   will-change: transform, opacity;
   backface-visibility: hidden;
@@ -185,7 +253,7 @@
 .hero__cards-section--dissolving .hero__card {
   opacity: 1;
   transform:
-    translateX(calc(var(--slide-offset) * (clamp(160px, 15vw, 230px) + 48px)))
+    translateX(calc(var(--slide-offset) * (clamp(184px, 16.5vw, 256px) + 48px)))
     translateY(calc(var(--slide-dist) * 1px))
     rotateY(0deg)
     scale(calc(1 - var(--slide-dist) * 0.017));
@@ -209,7 +277,7 @@
 .hero__cards-section--sliding .hero__card {
   position: absolute;
   left: 50%;
-  margin-left: calc(clamp(160px, 15vw, 230px) / -2);
+  margin-left: calc(clamp(184px, 16.5vw, 256px) / -2);
   opacity: 1;
   transition: box-shadow 0.25s ease, border-color 0.25s ease;
 }
@@ -306,6 +374,10 @@
 .hero__card-logo { width: clamp(38px, 4.4vw, 58px); height: clamp(38px, 4.4vw, 58px); object-fit: contain; margin-bottom: 4px; filter: brightness(1.25) drop-shadow(0 3px 8px rgba(0,0,0,0.5)); transition: transform 0.4s ease, filter 0.4s ease; }
 .hero__card:hover .hero__card-logo { transform: scale(1.12); filter: brightness(1.45) drop-shadow(0 4px 14px rgba(0,200,83,0.3)); }
 
+/* Knock out a logo's dark background against the dark card (screen blend drops black) */
+.hero__card-logo--blend { mix-blend-mode: screen; filter: brightness(1.35) contrast(1.1); }
+.hero__card:hover .hero__card-logo--blend { filter: brightness(1.55) contrast(1.15) drop-shadow(0 4px 14px rgba(0,200,83,0.3)); }
+
 /* Content floats opposite the bg for depth; text sized & shadowed for max legibility */
 .hero__card-content {
   position: relative; z-index: 3; height: 100%;
@@ -338,6 +410,28 @@
   line-height: 1.55; letter-spacing: 0.25px;
   text-shadow: 0 1px 6px rgba(0,0,0,0.8);
 }
+
+/* Explore Project CTA (all cards except PSS) */
+.hero__card-cta {
+  margin-top: clamp(8px, 1.4vh, 16px);
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(8.5px, 0.72vw, 10px); font-weight: 700; letter-spacing: 1.2px;
+  color: #eafff2; cursor: pointer;
+  padding: clamp(6px, 0.9vh, 9px) clamp(12px, 1.1vw, 18px);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 200, 83, 0.5);
+  background: linear-gradient(160deg, rgba(0, 200, 83, 0.22), rgba(0, 200, 83, 0.06));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.hero__card-cta svg { transition: transform 0.25s ease; }
+.hero__card:hover .hero__card-cta {
+  background: linear-gradient(160deg, rgba(0, 200, 83, 0.4), rgba(0, 200, 83, 0.16));
+  border-color: rgba(0, 200, 83, 0.85);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 6px 16px rgba(0, 200, 83, 0.25);
+}
+.hero__card-cta:hover svg { transform: translateX(3px); }
 
 /* ===== Modal ===== */
 .hero__modal-overlay { position: fixed; inset: 0; z-index: 99999; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0); cursor: pointer; perspective: 1400px; transform-style: preserve-3d; }

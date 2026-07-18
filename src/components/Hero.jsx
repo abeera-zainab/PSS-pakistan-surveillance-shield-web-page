@@ -18,12 +18,14 @@ const useTypewriter = (text, delay = 60, startDelay = 0) => {
 
 const projectCards = [
   { title: 'AGEX IRIS', logo: '/logo-agex-iris.png', bgImage: '/bg-agex-iris.png', desc: 'AI-powered facial reconstruction & enhancement system for precision identity analysis, feature mapping, and real-time biometric recognition.' },
-  { title: 'GEO INT', subtitle: 'Terrain Feature Analysis', logo: '/logo-terrain.png', bgImage: '/bg-terrain.png', desc: 'Geolocation and Terrain analysis of target areas from a video or image feed' },
   { title: 'NIGRAN', subtitle: 'Media Monitoring', logo: '/logo-nigran.png', bgImage: '/bg-nigran.png', desc: 'Autonomous digital pulse reporting system' },
-  { title: 'Pakistan Surveillance Shield', subtitle: '(PSS)', logo: '/logo.png.png', bgImage: '/logo.png.png', desc: 'Smart Surveillance. Safer Pakistan.', isPss: true },
-  { title: 'RAVEN', logo: '/logo-raven.png', bgImage: '/bg-raven.png', desc: 'Spotting the subtle changes to secure the road ahead' },
-  { title: 'NoX', logo: '/logo-nox.png', bgImage: '/bg-nox.png', desc: 'Adversarial offensive cyber toolset & capability' },
+  { title: 'GEO INT', subtitle: 'Terrain Feature Analysis', logo: '/logo-terrain.png', bgImage: '/bg-terrain.png', desc: 'Geolocation and Terrain analysis of target areas from a video or image feed' },
   { title: 'CyberINT', logo: '/logo-cyberint.png', bgImage: '/bg-cyberint.png', desc: 'Full-spectrum OSINT, target profiling, data harvesting, dark web monitoring, and continuous watchdog' },
+  { title: 'Pakistan Surveillance Shield', subtitle: '(PSS)', logo: '/logo.png.png', bgImage: '/logo.png.png', desc: 'Smart Surveillance. Safer Pakistan.', isPss: true },
+  { title: 'NoX', subtitle: 'CyberINT', logo: '/logo-nox.png', bgImage: '/bg-nox.png', desc: 'Adversarial offensive cyber toolset & capability' },
+  { title: 'RAVEN', logo: '/logo-raven.png', bgImage: '/bg-raven.png', desc: 'Spotting the subtle changes to secure the road ahead' },
+  { title: 'DEFENSIVE SUITE', subtitle: 'See · Control · Respond', logo: '/logo-defensive.png', bgImage: '/defensive-suite.jpg', logoBlend: true, desc: 'Unified Security Operations — detection, endpoint control & DLP, and automated response on one platform.' },
+  { title: 'RESPONSIBLE AI', subtitle: 'Ethical by Design', logo: '/logo-responsible-ai.png', bgImage: '/responsible-ai.png', logoBlend: true, desc: 'Regulation-agnostic assurance for agentic AI — turning obligations into signed, auditor-grade evidence.' },
 ]
 
 const CENTER = Math.floor(projectCards.length / 2)
@@ -37,8 +39,7 @@ const SLIDE_CENTER = (SLIDER_INDICES.length - 1) / 2
 const Hero = () => {
   const canvasRef = useRef(null)
   const typoRef = useRef(null)
-  const line1 = useTypewriter('Smart Surveillance.', 55, 400)
-  const line2 = useTypewriter('Safer Pakistan.', 55, 1600)
+  const line1 = useTypewriter('Pakistan Surveillance Shield.', 32, 250)
 
   // hidden → assembling → stacked → spreading → dissolving → sliding
   const [phase, setPhase] = useState('hidden')
@@ -61,7 +62,7 @@ const Hero = () => {
   }, [])
 
   useEffect(() => {
-    if (!line2.done) return
+    if (!line1.done) return
     const timers = [
       setTimeout(() => setPhase('assembling'), 280),
       setTimeout(() => setPhase('stacked'), 1450),
@@ -70,7 +71,7 @@ const Hero = () => {
       setTimeout(() => setPhase('sliding'), 5900),
     ]
     return () => timers.forEach(clearTimeout)
-  }, [line2.done])
+  }, [line1.done])
 
   useEffect(() => {
     const measure = () => {
@@ -80,12 +81,12 @@ const Hero = () => {
       const available = section
         ? section.offsetHeight - 32
         : window.innerHeight - 64 - 250
-      setCardH(Math.max(160, Math.min(380, available)))
+      setCardH(Math.max(180, Math.min(430, available)))
     }
     measure()
     window.addEventListener('resize', measure)
     return () => window.removeEventListener('resize', measure)
-  }, [line2.done])
+  }, [line1.done])
 
   // Left / right scroll only — horizontal wheel, shift+wheel, or touch swipe
   useEffect(() => {
@@ -142,12 +143,19 @@ const Hero = () => {
 
     const n = SLIDER_INDICES.length
     let lastT = null
+    let startT = null
 
     const tick = (now) => {
       // Delta-time smoothing: speed stays constant across 60/120/144Hz displays
       if (lastT == null) lastT = now
+      if (startT == null) startT = now
       const dt = Math.min((now - lastT) / 16.667, 3)
       lastT = now
+
+      // Ease the coverflow depth in over the first ~650ms so cards glide out of the
+      // dissolving layout instead of popping into 3D — seamless hand-off.
+      const p = Math.min((now - startT) / 650, 1)
+      const settle = 1 - Math.pow(1 - p, 3)
 
       if (!pausedRef.current) autoXRef.current -= SLIDE_SPEED * dt
 
@@ -188,11 +196,12 @@ const Hero = () => {
         } else {
           const nx = Math.max(-1, Math.min(1, x / (vw / 2)))
           const dist = Math.abs(nx)
-          // Coverflow: side cards angle toward the centre; centre card faces flat
-          const rotY = -nx * 18
-          const scale = 1 - dist * 0.08
-          const ty = dist * 4
-          const tz = -dist * 60
+          // Coverflow: side cards angle toward the centre; centre card faces flat.
+          // `settle` ramps the depth from flat → full so the entrance is smooth.
+          const rotY = -nx * 18 * settle
+          const scale = 1 - dist * 0.08 * settle
+          const ty = dist * 4 * settle
+          const tz = -dist * 60 * settle
           el.style.transform = `translateX(${x}px) translateY(${ty}px) translateZ(${tz}px) rotateY(${rotY}deg) scale(${scale})`
           el.style.zIndex = String(10 - Math.floor(dist * 5))
         }
@@ -298,7 +307,7 @@ const Hero = () => {
       <div className="hero__content">
         <div className="hero__top-badge">
           <span className="hero__badge-line" />
-          <span className="hero__badge-text">UNIT-47 CYBER INTELLIGENCE DIVISION</span>
+          <span className="hero__badge-text">UNIT 47 CYBER INTELLIGENCE PLATFORM</span>
           <span className="hero__badge-line" />
         </div>
 
@@ -307,21 +316,17 @@ const Hero = () => {
             <span className="hero__title-line hero__title-line--1">
               {line1.displayed}
               {!line1.done && <span className="hero__cursor">|</span>}
-            </span>
-            <span className="hero__title-line hero__title-line--2">
-              {line2.displayed}
-              {line1.done && !line2.done && <span className="hero__cursor">|</span>}
-              {line2.done && <span className="hero__cursor hero__cursor--blink">|</span>}
+              {line1.done && <span className="hero__cursor hero__cursor--blink">|</span>}
             </span>
           </h1>
-          <div className={`hero__divider ${line2.done ? 'hero__divider--visible' : ''}`}>
+
+          <div className={`hero__divider ${line1.done ? 'hero__divider--visible' : ''}`}>
             <span className="hero__divider-wing" />
             <span className="hero__divider-diamond" />
             <span className="hero__divider-wing" />
           </div>
-          <p className={`hero__subtitle ${line2.done ? 'hero__subtitle--visible' : ''}`}>
-            An in-house cyber intelligence capability that transforms
-            raw cyber signals into actionable insights for informed decisions.
+          <p className={`hero__subtitle ${line1.done ? 'hero__subtitle--visible' : ''}`}>
+            CyberInt Capabilities
           </p>
         </div>
 
@@ -375,10 +380,19 @@ const Hero = () => {
                     </>
                   )}
                   <div className="hero__card-content">
-                    {card.logo && <img src={card.logo} alt={card.title} className="hero__card-logo" />}
+                    {card.logo && <img src={card.logo} alt={card.title} className={`hero__card-logo ${card.logoBlend ? 'hero__card-logo--blend' : ''}`} />}
                     <h3 className="hero__card-title">{card.title}</h3>
                     {card.subtitle && <span className="hero__card-subtitle">{card.subtitle}</span>}
                     <p className="hero__card-desc">{card.desc}</p>
+                    {!isPss && (
+                      <button
+                        className="hero__card-cta"
+                        onClick={(e) => { e.stopPropagation(); openCard(i) }}
+                      >
+                        Explore Project
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                      </button>
+                    )}
                   </div>
                 </div>
               )
@@ -391,6 +405,28 @@ const Hero = () => {
       <div className="hero__corner hero__corner--tr" />
       <div className="hero__corner hero__corner--bl" />
       <div className="hero__corner hero__corner--br" />
+
+      {/* Corner seal emblems — PSS top-left, NIFTAC top-right */}
+      <div className={`hero__corner-seal hero__corner-seal--tl ${line1.done ? 'hero__corner-seal--visible' : ''}`}>
+        <div className="hero__seal-wrap hero__seal-wrap--left">
+          <img
+            src="/pss-logo.png"
+            alt="Pak Surveillance Shield"
+            className="hero__seal"
+            onError={(e) => { e.currentTarget.style.display = 'none' }}
+          />
+        </div>
+      </div>
+      <div className={`hero__corner-seal hero__corner-seal--tr ${line1.done ? 'hero__corner-seal--visible' : ''}`}>
+        <div className="hero__seal-wrap hero__seal-wrap--right">
+          <img
+            src="/niftac-logo.png"
+            alt="NIFTAC — National Intelligence Fusion & Threat Assessment Center"
+            className="hero__seal"
+            onError={(e) => { e.currentTarget.style.display = 'none' }}
+          />
+        </div>
+      </div>
 
       {activeCard !== null && createPortal(
         <div className={`hero__modal-overlay ${modalVisible ? 'hero__modal-overlay--visible' : 'hero__modal-overlay--closing'}`} onClick={closeCard}>

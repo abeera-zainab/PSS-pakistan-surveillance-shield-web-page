@@ -52,18 +52,32 @@ const phases = [
     ],
   },
   {
-    id: 'phase4', num: '05', title: 'AI CORRELATION ENGINE', system: 'AI CORE', subtitle: 'Intelligence Synthesis',
-    inputStreams: ['NIGRAN', 'GEOINT', 'AGEX IRIS', 'SOCIAL MEDIA RECON', 'CYBERINT RECON', 'NOX'],
-    outputItems: ['Identity', 'Location', 'Associates', 'Timeline', 'Devices', 'Social Links', 'Travel', 'Behavior', 'Threat Score', 'Confidence Score'],
-    output: 'Correlation Complete',
+    id: 'ravenphase', num: '05', title: 'RAVEN', system: 'RAVEN', subtitle: 'Route Anomaly & Verification',
+    units: ['CAPTURE', 'STITCH', 'COMPARE', 'FILTER', 'REPORT'],
+    output: 'Change Sites Confirmed',
   },
   {
-    id: 'phase5', num: '06', title: 'INTELLIGENCE FUSION', system: 'FUSION', subtitle: 'Command Dashboard',
+    id: 'defensivephase', num: '06', title: 'DEFENSIVE SUITE', system: 'DEFENSIVE SUITE', subtitle: 'See · Control · Respond',
+    systemSub: 'Security Operations Platform',
+    modules: [
+      { name: 'SECURITY · SEE', items: ['Wazuh', 'Prometheus', 'Exporters', 'Grafana', 'Axn Telemetry'], result: 'Full Visibility' },
+      { name: 'CONTROL · ENFORCE', items: ['Axn', 'Active Directory', 'Firewall'], result: 'Policy Enforced' },
+      { name: 'RESPONSE · ACT', items: ['DFIR-IRIS', 'Shuffle', 'Axn Actions'], result: 'Automated Response' },
+    ],
+  },
+  {
+    id: 'raiphase', num: '07', title: 'RESPONSIBLE AI', system: 'RESPONSIBLE AI', subtitle: 'Assurance & Governance',
+    systemSub: 'Ethical by Design · Trusted by Default',
+    units: ['FAIRNESS', 'TRANSPARENCY', 'PRIVACY', 'ACCOUNTABILITY'],
+    output: 'Signed Assurance Evidence',
+  },
+  {
+    id: 'phase5', num: '08', title: 'INTELLIGENCE FUSION', system: 'FUSION', subtitle: 'Command Dashboard',
     widgets: ['Target Identity', 'Face Match', 'Geo Coordinates', 'Social Accounts', 'Threat Network', 'Timeline', 'Vehicle', 'Device', 'Communication Pattern', 'Heatmaps', 'Routes', 'Link Analysis'],
     output: 'Predicting Future Activity',
   },
   {
-    id: 'phase6', num: '07', title: 'MISSION INTELLIGENCE REPORT', system: 'PSS', subtitle: 'Final Output',
+    id: 'phase6', num: '09', title: 'MISSION INTELLIGENCE REPORT', system: 'PSS', subtitle: 'Final Output',
     reportItems: ['Identity', 'Location', 'Threat Score', 'Timeline', 'Known Associates', 'Face Evidence', 'Media', 'Maps', 'Dark Web Intel', 'Social Intel', 'Geo Intel', 'Recommendations'],
     output: 'Pakistan Surveillance Shield', final: true,
   },
@@ -1640,13 +1654,604 @@ const ArieCase = ({ open, onClose }) => {
   )
 }
 
+/* ===== RAVEN — Route Anomaly & Verification Engine (aerial route clearance) ===== */
+
+const ravenStages = [
+  {
+    key: 'summary', tab: 'SUMMARY', num: '00',
+    tag: 'OVERVIEW — CHANGE, NOT OBJECTS',
+    title: 'RAVEN · Route Anomaly & Verification',
+    sub: 'Inspects a route from the air instead of on foot. Photograph a road two days running — anything new, moved or disturbed shows up as a difference. RAVEN flags what changed since yesterday for a human to inspect.',
+    flow: ['TWO FLIGHTS', 'COMPARE MAPS', 'FLAG CHANGES'],
+    meta: ['CHANGE DETECTION', 'NO EXOTIC SENSORS', 'HUMAN-IN-THE-LOOP'],
+  },
+  {
+    key: 'capture', tab: 'CAPTURE', num: '01', scene: 'capture', badge: 'DRONE · AUTO ROUTE',
+    tag: 'STAGE 01 / 05',
+    title: 'Automated Capture',
+    sub: 'A drone flies the route automatically, camera pointing straight down, taking overlapping photos. RTK records each photo’s position to centimetre accuracy.',
+    meta: ['AUTO ROUTE', 'RTK CM-ACCURATE', 'OVERLAPPING PHOTOS'],
+  },
+  {
+    key: 'stitch', tab: 'STITCH', num: '02', scene: 'stitch', badge: 'OpenDroneMap · STITCHING',
+    tag: 'STAGE 02 / 05',
+    title: 'Map & Height Model',
+    sub: 'OpenDroneMap combines each day’s photos into one seamless top-down map, plus a height model reconstructed from photo overlap — no special sensor needed.',
+    meta: ['OPENDRONEMAP', 'ORTHO MAP', '3D HEIGHT MODEL'],
+  },
+  {
+    key: 'compare', tab: 'COMPARE', num: '03', scene: 'compare', badge: 'APPEARANCE + HEIGHT',
+    tag: 'STAGE 03 / 05',
+    title: 'Day 1 vs Day 2',
+    sub: 'The two maps are compared on two signals — appearance change (AI model) catches new objects; height change catches disturbed or refilled ground that looks unchanged in colour.',
+    meta: ['APPEARANCE + HEIGHT', 'SEEING THE INVISIBLE'],
+  },
+  {
+    key: 'filter', tab: 'FILTER', num: '04', scene: 'filter', badge: 'NOISE SUPPRESSED',
+    tag: 'STAGE 04 / 05',
+    title: 'Suppress False Alarms',
+    sub: 'Shadows, weather, vegetation and passing traffic are suppressed. A change must appear consistently from multiple viewpoints before it is reported.',
+    meta: ['MULTI-VIEW CONSISTENCY', 'LOW FALSE ALARMS'],
+  },
+  {
+    key: 'report', tab: 'REPORT', num: '05', scene: 'report', badge: 'GPS · COVERAGE',
+    tag: 'STAGE 05 / 05',
+    title: 'Confirmed Change Sites',
+    sub: 'Confirmed changes are output with GPS coordinates, before/after imagery and a coverage map — a short list of specific locations to inspect.',
+    meta: ['GPS COORDINATES', 'BEFORE / AFTER', 'COVERAGE MAP'],
+  },
+]
+
+const RAVEN_ROUTE = 'M18 168 Q80 118 148 138 Q214 158 302 78'
+
+const RavenScene = ({ variant }) => {
+  if (variant === 'capture') {
+    return (
+      <svg className="wf-case__scene" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="320" height="200" fill="#0e1e24" />
+        <g stroke="rgba(58,166,185,0.12)" strokeWidth="0.6">
+          {[40, 80, 120, 160].map((y) => <line key={y} x1="0" y1={y} x2="320" y2={y} />)}
+          {[60, 120, 180, 240, 300].map((x) => <line key={x} x1={x} y1="0" x2={x} y2="200" />)}
+        </g>
+        <path d={RAVEN_ROUTE} fill="none" stroke="#c9b184" strokeWidth="7" strokeLinecap="round" opacity="0.55" />
+        <path d={RAVEN_ROUTE} fill="none" stroke="#e0d3ad" strokeWidth="1.4" strokeDasharray="4 6" />
+        {/* photo footprints appearing along the route */}
+        {[[40, 150], [92, 122], [150, 134], [214, 150], [280, 92]].map(([x, y], i) => (
+          <rect key={i} className="wf-raven__foot" x={x - 16} y={y - 12} width="32" height="24" rx="2"
+            style={{ animationDelay: `${0.3 + i * 0.45}s` }} />
+        ))}
+        {/* drone flying the route */}
+        <g className="wf-raven__drone">
+          <line x1="-9" y1="-6" x2="9" y2="6" stroke="#3aa6b9" strokeWidth="2" />
+          <line x1="9" y1="-6" x2="-9" y2="6" stroke="#3aa6b9" strokeWidth="2" />
+          <circle cx="-9" cy="-6" r="4" fill="#3aa6b9" /><circle cx="9" cy="-6" r="4" fill="#3aa6b9" />
+          <circle cx="-9" cy="6" r="4" fill="#3aa6b9" /><circle cx="9" cy="6" r="4" fill="#3aa6b9" />
+          <rect x="-5" y="-4" width="10" height="8" rx="2" fill="#eafaff" />
+          <polygon className="wf-raven__cone" points="-6,4 6,4 14,30 -14,30" fill="rgba(58,166,185,0.18)" />
+        </g>
+      </svg>
+    )
+  }
+  if (variant === 'stitch') {
+    return (
+      <svg className="wf-case__scene" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="320" height="200" fill="#0e1e24" />
+        {/* tiles snapping into one map */}
+        {Array.from({ length: 12 }).map((_, i) => {
+          const c = i % 4, r = Math.floor(i / 4)
+          return <rect key={i} className="wf-raven__tile" x={22 + c * 62} y={16 + r * 40} width="58" height="36" rx="3"
+            style={{ animationDelay: `${0.15 + i * 0.12}s` }} />
+        })}
+        {/* height model bars */}
+        {Array.from({ length: 14 }).map((_, i) => (
+          <rect key={i} className="wf-raven__hbar" x={20 + i * 20} width="12" rx="1"
+            style={{ animationDelay: `${1.6 + i * 0.06}s` }} />
+        ))}
+      </svg>
+    )
+  }
+  if (variant === 'compare') {
+    const mini = (dx, day, extra) => (
+      <g transform={`translate(${dx},0)`}>
+        <rect x="0" y="24" width="132" height="152" rx="6" fill="#0f242b" stroke="rgba(58,166,185,0.35)" strokeWidth="1" />
+        <text x="66" y="16" textAnchor="middle" className="wf-raven__daylbl">{day}</text>
+        <path d="M14 150 Q60 110 118 60" fill="none" stroke="#c9b184" strokeWidth="5" opacity="0.6" />
+        <circle cx="44" cy="118" r="4" fill="#7f9ba3" /><circle cx="90" cy="86" r="4" fill="#7f9ba3" />
+        {extra && (
+          <g>
+            <circle className="wf-raven__newdot" cx="72" cy="104" r="5" fill="#e0913a" />
+            <circle className="wf-raven__newring" cx="72" cy="104" r="7" fill="none" stroke="#e0913a" strokeWidth="1.5" />
+          </g>
+        )}
+      </g>
+    )
+    return (
+      <svg className="wf-case__scene" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="320" height="200" fill="#0e1e24" />
+        {mini(20, 'DAY 1', false)}
+        {mini(168, 'DAY 2', true)}
+        <line className="wf-raven__cmpscan" x1="160" y1="24" x2="160" y2="176" stroke="rgba(58,166,185,0.6)" strokeWidth="1.5" />
+      </svg>
+    )
+  }
+  if (variant === 'report') {
+    return (
+      <svg className="wf-case__scene" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="320" height="200" fill="#0e1e24" />
+        <g stroke="rgba(58,166,185,0.14)" strokeWidth="0.6">
+          {[40, 80, 120, 160].map((y) => <line key={y} x1="0" y1={y} x2="320" y2={y} />)}
+          {[64, 128, 192, 256].map((x) => <line key={x} x1={x} y1="0" x2={x} y2="200" />)}
+        </g>
+        {/* coverage: verified vs unverified */}
+        <path d="M0 96 Q90 78 180 92 Q250 102 320 84 L320 200 L0 200 Z" fill="rgba(58,166,185,0.12)" />
+        <path d={RAVEN_ROUTE} fill="none" stroke="#c9b184" strokeWidth="6" strokeLinecap="round" opacity="0.5" />
+        {/* GPS pins dropping */}
+        {[[92, 122], [150, 134], [280, 92]].map(([x, y], i) => (
+          <g key={i} className="wf-raven__pin" style={{ animationDelay: `${0.5 + i * 0.5}s`, transformOrigin: `${x}px ${y}px` }}>
+            <path d={`M${x} ${y} l-6 -11 a6.5 6.5 0 1 1 12 0 Z`} fill="#e0913a" />
+            <circle cx={x} cy={y - 13} r="2.4" fill="#0e1e24" />
+          </g>
+        ))}
+      </svg>
+    )
+  }
+  return null
+}
+
+const RAVEN_NOISE = ['Shadows', 'Vegetation', 'Puddles', 'Passing Traffic']
+
+const RavenFilter = () => (
+  <div className="wf-raven-filter">
+    <div className="wf-raven-filter__col">
+      <span className="wf-raven-filter__head">SUPPRESSED</span>
+      {RAVEN_NOISE.map((nz, i) => (
+        <span key={i} className="wf-raven-filter__noise" style={{ animationDelay: `${0.3 + i * 0.35}s` }}>{nz}</span>
+      ))}
+    </div>
+    <div className="wf-raven-filter__col">
+      <span className="wf-raven-filter__head wf-raven-filter__head--keep">REPORTED</span>
+      <span className="wf-raven-filter__keep">
+        <span className="wf-raven-filter__keep-dot" /> New Object · consistent across views
+      </span>
+    </div>
+  </div>
+)
+
+const RavenCase = ({ open, onClose }) => {
+  const { stage, setStage, paused, setPaused } = useCaseExplorer(open, onClose, ravenStages.length)
+
+  const renderBody = (s) => (
+    <>
+          {s.scene && (
+            <div className="wf-case__visual wf-case__visual--tall wf-case__visual--raven">
+              {s.scene === 'filter' ? <RavenFilter /> : <RavenScene variant={s.scene} />}
+              {s.badge && <span className="wf-case__badge">{s.badge}</span>}
+            </div>
+          )}
+
+          <div className="wf-case__info">
+            <span className="wf-case__stage-tag">{s.tag}</span>
+            <h4 className="wf-case__title">{s.title}</h4>
+            <p className="wf-case__sub">{s.sub}</p>
+
+            {s.flow && (
+              <div className="wf-case__flow">
+                {s.flow.map((f, fi) => (
+                  <span key={fi} className="wf-case__flow-step">
+                    {fi > 0 && <span className="wf-case__flow-arrow"><SvgChevron /></span>}
+                    <span className="wf-case__flow-chip">{f}</span>
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {s.meta && (
+              <div className="wf-case__meta">
+                {s.meta.map((m, mi) => (
+                  <span key={mi} className="wf-case__meta-chip" style={{ animationDelay: `${0.3 + mi * 0.18}s` }}>{m}</span>
+                ))}
+              </div>
+            )}
+          </div>
+    </>
+  )
+
+  if (!open) return null
+  return (
+    <CaseExplorer
+      name="RAVEN — ROUTE ANOMALY & VERIFICATION CASE"
+      stages={ravenStages}
+      stage={stage} setStage={setStage}
+      paused={paused} setPaused={setPaused}
+      onClose={onClose}
+      renderBody={renderBody}
+    />
+  )
+}
+
+/* ===== DEFENSIVE SUITE — Security Operations (See · Control · Respond) ===== */
+
+const defenseTools = [
+  { name: 'WAZUH', color: '#3b82f6' },
+  { name: 'PROMETHEUS', color: '#e0913a' },
+  { name: 'EXPORTERS', color: '#22d3ee' },
+  { name: 'GRAFANA', color: '#f59e0b' },
+  { name: 'AXN', color: '#2dd4bf' },
+  { name: 'ACTIVE DIRECTORY', color: '#5aa9e6' },
+  { name: 'FIREWALL', color: '#e0574a' },
+  { name: 'DFIR-IRIS', color: '#a78bfa' },
+  { name: 'SHUFFLE', color: '#34d399' },
+]
+
+// Animated See → Control → Respond closed loop
+const DefenseLoop = () => (
+  <svg className="wf-case__scene" viewBox="0 0 300 250" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+    <rect width="300" height="250" fill="#0a1424" />
+    <circle className="wf-def__outer" cx="150" cy="118" r="106" fill="none" stroke="rgba(34,211,238,0.18)" strokeWidth="1" strokeDasharray="3 9" />
+    <circle className="wf-def__loop-base" cx="150" cy="118" r="84" fill="none" stroke="rgba(34,211,238,0.22)" strokeWidth="2" />
+    <circle className="wf-def__loop-comet" cx="150" cy="118" r="84" fill="none" stroke="#5ee7f5" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="24 530" />
+    {/* central shield hub */}
+    <g className="wf-def__hub">
+      <circle cx="150" cy="118" r="34" fill="none" stroke="rgba(45,212,191,0.4)" strokeWidth="1" className="wf-def__hub-ring" />
+      <path d="M150 96 L168 104 V120 Q168 138 150 146 Q132 138 132 120 V104 Z" fill="rgba(45,212,191,0.18)" stroke="#2dd4bf" strokeWidth="1.4" />
+      <circle cx="150" cy="120" r="3" fill="#5ee7f5" />
+    </g>
+    {/* nodes */}
+    {[['SEE', 150, 34], ['CONTROL', 224, 161], ['RESPOND', 76, 161]].map(([lbl, x, y], i) => (
+      <g key={lbl}>
+        <circle className="wf-def__node" cx={x} cy={y} r="7" style={{ animationDelay: `${i * 0.5}s` }} />
+        <circle cx={x} cy={y} r="3" fill="#0a1424" />
+        <text className="wf-def__nodelbl" x={x} y={y - 13} textAnchor="middle">{lbl}</text>
+      </g>
+    ))}
+  </svg>
+)
+
+const defenseStages = [
+  {
+    key: 'summary', tab: 'SUMMARY', num: '00',
+    tag: 'OVERVIEW — SECURITY OPERATIONS, UNIFIED',
+    title: 'Defensive Suite · SecOps Platform',
+    sub: 'A complete Security Operations capability — See, Control, Respond — on one unified, auditable stack, with Axn as its endpoint-control and data-protection core.',
+    flow: ['SEE', 'CONTROL', 'RESPOND'],
+    meta: ['UNIFIED STACK', 'CENTRALLY MANAGED', 'FULLY AUDITABLE'],
+  },
+  {
+    key: 'loop', tab: 'LOOP', num: '01', loop: true, badge: 'ONE CLOSED LOOP',
+    tag: 'ONE CLOSED LOOP',
+    title: 'See → Control → Respond',
+    sub: 'Monitoring surfaces what’s happening, the control layer enforces the rules, and automation drives a fast, consistent, auditable response — all from one place.',
+    meta: ['CLOSED LOOP', 'ONE PLATFORM'],
+  },
+  {
+    key: 'pillars', tab: 'PILLARS', num: '02',
+    tag: 'THREE PILLARS',
+    title: 'Security · Control · Response',
+    sub: 'Visibility & detection, enforcement & prevention, and investigation & automation.',
+    pillars: [
+      { name: 'SECURITY', tag: 'See everything', tools: ['Wazuh', 'Prometheus', 'Exporters', 'Grafana', 'Axn'] },
+      { name: 'CONTROL', tag: 'Control everything', tools: ['Axn', 'Active Directory', 'Firewall'] },
+      { name: 'RESPONSE', tag: 'Act on everything', tools: ['DFIR-IRIS', 'Shuffle', 'Axn'] },
+    ],
+  },
+  {
+    key: 'toolset', tab: 'TOOLSET', num: '03', ring: defenseTools, core: 'DEFENSE', badge: 'THE STACK',
+    tag: 'THE UNIFIED STACK',
+    title: 'One Unified Toolset',
+    sub: 'Nine proven tools, one operation — from detection to enforcement to automated response.',
+    meta: ['9 TOOLS', 'ONE OPERATION'],
+  },
+  {
+    key: 'axn', tab: 'AXN', num: '04',
+    tag: 'ENDPOINT CONTROL & DLP CORE',
+    title: 'Axn — the Core',
+    sub: 'Advanced Endpoint Protection & Data Loss Prevention for enterprise Windows fleets, from a single console.',
+    steps: [
+      'Control hardware — USB, storage & network adapters',
+      'Control software, services & policy per machine',
+      'Prevent data loss — clipboard, screen, browser, egress',
+      'Guide user remediation with timers & lock-out',
+    ],
+    meta: ['SEE · CONTROL · RESPOND', 'SINGLE CONSOLE'],
+  },
+]
+
+const DefensiveCase = ({ open, onClose }) => {
+  const { stage, setStage, paused, setPaused } = useCaseExplorer(open, onClose, defenseStages.length)
+
+  const renderBody = (s) => {
+    const angle = s.ring ? 360 / s.ring.length : 0
+    return (
+    <>
+          {s.loop && (
+            <div className="wf-case__visual wf-case__visual--tall wf-case__visual--defsuite">
+              <DefenseLoop />
+              {s.badge && <span className="wf-case__badge">{s.badge}</span>}
+            </div>
+          )}
+
+          {s.ring && (
+            <div className="wf-case__visual wf-case__visual--3d wf-case__visual--defsuite">
+              <div className="wf-social3d">
+                <div className="wf-social3d__ring">
+                  {s.ring.map((p, i) => (
+                    <div key={p.name} className="wf-social3d__node" style={{ transform: `rotateY(${i * angle}deg) translateZ(178px)` }}>
+                      <span className="wf-social3d__dot" style={{ background: p.color }} />
+                      {p.name}
+                    </div>
+                  ))}
+                </div>
+                <span className="wf-social3d__core">{s.core}</span>
+              </div>
+              {s.badge && <span className="wf-case__badge">{s.badge}</span>}
+            </div>
+          )}
+
+          {s.pillars && (
+            <div className="wf-def-pillars">
+              {s.pillars.map((p, i) => (
+                <div key={i} className="wf-def-pillar" style={{ animationDelay: `${0.15 + i * 0.16}s` }}>
+                  <span className="wf-def-pillar__name">{p.name}</span>
+                  <span className="wf-def-pillar__tag">{p.tag}</span>
+                  <div className="wf-def-pillar__tools">
+                    {p.tools.map((t, ti) => (
+                      <span key={ti} className={`wf-def-pillar__tool ${t === 'Axn' ? 'wf-def-pillar__tool--axn' : ''}`}>{t}</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="wf-case__info">
+            <span className="wf-case__stage-tag">{s.tag}</span>
+            <h4 className="wf-case__title">{s.title}</h4>
+            <p className="wf-case__sub">{s.sub}</p>
+
+            {s.flow && (
+              <div className="wf-case__flow">
+                {s.flow.map((f, fi) => (
+                  <span key={fi} className="wf-case__flow-step">
+                    {fi > 0 && <span className="wf-case__flow-arrow"><SvgChevron /></span>}
+                    <span className="wf-case__flow-chip">{f}</span>
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {s.meta && (
+              <div className="wf-case__meta">
+                {s.meta.map((m, mi) => (
+                  <span key={mi} className="wf-case__meta-chip" style={{ animationDelay: `${0.3 + mi * 0.18}s` }}>{m}</span>
+                ))}
+              </div>
+            )}
+
+            {s.steps && (
+              <div className="wf-case__list">
+                {s.steps.map((item, si) => (
+                  <div key={si} className="wf-case__list-item" style={{ animationDelay: `${0.2 + si * 0.22}s` }}>
+                    <span className="wf-case__step-num">{si + 1}</span>
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+    </>
+    )
+  }
+
+  if (!open) return null
+  return (
+    <CaseExplorer
+      name="DEFENSIVE SUITE — SECURITY OPERATIONS CASE"
+      stages={defenseStages}
+      stage={stage} setStage={setStage}
+      paused={paused} setPaused={setPaused}
+      onClose={onClose}
+      renderBody={renderBody}
+    />
+  )
+}
+
+/* ===== RESPONSIBLE AI — Assurance & Governance for agentic AI ===== */
+
+const raiPipeline = ['Obligation', 'Control', 'Probe', 'Finding', 'Signed Evidence', 'Remediation', 'Retest']
+
+// Auto-advancing obligation → evidence pipeline
+const RaiPipeline = () => {
+  const [prog, setProg] = useState(0)
+  useEffect(() => {
+    const iv = setInterval(() => setProg((p) => (p + 1) % (raiPipeline.length + 2)), 1050)
+    return () => clearInterval(iv)
+  }, [])
+  const statusOf = (i) => (i < prog ? 'done' : i === prog ? 'active' : 'todo')
+  const pct = Math.round((Math.min(prog, raiPipeline.length) / raiPipeline.length) * 100)
+  return (
+    <div className="wf-rai">
+      <div className="wf-rai__bar">
+        <span className="wf-rai__bar-lbl">◈ OBLIGATION → SIGNED EVIDENCE</span>
+        <span className="wf-rai__pct">{pct}% · {pct === 100 ? 'ASSURED' : 'COMPILING'}</span>
+      </div>
+      <div className="wf-rai__pipe">
+        {raiPipeline.map((s, i) => (
+          <span key={i} className="wf-rai__step-wrap">
+            {i > 0 && <span className="wf-rai__arrow"><SvgChevron /></span>}
+            <span className={`wf-rai__step wf-rai__step--${statusOf(i)}`}>
+              <em className="wf-rai__step-ico">{statusOf(i) === 'done' ? '✓' : i + 1}</em>
+              {s}
+            </span>
+          </span>
+        ))}
+      </div>
+      <div className="wf-rai__note">Continuous, governed testing — every obligation compiled to auditor-grade evidence with remediation & retest.</div>
+    </div>
+  )
+}
+
+const raiUmbrellas = [
+  { name: 'MEMORY & CONTEXT', color: '#22c55e' },
+  { name: 'PRIVACY & DISCLOSURE', color: '#38bdf8' },
+  { name: 'TOOL & CODE ABUSE', color: '#e0913a' },
+  { name: 'GOAL MANIPULATION', color: '#f43f5e' },
+  { name: 'AUTONOMY & OVERSIGHT', color: '#a78bfa' },
+]
+
+const raiStages = [
+  {
+    key: 'summary', tab: 'SUMMARY', num: '00',
+    tag: 'OVERVIEW — ETHICAL BY DESIGN, TRUSTED BY DEFAULT',
+    title: 'Responsible AI · Assurance Framework',
+    sub: 'A regulation-agnostic assurance framework for agentic AI — it compiles obligations from many regimes into signed, auditor-grade evidence, and measures precisely what governance can and cannot reach.',
+    flow: ['OBLIGATIONS', 'GOVERNED TESTING', 'ASSURANCE'],
+    meta: ['REGULATION-AGNOSTIC', 'AUDITOR-GRADE EVIDENCE', 'AGENTIC SYSTEMS'],
+  },
+  {
+    key: 'pillars', tab: 'PILLARS', num: '01',
+    tag: 'FOUR PILLARS',
+    title: 'Fairness · Transparency · Privacy · Accountability',
+    sub: 'The principles the framework operationalises — turned from posters into enforced, logged, auditable controls.',
+    pillars: [
+      { name: 'FAIRNESS', tag: 'Equitable by design', tools: ['Bias probes', 'Ground-truth labels'] },
+      { name: 'TRANSPARENCY', tag: 'Inspectable interface', tools: ['NIST AI RMF', 'Audit logging'] },
+      { name: 'PRIVACY', tag: 'First-class pillar', tools: ['Contextual integrity', 'GDPR / CCPA'] },
+      { name: 'ACCOUNTABILITY', tag: 'Provable, attributable', tools: ['Signed evidence', 'Attribution'] },
+    ],
+  },
+  {
+    key: 'pipeline', tab: 'PIPELINE', num: '02', pipeline: true, badge: 'CONTINUOUS ASSURANCE',
+    tag: 'OBLIGATION → EVIDENCE',
+    title: 'The Evidence Pipeline',
+    sub: 'Every obligation flows automatically through the pipeline — control, probe, finding, signed evidence, remediation and retest.',
+    meta: ['AUTOMATED', 'CLAUSE-LINKED', 'REPRODUCIBLE'],
+  },
+  {
+    key: 'taxonomy', tab: 'TAXONOMY', num: '03', ring: raiUmbrellas, core: 'OWASP ASI', badge: 'FIVE UMBRELLAS',
+    tag: 'THREAT TAXONOMY — OWASP ASI 2026',
+    title: 'Five-Umbrella Taxonomy',
+    sub: 'Agentic threats mapped across five umbrellas — from memory poisoning to autonomy and oversight — as evidence-producing probes.',
+    meta: ['5 UMBRELLAS', 'PROBE LIBRARY'],
+  },
+  {
+    key: 'measure', tab: 'MEASURE', num: '04',
+    tag: 'THE MEASURED CORE',
+    title: 'Residual-Risk Surface & Attribution',
+    sub: 'With governance toggled ON/OFF, the framework measures detectability and attributability — mapping the residual surface that even audited-maximal governance cannot reach.',
+    steps: [
+      'Governance ON/OFF — the single instrumented variable',
+      'Detectability — provable + empirical residual subsets',
+      'Attribution — rank-trend over structural distance',
+      'Residual overlap — undetected ∩ misattributed',
+    ],
+    meta: ['DETECTABILITY', 'ATTRIBUTABILITY', 'RESIDUAL SURFACE'],
+  },
+]
+
+const ResponsibleAiCase = ({ open, onClose }) => {
+  const { stage, setStage, paused, setPaused } = useCaseExplorer(open, onClose, raiStages.length)
+
+  const renderBody = (s) => {
+    const angle = s.ring ? 360 / s.ring.length : 0
+    return (
+    <>
+          {s.pipeline && (
+            <div className="wf-case__visual wf-case__visual--tall wf-case__visual--rai">
+              <RaiPipeline />
+              {s.badge && <span className="wf-case__badge">{s.badge}</span>}
+            </div>
+          )}
+
+          {s.ring && (
+            <div className="wf-case__visual wf-case__visual--3d wf-case__visual--rai">
+              <div className="wf-social3d">
+                <div className="wf-social3d__ring">
+                  {s.ring.map((p, i) => (
+                    <div key={p.name} className="wf-social3d__node" style={{ transform: `rotateY(${i * angle}deg) translateZ(176px)` }}>
+                      <span className="wf-social3d__dot" style={{ background: p.color }} />
+                      {p.name}
+                    </div>
+                  ))}
+                </div>
+                <span className="wf-social3d__core">{s.core}</span>
+              </div>
+              {s.badge && <span className="wf-case__badge">{s.badge}</span>}
+            </div>
+          )}
+
+          {s.pillars && (
+            <div className="wf-def-pillars wf-def-pillars--rai">
+              {s.pillars.map((p, i) => (
+                <div key={i} className="wf-def-pillar" style={{ animationDelay: `${0.15 + i * 0.14}s` }}>
+                  <span className="wf-def-pillar__name">{p.name}</span>
+                  <span className="wf-def-pillar__tag">{p.tag}</span>
+                  <div className="wf-def-pillar__tools">
+                    {p.tools.map((t, ti) => (<span key={ti} className="wf-def-pillar__tool">{t}</span>))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="wf-case__info">
+            <span className="wf-case__stage-tag">{s.tag}</span>
+            <h4 className="wf-case__title">{s.title}</h4>
+            <p className="wf-case__sub">{s.sub}</p>
+
+            {s.flow && (
+              <div className="wf-case__flow">
+                {s.flow.map((f, fi) => (
+                  <span key={fi} className="wf-case__flow-step">
+                    {fi > 0 && <span className="wf-case__flow-arrow"><SvgChevron /></span>}
+                    <span className="wf-case__flow-chip">{f}</span>
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {s.meta && (
+              <div className="wf-case__meta">
+                {s.meta.map((m, mi) => (
+                  <span key={mi} className="wf-case__meta-chip" style={{ animationDelay: `${0.3 + mi * 0.18}s` }}>{m}</span>
+                ))}
+              </div>
+            )}
+
+            {s.steps && (
+              <div className="wf-case__list">
+                {s.steps.map((item, si) => (
+                  <div key={si} className="wf-case__list-item" style={{ animationDelay: `${0.2 + si * 0.22}s` }}>
+                    <span className="wf-case__step-num">{si + 1}</span>
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+    </>
+    )
+  }
+
+  if (!open) return null
+  return (
+    <CaseExplorer
+      name="RESPONSIBLE AI — ASSURANCE FRAMEWORK CASE"
+      stages={raiStages}
+      stage={stage} setStage={setStage}
+      paused={paused} setPaused={setPaused}
+      onClose={onClose}
+      renderBody={renderBody}
+    />
+  )
+}
+
 const PhaseCard = ({ phase, index }) => {
   const ref = useRef(null)
   const [visible, setVisible] = useState(false)
   const [stepped, setStepped] = useState(false)
   const [openCaseId, setOpenCaseId] = useState(null)
   const direction = index % 2 === 0 ? 'left' : 'right'
-  const hasCase = phase.id === 'phase1' || phase.id === 'phase2'
+  const hasCase = phase.id === 'phase1' || phase.id === 'phase2' || phase.id === 'ravenphase' || phase.id === 'defensivephase' || phase.id === 'raiphase'
   const closeCase = () => setOpenCaseId(null)
 
   useEffect(() => {
@@ -1676,7 +2281,11 @@ const PhaseCard = ({ phase, index }) => {
         >
           <h3 className="wf-phase__title">{phase.title}</h3>
           <span className="wf-phase__subtitle">{phase.subtitle}</span>
-          {hasCase && <span className="wf-phase__case-chip">CASE FILE ▸</span>}
+          {hasCase && (
+            <span className="wf-phase__case-chip">
+              {['ravenphase', 'defensivephase', 'raiphase'].includes(phase.id) ? 'WORKING ▸' : 'CASE FILE ▸'}
+            </span>
+          )}
         </div>
         {visible && stepped && <span className="wf-phase__status-live"><span className="wf-phase__status-dot" /> ACTIVE</span>}
       </div>
@@ -1790,6 +2399,26 @@ const PhaseCard = ({ phase, index }) => {
           </>
         )}
 
+        {(phase.id === 'ravenphase' || phase.id === 'raiphase') && (
+          <>
+            <div className="wf-units wf-units--raven">
+              {phase.units.map((u, i) => (
+                <span key={i} className="wf-unit-step">
+                  {i > 0 && <span className="wf-unit-step__arrow"><SvgChevron /></span>}
+                  <span className={`wf-unit ${stepped ? 'wf-unit--on' : ''}`} style={{ transitionDelay: `${0.4 + i * 0.16}s` }}>
+                    <em className="wf-unit__n">{String(i + 1).padStart(2, '0')}</em>{u}
+                  </span>
+                </span>
+              ))}
+            </div>
+            <FlowArrow />
+            <div className="wf-system-box wf-system-box--large"><div className="wf-system-box__label">{phase.system}</div><div className="wf-system-box__sub">{phase.subtitle}</div></div>
+            <div className={`wf-output ${stepped ? 'wf-output--active' : ''}`}>
+              <span className="wf-output__pulse" /><span className="wf-output__text">{phase.output}</span>
+            </div>
+          </>
+        )}
+
         {phase.id === 'phase4' && (
           <>
             <div className="wf-input-streams">
@@ -1869,11 +2498,24 @@ const PhaseCard = ({ phase, index }) => {
       {phase.id === 'noxphase' && <DarkovaCase open={openCaseId === 'nox-darkweb'} onClose={closeCase} />}
       {phase.id === 'noxphase' && <OffensiveCase open={openCaseId === 'nox-offensive'} onClose={closeCase} />}
       {phase.id === 'noxphase' && <ArieCase open={openCaseId === 'nox-arie'} onClose={closeCase} />}
+      {phase.id === 'ravenphase' && <RavenCase open={openCaseId === 'main'} onClose={closeCase} />}
+      {phase.id === 'defensivephase' && <DefensiveCase open={openCaseId === 'main'} onClose={closeCase} />}
+      {phase.id === 'raiphase' && <ResponsibleAiCase open={openCaseId === 'main'} onClose={closeCase} />}
 
-      {index < phases.length - 1 && (
+      {index < phases.length - 1 && !['03', '04', '05', '06'].includes(phase.num) && (
         <div className={`wf-connector ${stepped ? 'wf-connector--active' : ''}`}>
           <div className="wf-connector__line" />
           <div className="wf-connector__beam" />
+        </div>
+      )}
+
+      {['03', '04', '05', '06'].includes(phase.num) && (
+        <div className={`wf-separator ${stepped ? 'wf-separator--active' : ''}`}>
+          <span className="wf-separator__line" />
+          <span className="wf-separator__node">
+            <span className="wf-separator__dot" />
+          </span>
+          <span className="wf-separator__line" />
         </div>
       )}
     </div>
@@ -1919,7 +2561,7 @@ const Workflow = () => {
 
       <div className="workflow__header">
         <span className="workflow__badge"><SvgDiamond /> CLASSIFIED <SvgDiamond /></span>
-        <h2 className="workflow__title">CINEMATIC PSS WORKFLOW</h2>
+        <h2 className="workflow__title">PSS WORKFLOW</h2>
         <p className="workflow__desc">End-to-end intelligence pipeline from threat detection to actionable report</p>
         <div className="workflow__title-line" />
       </div>
