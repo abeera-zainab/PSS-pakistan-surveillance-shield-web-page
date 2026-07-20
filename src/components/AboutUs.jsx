@@ -194,7 +194,7 @@ const AboutUs = () => {
       <div className="about__bg-glow about__bg-glow--tl" />
       <div className="about__bg-glow about__bg-glow--br" />
 
-      {/* ===== INTRO — full bleed ===== */}
+      {/* ===== INTRO - full bleed ===== */}
       <div className={`about__intro ${visible ? 'about__intro--show' : ''}`}>
         <div className="about__intro-inner">
           <div className="about__intro-left">
@@ -246,7 +246,7 @@ const AboutUs = () => {
         </div>
       </div>
 
-      {/* ===== COMMAND STRUCTURE — full width ===== */}
+      {/* ===== COMMAND STRUCTURE - full width ===== */}
       <div className={`about__structure ${visible ? 'about__structure--show' : ''}`}>
         <div className="about__structure-head">
           <span className="about__eyebrow about__eyebrow--center">
@@ -323,7 +323,7 @@ const AboutUs = () => {
         </div>
       </div>
 
-      {/* ===== STATS — light technical mission output ===== */}
+      {/* ===== STATS - light technical mission output ===== */}
       <div className="about__stats-section" ref={statsRef}>
         <div className="about__stats-grid-bg" />
         <div className="about__stats-scan" />

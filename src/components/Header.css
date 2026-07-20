@@ -105,9 +105,9 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 40px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* brand left · nav centered · empty right */
   align-items: center;
-  justify-content: space-between;
   position: relative;
   z-index: 2;
 }

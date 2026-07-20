@@ -55,15 +55,15 @@ const slides = [
   {
     id: 'o1', no: '01', img: '/osint-1.png', kind: 'BOARD', code: 'CASE-BOARD',
     title: 'OSINT Case Board', region: 'IO110 · IO111 · IO106',
-    tag: 'OVERVIEW — ACTIVE OSINT CASES',
-    summary: 'Three OSINT cases tracked in parallel — social-media tracing, CCTV enhancement, and protest attribution.',
+    tag: 'OVERVIEW - ACTIVE OSINT CASES',
+    summary: 'Three OSINT cases tracked in parallel - social-media tracing, CCTV enhancement, and protest attribution.',
     flow: ['Intake', 'Trace', 'Extract', 'Map'],
     tags: ['3 CASES', 'MULTI-SOURCE'],
   },
   {
     id: 'o2', no: '02', img: '/osint-2.png', kind: 'OSINT', code: 'IO110',
     title: 'BLF “Chaos” OSINT', region: '04/06/2026 · Social Media Analysis',
-    tag: 'DIGITAL FOOTPRINT — FACE EXTRACTION',
+    tag: 'DIGITAL FOOTPRINT - FACE EXTRACTION',
     summary: '“Chaos” video traced across three X uploads; eight candidate face crops prepared for reconstruction / recognition.',
     flow: ['Face Extraction', 'Reconstruction', 'Recognition', 'Candidate Shortlist'],
     tags: ['8 FACES', '3 UPLOAD TRACES'],
@@ -169,7 +169,7 @@ const OsintReel = () => {
           </div>
           <h2 className="os__title">OSINT Case Reel</h2>
           <p className="os__lead">
-            Open-source tracing across social platforms and CCTV — video dissemination mapped,
+            Open-source tracing across social platforms and CCTV - video dissemination mapped,
             frames extracted and enhanced, and candidate faces surfaced for the recognition pipeline.
           </p>
         </header>

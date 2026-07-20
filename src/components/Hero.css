@@ -1,4 +1,4 @@
-/* ===== HERO — STACK → SPREAD → SLIDE ===== */
+/* ===== HERO - STACK → SPREAD → SLIDE ===== */
 
 .hero {
   position: relative;
@@ -48,7 +48,7 @@
 .hero__subtitle { font-family: 'Orbitron', 'Inter', sans-serif; font-size: clamp(16px, 2.1vw, 27px); font-weight: 800; color: var(--forest-green); line-height: 1.4; max-width: 720px; margin: 0 auto; letter-spacing: clamp(1px, 0.3vw, 3px); text-align: center; text-transform: uppercase; opacity: 0; transform: translateY(15px); transition: all 0.7s ease-out 0.15s; flex-shrink: 0; }
 .hero__subtitle--visible { opacity: 1; transform: translateY(0); }
 
-/* ===== CORNER SEALS — PSS top-left · NIFTAC top-right, techy drift, clear of the heading ===== */
+/* ===== CORNER SEALS - PSS top-left · NIFTAC top-right, techy drift, clear of the heading ===== */
 .hero__corner-seal {
   position: absolute; z-index: 12;
   top: clamp(82px, 12vh, 138px);
@@ -67,17 +67,17 @@
   animation: sealSway 3.8s ease-in-out infinite;   /* smooth left ↔ right drift, no rotation */
   will-change: transform;
 }
-/* mirror the pair — one drifts left as the other drifts right */
+/* mirror the pair - one drifts left as the other drifts right */
 .hero__seal-wrap--right { animation-delay: -1.9s; }
 
-/* techy HUD — rotating dashed scanner ring around the (non-rotating) seal */
+/* techy HUD - rotating dashed scanner ring around the (non-rotating) seal */
 .hero__seal-wrap::before {
   content: ''; position: absolute; inset: -7%; border-radius: 50%;
   border: 1.5px dashed rgba(0, 200, 83, 0.5);
   animation: sealRingSpin 13s linear infinite;
   pointer-events: none;
 }
-/* techy glow — pulsing halo + inner ring */
+/* techy glow - pulsing halo + inner ring */
 .hero__seal-wrap::after {
   content: ''; position: absolute; inset: 1%; border-radius: 50%;
   border: 1px solid rgba(0, 200, 83, 0.28);
@@ -116,7 +116,7 @@
 }
 
 /* ========================================================
-   CARDS SECTION — RISE → MERGE INTO PSS → SPREAD → PSS
+   CARDS SECTION - RISE → MERGE INTO PSS → SPREAD → PSS
    DISSOLVES → SLIDE
    ======================================================== */
 
@@ -157,7 +157,7 @@
     0 0 28px rgba(0, 200, 83, 0.08);
 }
 
-/* ——— Phase: hidden ——— */
+/* --- Phase: hidden --- */
 .hero__cards-section--hidden .hero__card {
   opacity: 0;
   transform:
@@ -167,7 +167,7 @@
     scale(0.9);
 }
 
-/* ——— Phase: assembling — cards rise in around the PSS card ——— */
+/* --- Phase: assembling - cards rise in around the PSS card --- */
 .hero__cards-section--assembling .hero__card {
   opacity: 1;
   transform:
@@ -186,7 +186,7 @@
   z-index: 20;
 }
 
-/* ——— Phase: stacked — every card is absorbed INTO the PSS card ——— */
+/* --- Phase: stacked - every card is absorbed INTO the PSS card --- */
 .hero__cards-section--stacked .hero__card {
   opacity: 1;
   transform:
@@ -222,7 +222,7 @@
   100% { transform: translateX(0) scale(1.08); }
 }
 
-/* ——— Phase: spreading — PSS pushes the cards back out ——— */
+/* --- Phase: spreading - PSS pushes the cards back out --- */
 .hero__cards-section--spreading .hero__card {
   opacity: 1;
   transform:
@@ -248,7 +248,7 @@
   100% { transform: translateX(0) scale(1.04); }
 }
 
-/* ——— Phase: dissolving — PSS fades away, cards settle into carousel slots ——— */
+/* --- Phase: dissolving - PSS fades away, cards settle into carousel slots --- */
 /* 48px below = CARD_GAP in Hero.jsx; translateY/scale mirror the slider's falloff so the handoff is seamless */
 .hero__cards-section--dissolving .hero__card {
   opacity: 1;
@@ -273,7 +273,7 @@
     filter 0.95s ease;
 }
 
-/* ——— Phase: sliding — carousel of the remaining cards, PSS is gone ——— */
+/* --- Phase: sliding - carousel of the remaining cards, PSS is gone --- */
 .hero__cards-section--sliding .hero__card {
   position: absolute;
   left: 50%;
@@ -303,7 +303,7 @@
 }
 
 /* ===== Card inner ===== */
-/* Faded, parallax background image — text stays the hero of the card */
+/* Faded, parallax background image - text stays the hero of the card */
 .hero__card-bg {
   position: absolute; inset: -4px;
   width: calc(100% + 8px); height: calc(100% + 8px);
@@ -340,7 +340,7 @@
 }
 .hero__cards-section--sliding .hero__card:hover .hero__card-shine { opacity: 1; }
 
-/* === TECHY HUD — scanline sweep + corner brackets === */
+/* === TECHY HUD - scanline sweep + corner brackets === */
 .hero__card-scan {
   position: absolute; left: 0; right: 0; top: 0; height: 34%;
   z-index: 2; pointer-events: none; opacity: 0;
@@ -382,38 +382,52 @@
 .hero__card-content {
   position: relative; z-index: 3; height: 100%;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: clamp(10px, 2vh, 24px) clamp(10px, 1.2vw, 16px);
-  text-align: center; gap: clamp(4px, 0.8vh, 8px);
+  padding: clamp(16px, 2.6vh, 28px) clamp(11px, 1.2vw, 16px) clamp(13px, 1.8vh, 20px);
+  text-align: center; gap: clamp(7px, 1.1vh, 11px);
   transform: translate3d(calc(var(--px, 0) * 1px), calc(var(--py, 0) * 1px), 0);
   transition: transform 0.25s ease-out;
 }
+/* Fixed-height rows -> icon / title / subtitle / desc align across every card. */
+.hero__card-icon {
+  flex: none;
+  width: clamp(54px, 5.6vw, 70px); height: clamp(54px, 5.6vw, 70px);
+  display: flex; align-items: center; justify-content: center;
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,0.45)); /* standalone, no box */
+  transition: transform 0.4s ease;
+}
+.hero__card-icon svg { width: 100%; height: 100%; display: block; }
+.hero__card-logo-img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.5)); }
+.hero__card:hover .hero__card-icon { transform: scale(1.08); }
 .hero__card-title {
   font-family: 'Orbitron', monospace;
   font-size: clamp(11px, 1.15vw, 15px);
   font-weight: 800; color: #fff;
-  letter-spacing: 1.8px; text-transform: uppercase; line-height: 1.35;
+  letter-spacing: 1.8px; text-transform: uppercase; line-height: 1.3;
+  min-height: 2.6em; display: flex; align-items: center; justify-content: center;
   text-shadow: 0 2px 10px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9);
   transition: text-shadow 0.4s ease;
 }
 .hero__card:hover .hero__card-title { text-shadow: 0 2px 10px rgba(0,0,0,0.85), 0 0 14px rgba(0,200,83,0.35); }
 .hero__card-subtitle {
   font-family: 'Rajdhani', sans-serif;
-  font-size: clamp(11px, 1.05vw, 14px);
-  font-weight: 600; color: rgba(255,255,255,0.93);
-  letter-spacing: 1.2px; margin-top: -4px;
+  font-size: clamp(10px, 1vw, 13px);
+  font-weight: 600; color: rgba(125,255,176,0.9);
+  letter-spacing: 1.2px; text-transform: uppercase;
+  min-height: 1.2em; line-height: 1.2;
   text-shadow: 0 1px 6px rgba(0,0,0,0.8);
 }
 .hero__card-desc {
   font-family: 'Inter', sans-serif;
-  font-size: clamp(10px, 0.95vw, 13px);
-  font-weight: 500; color: rgba(255,255,255,0.96);
-  line-height: 1.55; letter-spacing: 0.25px;
+  font-size: clamp(10px, 0.95vw, 12.5px);
+  font-weight: 500; color: rgba(255,255,255,0.9);
+  line-height: 1.5; letter-spacing: 0.2px;
+  min-height: 4.2em;
   text-shadow: 0 1px 6px rgba(0,0,0,0.8);
 }
 
 /* Explore Project CTA (all cards except PSS) */
 .hero__card-cta {
-  margin-top: clamp(8px, 1.4vh, 16px);
+  margin-top: clamp(6px, 1vh, 12px);
   display: inline-flex; align-items: center; gap: 6px;
   font-family: 'Orbitron', monospace;
   font-size: clamp(8.5px, 0.72vw, 10px); font-weight: 700; letter-spacing: 1.2px;

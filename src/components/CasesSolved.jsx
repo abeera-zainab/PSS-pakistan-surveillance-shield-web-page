@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import './CasesSolved.css'
 
 /* ============================================================
-   CASES SOLVED — OPERATION RAD-UL-FITNA
+   CASES SOLVED - OPERATION RAD-UL-FITNA
    AGEX IRIS · Face Reconstruction / Face Enhancement (FR/FE)
    Cinematic auto-playing reel using operational screenshots.
    Images live in /public as face-cases.png & face-radulfitna.png
@@ -55,7 +55,7 @@ const slides = [
   {
     id: 'f1', no: '01', img: '/face-cases.png', kind: 'FR', code: 'CASE-GALLERY',
     title: 'Reconstructed Case Gallery', region: 'Panjgur · Naukandi · Imambargah',
-    tag: 'OVERVIEW — DEGRADED → RECONSTRUCTED',
+    tag: 'OVERVIEW - DEGRADED → RECONSTRUCTED',
     summary: 'Severely degraded scene media restored via GAN reconstruction and matched to identities across three operations.',
     flow: ['Degraded Face In', 'GAN Restore', 'Recognition', 'NADRA Match'],
     tags: ['MULTI-SUBJECT', 'NADRA-MATCHED'],
@@ -63,8 +63,8 @@ const slides = [
   {
     id: 'f2', no: '02', img: '/face-radulfitna.png', kind: 'BOARD', code: 'RAD-UL-FITNA',
     title: 'Rad-ul-Fitna Impact Board', region: 'FR / FE · Operational Output',
-    tag: 'IMPACT — RECONSTRUCTION LEDGER',
-    summary: 'Before / after reconstructions across the operation — 25 face reconstructions with image scaling, identity attribution, FaceTrace and MSISDN artifacts.',
+    tag: 'IMPACT - RECONSTRUCTION LEDGER',
+    summary: 'Before / after reconstructions across the operation - 25 face reconstructions with image scaling, identity attribution, FaceTrace and MSISDN artifacts.',
     flow: ['Reconstruct', 'Image Scaling', 'Identity Attribution', 'FaceTrace'],
     tags: ['25 FR', '8 FACETRACE'],
   },
@@ -162,7 +162,7 @@ const CasesSolved = () => {
           </div>
           <h2 className="cases__title">Cases Solved</h2>
           <p className="cases__lead">
-            Operational outcomes from the AGEX IRIS facial reconstruction &amp; enhancement pipeline —
+            Operational outcomes from the AGEX IRIS facial reconstruction &amp; enhancement pipeline -
             degraded scene media restored, matched, and attributed to confirmed identities.
           </p>
         </header>

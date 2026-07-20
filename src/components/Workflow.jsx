@@ -91,14 +91,14 @@ const FlowArrow = () => (
   </div>
 )
 
-/* ===== GEOINT CASE FILE — Terrain Feature Analysis ===== */
+/* ===== GEOINT CASE FILE - Terrain Feature Analysis ===== */
 
 const CASE_STAGE_MS = 4200
 
 const caseStages = [
   {
     key: 'summary', tab: 'SUMMARY', num: '00',
-    tag: 'OVERVIEW — WHAT THIS DOES',
+    tag: 'OVERVIEW - WHAT THIS DOES',
     title: 'GEOINT · Terrain Feature Analysis',
     sub: 'Confirms where a photo or video was really captured. Terrain features in the frame are enhanced with AI, analyzed, and matched against satellite imagery until exact coordinates are verified.',
     flow: ['VIDEO / IMAGE IN', 'AI TERRAIN MATCH', 'COORDINATES OUT'],
@@ -143,7 +143,7 @@ const caseStages = [
   },
 ]
 
-/* ===== NIGRAN CASE — Real-Time Media Monitoring ===== */
+/* ===== NIGRAN CASE - Real-Time Media Monitoring ===== */
 
 const nigranPlatforms = [
   { key: 'twitter', label: 'TWITTER / X', img: '/nigran-feed-twitter.png', color: '#1d9bf0' },
@@ -156,7 +156,7 @@ const nigranPlatforms = [
 const nigranStages = [
   {
     key: 'summary', tab: 'SUMMARY', num: '00',
-    tag: 'OVERVIEW — WHAT THIS DOES',
+    tag: 'OVERVIEW - WHAT THIS DOES',
     title: 'NIGRAN · Real-Time Media Monitoring',
     sub: 'A centralized platform that monitors, analyzes and generates intelligence from multiple social media platforms in real time.',
     flow: ['SOCIAL FEEDS IN', 'MONITOR · ANALYZE', 'ALERTS & REPORTS OUT'],
@@ -166,7 +166,7 @@ const nigranStages = [
     key: 'dashboard', tab: 'DASHBOARD', num: '01',
     tag: 'COMMAND VIEW',
     title: 'Media Intelligence Dashboard',
-    sub: 'Unified real-time monitoring — alert volume, sentiment distribution, activity trends and source health in one console.',
+    sub: 'Unified real-time monitoring - alert volume, sentiment distribution, activity trends and source health in one console.',
     img: '/nigran-dashboard.png',
     meta: ['1.7K ALERTS', 'SOURCES 5/5', 'UPTIME 100%'],
   },
@@ -174,7 +174,7 @@ const nigranStages = [
     key: 'platforms', tab: 'PLATFORMS', num: '02',
     tag: 'MULTI-PLATFORM SURVEILLANCE',
     title: 'One Live Feed per Platform',
-    sub: 'Dedicated activity feeds for Twitter/X, Facebook, Instagram, TikTok and YouTube — tracked accounts, keywords and hashtags.',
+    sub: 'Dedicated activity feeds for Twitter/X, Facebook, Instagram, TikTok and YouTube - tracked accounts, keywords and hashtags.',
     stack: true,
   },
   {
@@ -184,7 +184,7 @@ const nigranStages = [
     sub: 'A seamless, automated pipeline:',
     steps: [
       'Social media platforms monitored continuously',
-      'Data collection — mentions fetched & stored',
+      'Data collection - mentions fetched & stored',
       'Keyword & account monitoring',
       'Content & sentiment analysis',
       'Real-time alerts on relevant events',
@@ -193,12 +193,12 @@ const nigranStages = [
   },
 ]
 
-/* ===== AGEX IRIS CASE — FR/FE Reconstruction & Matching ===== */
+/* ===== AGEX IRIS CASE - FR/FE Reconstruction & Matching ===== */
 
 const agexStages = [
   {
     key: 'summary', tab: 'SUMMARY', num: '00',
-    tag: 'OVERVIEW — WHAT THIS DOES',
+    tag: 'OVERVIEW - WHAT THIS DOES',
     title: 'AGEX IRIS · Facial Reconstruction & Recognition',
     sub: 'Restores degraded, obscured and damaged facial images using an in-house GAN reconstruction model, then passes the restored face to the recognition engine for NADRA database matching.',
     flow: ['DEGRADED FACE IN', 'GAN RESTORE', 'NADRA MATCH OUT'],
@@ -206,9 +206,9 @@ const agexStages = [
   },
   {
     key: 'input', tab: 'INPUT', num: '01',
-    tag: 'STEP 01 / 04 — IMAM BARGAH CASE, ISLAMABAD',
+    tag: 'STEP 01 / 04 - IMAM BARGAH CASE, ISLAMABAD',
     title: 'Degraded Face Image',
-    sub: 'Severely damaged facial image recovered from the scene — Islamabad G10 SB, 11 Nov 2025.',
+    sub: 'Severely damaged facial image recovered from the scene - Islamabad G10 SB, 11 Nov 2025.',
     img: '/agex-input.png',
     meta: ['SOURCE: SCENE MEDIA', 'QUALITY: SEVERE DAMAGE'],
     face: 'degraded',
@@ -217,7 +217,7 @@ const agexStages = [
     key: 'gan', tab: 'GAN MODEL', num: '02',
     tag: 'STEP 02 / 04',
     title: 'Reconstruction Architecture',
-    sub: 'In-house model trained on NUST high-performance GPU infrastructure — fine-tuned on Asian facial characteristics and feature patterns.',
+    sub: 'In-house model trained on NUST high-performance GPU infrastructure - fine-tuned on Asian facial characteristics and feature patterns.',
     img: '/agex-gan.png',
     meta: ['TRAIN → RESTORE', 'IN-HOUSE MODEL'],
     face: 'gan',
@@ -233,21 +233,21 @@ const agexStages = [
   },
   {
     key: 'matched', tab: 'MATCHED', num: '04',
-    tag: 'STEP 04 / 04 — IDENTITY SURFACED',
+    tag: 'STEP 04 / 04 - IDENTITY SURFACED',
     title: 'NADRA Match',
-    sub: 'Identity candidate surfaced for analyst review — supporting investigative and forensic operations.',
+    sub: 'Identity candidate surfaced for analyst review - supporting investigative and forensic operations.',
     img: '/agex-matched.png',
     meta: ['NADRA DATABASE', 'CANDIDATE FOUND'],
     face: 'matched',
     match: {
       label: 'IDENTITY CANDIDATE',
-      caseLine: 'Imam Bargah Case — Islamabad G10 SB · 11 Nov 2025',
+      caseLine: 'Imam Bargah Case - Islamabad G10 SB · 11 Nov 2025',
       verdict: 'Analyst-led review',
     },
   },
 ]
 
-/* ===== SOCIAL MEDIA RECON CASE — OSINT Intelligence ===== */
+/* ===== SOCIAL MEDIA RECON CASE - OSINT Intelligence ===== */
 
 const socialPlatforms = [
   { name: 'FACEBOOK', color: '#1877f2' },
@@ -262,9 +262,9 @@ const socialPlatforms = [
 const socialStages = [
   {
     key: 'summary', tab: 'SUMMARY', num: '00',
-    tag: 'OVERVIEW — WHAT THIS DOES',
+    tag: 'OVERVIEW - WHAT THIS DOES',
     title: 'Social Media Recon · OSINT Intelligence',
-    sub: 'A unified view of social interaction — OSINT extraction and case-based intelligence support across every major platform.',
+    sub: 'A unified view of social interaction - OSINT extraction and case-based intelligence support across every major platform.',
     flow: ['OSINT RECON', 'ACCOUNT MAPPING', 'PROFILE CORRELATION', 'ACTIONABLE LEADS'],
     meta: ['MULTI-PLATFORM OPS', 'TECHINT PROFILING', 'CASE-BASED INTEL'],
   },
@@ -272,13 +272,13 @@ const socialStages = [
     key: 'platforms', tab: 'PLATFORMS', num: '01',
     tag: 'UNIFIED SOCIAL VIEW',
     title: 'Multi-Platform Operations',
-    sub: 'Multi-platform ops for intelligence gathering — a single unified view of social interaction across all monitored networks.',
+    sub: 'Multi-platform ops for intelligence gathering - a single unified view of social interaction across all monitored networks.',
     social3d: true,
     meta: ['7 NETWORKS', 'UNIFIED VIEW'],
   },
   {
     key: 'metrics', tab: 'METRICS', num: '02',
-    tag: 'DATA EXTRACTION — OSINT RECON',
+    tag: 'DATA EXTRACTION - OSINT RECON',
     title: 'Extraction at Scale',
     sub: '2,000+ accounts mapped through OSINT recon, correlated into actionable intelligence.',
     stats: [
@@ -289,19 +289,19 @@ const socialStages = [
   },
   {
     key: 'pipeline', tab: 'PIPELINE', num: '03',
-    tag: 'CASE STUDIES — TECHINT PROFILING',
+    tag: 'CASE STUDIES - TECHINT PROFILING',
     title: 'From Recon to Actionable Leads',
-    sub: 'Suspects profiled in the database through TechINT — an OSINT pipeline turning raw social data into leads.',
+    sub: 'Suspects profiled in the database through TechINT - an OSINT pipeline turning raw social data into leads.',
     steps: [
       'OSINT Recon across all platforms',
-      'Account Mapping — 2,000+ accounts linked',
+      'Account Mapping - 2,000+ accounts linked',
       'Profile Correlation & identity resolution',
       'Actionable Leads surfaced for analysts',
     ],
   },
 ]
 
-/* ===== CYBERINT RECON CASE — OSINT / Data Harvest ===== */
+/* ===== CYBERINT RECON CASE - OSINT / Data Harvest ===== */
 
 const cyberSources = [
   { name: 'GOV RECORDS', color: '#1a3a2a' },
@@ -315,9 +315,9 @@ const cyberSources = [
 const cyberStages = [
   {
     key: 'summary', tab: 'SUMMARY', num: '00',
-    tag: 'OVERVIEW — WHAT THIS DOES',
+    tag: 'OVERVIEW - WHAT THIS DOES',
     title: 'CyberInt Recon · OSINT Data Harvest',
-    sub: 'Reconnaissance across open and closed sources — government records, public databases, domains, emails, phone numbers and leaked databases — compiled into actionable recon intelligence.',
+    sub: 'Reconnaissance across open and closed sources - government records, public databases, domains, emails, phone numbers and leaked databases - compiled into actionable recon intelligence.',
     flow: ['SOURCE HARVEST', 'CORRELATION', 'SUSPECT PROFILING', 'ACTIONABLE LEADS'],
     meta: ['OSINT + TECHINT', 'CASE-BASED INTEL', 'ANALYST-LED REVIEW'],
   },
@@ -331,9 +331,9 @@ const cyberStages = [
   },
   {
     key: 'metrics', tab: 'METRICS', num: '02',
-    tag: 'IMPACT — TECHINT PROFILING',
+    tag: 'IMPACT - TECHINT PROFILING',
     title: 'Recon at Scale',
-    sub: 'Suspects profiled in the database through CyberInt — turning harvested records into supported cases.',
+    sub: 'Suspects profiled in the database through CyberInt - turning harvested records into supported cases.',
     stats: [
       { val: 63, suffix: '+', label: 'Cases supported with actionable leads' },
       { val: 13000, suffix: '', label: 'Suspects profiled through CyberInt' },
@@ -342,13 +342,13 @@ const cyberStages = [
   },
   {
     key: 'pipeline', tab: 'PIPELINE', num: '03',
-    tag: 'CASE STUDIES — CASE-BASED INTEL',
+    tag: 'CASE STUDIES - CASE-BASED INTEL',
     title: 'From Harvest to Actionable Leads',
     sub: 'A recon pipeline turning raw records into case-ready intelligence for analysts.',
     steps: [
       'Source harvest across gov, public & leaked databases',
       'Correlation & identity resolution',
-      'Suspect profiling — 13,000+ records matched',
+      'Suspect profiling - 13,000+ records matched',
       'Actionable leads surfaced for analyst review',
     ],
   },
@@ -463,7 +463,7 @@ const DarkGlobe = () => (
       <path d="M120 180 Q150 168 168 190 Q172 214 148 224 Q124 220 116 200 Q114 188 120 180 Z" />
       <path d="M206 156 Q232 150 240 172 Q238 192 216 194 Q200 184 206 156 Z" />
     </g>
-    {/* attack arcs — comet pulse */}
+    {/* attack arcs - comet pulse */}
     <g clipPath="url(#dovaGlobeClip)">
       {GLOBE_ARCS.map((a, i) => <path key={`b${i}`} className="wf-tm__arc-base" d={a.d} />)}
       {GLOBE_ARCS.map((a, i) => (
@@ -746,7 +746,7 @@ const TerrainCase = ({ open, onClose }) => {
   if (!open) return null
   return (
     <CaseExplorer
-      name="GEOINT — TERRAIN FEATURE ANALYSIS CASE"
+      name="GEOINT - TERRAIN FEATURE ANALYSIS CASE"
       stages={caseStages}
       stage={stage} setStage={setStage}
       paused={paused} setPaused={setPaused}
@@ -850,7 +850,7 @@ const NigranCase = ({ open, onClose }) => {
   if (!open) return null
   return (
     <CaseExplorer
-      name="NIGRAN — MEDIA MONITORING CASE"
+      name="NIGRAN - MEDIA MONITORING CASE"
       stages={nigranStages}
       stage={stage} setStage={setStage}
       paused={paused} setPaused={setPaused}
@@ -879,7 +879,7 @@ const AgexCase = ({ open, onClose }) => {
 
               {s.face === 'degraded' && (
                 <>
-                  <span className="wf-case__coord-chip">IMAM BARGAH CASE — ISLAMABAD</span>
+                  <span className="wf-case__coord-chip">IMAM BARGAH CASE - ISLAMABAD</span>
                   <span className="wf-case__bracket wf-case__bracket--tl" />
                   <span className="wf-case__bracket wf-case__bracket--tr" />
                   <span className="wf-case__bracket wf-case__bracket--bl" />
@@ -953,7 +953,7 @@ const AgexCase = ({ open, onClose }) => {
   if (!open) return null
   return (
     <CaseExplorer
-      name="AGEX IRIS — FR/FE RECONSTRUCTION CASE"
+      name="AGEX IRIS - FR/FE RECONSTRUCTION CASE"
       stages={agexStages}
       stage={stage} setStage={setStage}
       paused={paused} setPaused={setPaused}
@@ -1042,7 +1042,7 @@ const SocialCase = ({ open, onClose }) => {
   if (!open) return null
   return (
     <CaseExplorer
-      name="SOCIAL MEDIA RECON — OSINT CASE"
+      name="SOCIAL MEDIA RECON - OSINT CASE"
       stages={socialStages}
       stage={stage} setStage={setStage}
       paused={paused} setPaused={setPaused}
@@ -1133,7 +1133,7 @@ const CyberCase = ({ open, onClose }) => {
   if (!open) return null
   return (
     <CaseExplorer
-      name="CYBERINT RECON — OSINT DATA HARVEST CASE"
+      name="CYBERINT RECON - OSINT DATA HARVEST CASE"
       stages={cyberStages}
       stage={stage} setStage={setStage}
       paused={paused} setPaused={setPaused}
@@ -1143,7 +1143,7 @@ const CyberCase = ({ open, onClose }) => {
   )
 }
 
-/* ===== DARKOVA — Dark Web Monitoring (NOX) ===== */
+/* ===== DARKOVA - Dark Web Monitoring (NOX) ===== */
 
 const darkovaSources = [
   { name: 'INDIAN GOVT DB', color: '#c9a227' },
@@ -1157,7 +1157,7 @@ const darkovaSources = [
 const darkovaStages = [
   {
     key: 'summary', tab: 'SUMMARY', num: '00',
-    tag: 'OVERVIEW — WHAT NOX HARVESTS',
+    tag: 'OVERVIEW - WHAT NOX HARVESTS',
     title: 'Darkova · Dark Web Monitoring',
     sub: 'Continuously monitoring hostile platforms, harvesting leaked databases and mapping threat actors across the onion network.',
     flow: ['MONITOR HOSTILE PLATFORMS', 'HARVEST LEAKS', 'MAP THREAT ACTORS'],
@@ -1165,7 +1165,7 @@ const darkovaStages = [
   },
   {
     key: 'dashboard', tab: 'DASHBOARD', num: '01',
-    tag: 'MODULE 03 · DARKOVA — NOX LAB ENGINE',
+    tag: 'MODULE 03 · DARKOVA - NOX LAB ENGINE',
     title: 'Darkova Threat Console',
     sub: 'Live global threat globe with realtime attack arcs, alert triage and an onion-crawler source feed.',
     dashboard: true,
@@ -1175,7 +1175,7 @@ const darkovaStages = [
     key: 'harvest', tab: 'HARVEST', num: '02',
     tag: 'WHAT NOX HARVESTS',
     title: 'Dark Web Harvest at Scale',
-    sub: 'Leaked records, hostile accounts and infiltrated markets — the yield of continuous dark-web surveillance.',
+    sub: 'Leaked records, hostile accounts and infiltrated markets - the yield of continuous dark-web surveillance.',
     stats: [
       { val: 20, suffix: ' Mn', label: 'Leaked Records Harvested', note: 'Indian · Israeli Red Dome' },
       { val: 750, suffix: '', label: 'Hostile Accounts Mapped', note: 'Forums · Markets · Chans' },
@@ -1265,7 +1265,7 @@ const DarkovaCase = ({ open, onClose }) => {
   if (!open) return null
   return (
     <CaseExplorer
-      name="DARKOVA — NOX DARK WEB MONITORING CASE"
+      name="DARKOVA - NOX DARK WEB MONITORING CASE"
       stages={darkovaStages}
       stage={stage} setStage={setStage}
       paused={paused} setPaused={setPaused}
@@ -1275,7 +1275,7 @@ const DarkovaCase = ({ open, onClose }) => {
   )
 }
 
-/* ===== OFFENSIVE HACKING (NOX) — one-tap backdoor attack chain ===== */
+/* ===== OFFENSIVE HACKING (NOX) - one-tap backdoor attack chain ===== */
 
 const AttackScene = ({ variant }) => {
   if (variant === 'terminal') {
@@ -1322,7 +1322,7 @@ const AttackScene = ({ variant }) => {
       </svg>
     )
   }
-  // 'app' — Daraz-clone app grid
+  // 'app' - Daraz-clone app grid
   return (
     <svg className="wf-case__scene" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <rect width="320" height="200" fill="#f2f2f2" />
@@ -1339,47 +1339,47 @@ const AttackScene = ({ variant }) => {
 const offensiveStages = [
   {
     key: 'summary', tab: 'SUMMARY', num: '00',
-    tag: 'OVERVIEW — HOW NOX DELIVERS A BACKDOOR',
+    tag: 'OVERVIEW - HOW NOX DELIVERS A BACKDOOR',
     title: 'Offensive Hacking · One-Tap Backdoor',
-    sub: 'A pixel-perfect Daraz clone delivered via WhatsApp — silent backdoor, full Android device access via C2.',
+    sub: 'A pixel-perfect Daraz clone delivered via WhatsApp - silent backdoor, full Android device access via C2.',
     flow: ['DELIVERY', 'INFECTION', 'PERSISTENCE', 'EXFILTRATION'],
     meta: ['WHATSAPP DELIVERY', 'SILENT BACKDOOR', 'C2 DEVICE ACCESS'],
   },
   {
     key: 'delivery', tab: 'DELIVERY', num: '01',
-    tag: 'STEP 01 / 04 — DELIVERY',
+    tag: 'STEP 01 / 04 - DELIVERY',
     title: 'WhatsApp',
     sub: 'Victim receives a crafted link disguised as a Daraz special offer via WhatsApp message.',
     img: '/offensive-whatsapp.png', scene: 'whatsapp', badge: 'DELIVERY',
   },
   {
     key: 'infection', tab: 'INFECTION', num: '02',
-    tag: 'STEP 02 / 04 — INFECTION',
+    tag: 'STEP 02 / 04 - INFECTION',
     title: 'Clone Installed',
-    sub: 'Victim clicks and installs a pixel-perfect Daraz clone APK with one tap — no suspicion.',
+    sub: 'Victim clicks and installs a pixel-perfect Daraz clone APK with one tap - no suspicion.',
     img: '/offensive-clone.png', scene: 'clone', badge: 'INFECTION',
   },
   {
     key: 'persistence', tab: 'PERSISTENCE', num: '03',
-    tag: 'STEP 03 / 04 — PERSISTENCE',
+    tag: 'STEP 03 / 04 - PERSISTENCE',
     title: 'Back Door Opens',
     sub: 'App silently opens a persistent backdoor upon launch, granting remote C2 access 24/7.',
     img: '/offensive-c2.png', scene: 'terminal', badge: 'PERSISTENCE', live: 'C2 LIVE',
   },
   {
     key: 'exfiltration', tab: 'EXFILTRATION', num: '04',
-    tag: 'STEP 04 / 04 — EXFILTRATION',
+    tag: 'STEP 04 / 04 - EXFILTRATION',
     title: 'Full Access',
-    sub: 'Camera · Microphone · GPS · Messages · Files · Call logs — all live-streamed to C2 server.',
+    sub: 'Camera · Microphone · GPS · Messages · Files · Call logs - all live-streamed to C2 server.',
     img: '/offensive-app.png', scene: 'app', badge: 'EXFILTRATION',
     access: ['Camera', 'Microphone', 'GPS', 'Messages', 'Files', 'Call logs'],
     c2note: 'All live-streamed to C2 server',
   },
   {
     key: 'next', tab: 'NEXT', num: '05',
-    tag: 'FUTURE NOVELTY — NEXT VERSION',
+    tag: 'FUTURE NOVELTY - NEXT VERSION',
     title: 'One-Click Compromise',
-    sub: 'The next version collapses the entire chain into a single click — delivery, install and backdoor in one action, with zero further victim interaction.',
+    sub: 'The next version collapses the entire chain into a single click - delivery, install and backdoor in one action, with zero further victim interaction.',
     novelty: true,
     flow: ['ONE CLICK', 'AUTO-INSTALL', 'INSTANT C2'],
   },
@@ -1455,7 +1455,7 @@ const OffensiveCase = ({ open, onClose }) => {
   if (!open) return null
   return (
     <CaseExplorer
-      name="OFFENSIVE HACKING — ONE-TAP BACKDOOR CASE"
+      name="OFFENSIVE HACKING - ONE-TAP BACKDOOR CASE"
       stages={offensiveStages}
       stage={stage} setStage={setStage}
       paused={paused} setPaused={setPaused}
@@ -1465,7 +1465,7 @@ const OffensiveCase = ({ open, onClose }) => {
   )
 }
 
-/* ===== ARIE — Auto Pentesting (NOX) — live mission-control console ===== */
+/* ===== ARIE - Auto Pentesting (NOX) - live mission-control console ===== */
 
 const arieMissions = [
   { name: 'Juice Shop Recon', host: 'juice.local', engine: 'PENTAGI', tasks: 12 },
@@ -1490,7 +1490,7 @@ const ARIE_KINDS = ['TASK', 'SUBTASK', 'ACTION']
 const arieLog = [
   '[AUTOPENTEST] target locked · dvwa.local',
   '[AUTOPENTEST] engine PENTAGI engaged',
-  '[AUTOPENTEST] recon scan complete — 14 services',
+  '[AUTOPENTEST] recon scan complete - 14 services',
   '[AUTOPENTEST] SQLi vector confirmed on /login',
   '[AUTOPENTEST] payload echo hijacked',
   '[AUTOPENTEST] shell established · uid=33',
@@ -1561,9 +1561,9 @@ const ArieTelemetry = () => {
 const arieStages = [
   {
     key: 'summary', tab: 'SUMMARY', num: '00',
-    tag: 'OVERVIEW — AUTONOMOUS PENTEST AGENT',
+    tag: 'OVERVIEW - AUTONOMOUS PENTEST AGENT',
     title: 'ARIE · Auto Pentesting',
-    sub: 'A command-center for autonomous pentest missions — target lock, an automated TASK → SUBTASK → ACTION pipeline, and live telemetry.',
+    sub: 'A command-center for autonomous pentest missions - target lock, an automated TASK → SUBTASK → ACTION pipeline, and live telemetry.',
     flow: ['TARGET LOCK', 'AUTOMATED PIPELINE', 'REMEDIATION'],
     meta: ['PENTAGI · PENTESTGPT', 'AUTONOMOUS MISSIONS', 'LIVE TELEMETRY'],
   },
@@ -1577,9 +1577,9 @@ const arieStages = [
   },
   {
     key: 'pipeline', tab: 'PIPELINE', num: '02',
-    tag: 'AUTOMATED — TASK → SUBTASK → ACTION',
+    tag: 'AUTOMATED - TASK → SUBTASK → ACTION',
     title: 'Live Task Pipeline',
-    sub: 'The agent walks the pipeline automatically — completing tasks, activating the next node and queuing the rest.',
+    sub: 'The agent walks the pipeline automatically - completing tasks, activating the next node and queuing the rest.',
     pipeline: true,
   },
   {
@@ -1644,7 +1644,7 @@ const ArieCase = ({ open, onClose }) => {
   if (!open) return null
   return (
     <CaseExplorer
-      name="ARIE — AUTO PENTESTING CONSOLE CASE"
+      name="ARIE - AUTO PENTESTING CONSOLE CASE"
       stages={arieStages}
       stage={stage} setStage={setStage}
       paused={paused} setPaused={setPaused}
@@ -1654,14 +1654,14 @@ const ArieCase = ({ open, onClose }) => {
   )
 }
 
-/* ===== RAVEN — Route Anomaly & Verification Engine (aerial route clearance) ===== */
+/* ===== RAVEN - Route Anomaly & Verification Engine (aerial route clearance) ===== */
 
 const ravenStages = [
   {
     key: 'summary', tab: 'SUMMARY', num: '00',
-    tag: 'OVERVIEW — CHANGE, NOT OBJECTS',
+    tag: 'OVERVIEW - CHANGE, NOT OBJECTS',
     title: 'RAVEN · Route Anomaly & Verification',
-    sub: 'Inspects a route from the air instead of on foot. Photograph a road two days running — anything new, moved or disturbed shows up as a difference. RAVEN flags what changed since yesterday for a human to inspect.',
+    sub: 'Inspects a route from the air instead of on foot. Photograph a road two days running - anything new, moved or disturbed shows up as a difference. RAVEN flags what changed since yesterday for a human to inspect.',
     flow: ['TWO FLIGHTS', 'COMPARE MAPS', 'FLAG CHANGES'],
     meta: ['CHANGE DETECTION', 'NO EXOTIC SENSORS', 'HUMAN-IN-THE-LOOP'],
   },
@@ -1676,14 +1676,14 @@ const ravenStages = [
     key: 'stitch', tab: 'STITCH', num: '02', scene: 'stitch', badge: 'OpenDroneMap · STITCHING',
     tag: 'STAGE 02 / 05',
     title: 'Map & Height Model',
-    sub: 'OpenDroneMap combines each day’s photos into one seamless top-down map, plus a height model reconstructed from photo overlap — no special sensor needed.',
+    sub: 'OpenDroneMap combines each day’s photos into one seamless top-down map, plus a height model reconstructed from photo overlap - no special sensor needed.',
     meta: ['OPENDRONEMAP', 'ORTHO MAP', '3D HEIGHT MODEL'],
   },
   {
     key: 'compare', tab: 'COMPARE', num: '03', scene: 'compare', badge: 'APPEARANCE + HEIGHT',
     tag: 'STAGE 03 / 05',
     title: 'Day 1 vs Day 2',
-    sub: 'The two maps are compared on two signals — appearance change (AI model) catches new objects; height change catches disturbed or refilled ground that looks unchanged in colour.',
+    sub: 'The two maps are compared on two signals - appearance change (AI model) catches new objects; height change catches disturbed or refilled ground that looks unchanged in colour.',
     meta: ['APPEARANCE + HEIGHT', 'SEEING THE INVISIBLE'],
   },
   {
@@ -1697,7 +1697,7 @@ const ravenStages = [
     key: 'report', tab: 'REPORT', num: '05', scene: 'report', badge: 'GPS · COVERAGE',
     tag: 'STAGE 05 / 05',
     title: 'Confirmed Change Sites',
-    sub: 'Confirmed changes are output with GPS coordinates, before/after imagery and a coverage map — a short list of specific locations to inspect.',
+    sub: 'Confirmed changes are output with GPS coordinates, before/after imagery and a coverage map - a short list of specific locations to inspect.',
     meta: ['GPS COORDINATES', 'BEFORE / AFTER', 'COVERAGE MAP'],
   },
 ]
@@ -1859,7 +1859,7 @@ const RavenCase = ({ open, onClose }) => {
   if (!open) return null
   return (
     <CaseExplorer
-      name="RAVEN — ROUTE ANOMALY & VERIFICATION CASE"
+      name="RAVEN - ROUTE ANOMALY & VERIFICATION CASE"
       stages={ravenStages}
       stage={stage} setStage={setStage}
       paused={paused} setPaused={setPaused}
@@ -1869,7 +1869,7 @@ const RavenCase = ({ open, onClose }) => {
   )
 }
 
-/* ===== DEFENSIVE SUITE — Security Operations (See · Control · Respond) ===== */
+/* ===== DEFENSIVE SUITE - Security Operations (See · Control · Respond) ===== */
 
 const defenseTools = [
   { name: 'WAZUH', color: '#3b82f6' },
@@ -1910,9 +1910,9 @@ const DefenseLoop = () => (
 const defenseStages = [
   {
     key: 'summary', tab: 'SUMMARY', num: '00',
-    tag: 'OVERVIEW — SECURITY OPERATIONS, UNIFIED',
+    tag: 'OVERVIEW - SECURITY OPERATIONS, UNIFIED',
     title: 'Defensive Suite · SecOps Platform',
-    sub: 'A complete Security Operations capability — See, Control, Respond — on one unified, auditable stack, with Axn as its endpoint-control and data-protection core.',
+    sub: 'A complete Security Operations capability - See, Control, Respond - on one unified, auditable stack, with Axn as its endpoint-control and data-protection core.',
     flow: ['SEE', 'CONTROL', 'RESPOND'],
     meta: ['UNIFIED STACK', 'CENTRALLY MANAGED', 'FULLY AUDITABLE'],
   },
@@ -1920,7 +1920,7 @@ const defenseStages = [
     key: 'loop', tab: 'LOOP', num: '01', loop: true, badge: 'ONE CLOSED LOOP',
     tag: 'ONE CLOSED LOOP',
     title: 'See → Control → Respond',
-    sub: 'Monitoring surfaces what’s happening, the control layer enforces the rules, and automation drives a fast, consistent, auditable response — all from one place.',
+    sub: 'Monitoring surfaces what’s happening, the control layer enforces the rules, and automation drives a fast, consistent, auditable response - all from one place.',
     meta: ['CLOSED LOOP', 'ONE PLATFORM'],
   },
   {
@@ -1938,18 +1938,18 @@ const defenseStages = [
     key: 'toolset', tab: 'TOOLSET', num: '03', ring: defenseTools, core: 'DEFENSE', badge: 'THE STACK',
     tag: 'THE UNIFIED STACK',
     title: 'One Unified Toolset',
-    sub: 'Nine proven tools, one operation — from detection to enforcement to automated response.',
+    sub: 'Nine proven tools, one operation - from detection to enforcement to automated response.',
     meta: ['9 TOOLS', 'ONE OPERATION'],
   },
   {
     key: 'axn', tab: 'AXN', num: '04',
     tag: 'ENDPOINT CONTROL & DLP CORE',
-    title: 'Axn — the Core',
+    title: 'Axn - the Core',
     sub: 'Advanced Endpoint Protection & Data Loss Prevention for enterprise Windows fleets, from a single console.',
     steps: [
-      'Control hardware — USB, storage & network adapters',
+      'Control hardware - USB, storage & network adapters',
       'Control software, services & policy per machine',
-      'Prevent data loss — clipboard, screen, browser, egress',
+      'Prevent data loss - clipboard, screen, browser, egress',
       'Guide user remediation with timers & lock-out',
     ],
     meta: ['SEE · CONTROL · RESPOND', 'SINGLE CONSOLE'],
@@ -2045,7 +2045,7 @@ const DefensiveCase = ({ open, onClose }) => {
   if (!open) return null
   return (
     <CaseExplorer
-      name="DEFENSIVE SUITE — SECURITY OPERATIONS CASE"
+      name="DEFENSIVE SUITE - SECURITY OPERATIONS CASE"
       stages={defenseStages}
       stage={stage} setStage={setStage}
       paused={paused} setPaused={setPaused}
@@ -2055,7 +2055,7 @@ const DefensiveCase = ({ open, onClose }) => {
   )
 }
 
-/* ===== RESPONSIBLE AI — Assurance & Governance for agentic AI ===== */
+/* ===== RESPONSIBLE AI - Assurance & Governance for agentic AI ===== */
 
 const raiPipeline = ['Obligation', 'Control', 'Probe', 'Finding', 'Signed Evidence', 'Remediation', 'Retest']
 
@@ -2085,7 +2085,7 @@ const RaiPipeline = () => {
           </span>
         ))}
       </div>
-      <div className="wf-rai__note">Continuous, governed testing — every obligation compiled to auditor-grade evidence with remediation & retest.</div>
+      <div className="wf-rai__note">Continuous, governed testing - every obligation compiled to auditor-grade evidence with remediation & retest.</div>
     </div>
   )
 }
@@ -2101,9 +2101,9 @@ const raiUmbrellas = [
 const raiStages = [
   {
     key: 'summary', tab: 'SUMMARY', num: '00',
-    tag: 'OVERVIEW — ETHICAL BY DESIGN, TRUSTED BY DEFAULT',
+    tag: 'OVERVIEW - ETHICAL BY DESIGN, TRUSTED BY DEFAULT',
     title: 'Responsible AI · Assurance Framework',
-    sub: 'A regulation-agnostic assurance framework for agentic AI — it compiles obligations from many regimes into signed, auditor-grade evidence, and measures precisely what governance can and cannot reach.',
+    sub: 'A regulation-agnostic assurance framework for agentic AI - it compiles obligations from many regimes into signed, auditor-grade evidence, and measures precisely what governance can and cannot reach.',
     flow: ['OBLIGATIONS', 'GOVERNED TESTING', 'ASSURANCE'],
     meta: ['REGULATION-AGNOSTIC', 'AUDITOR-GRADE EVIDENCE', 'AGENTIC SYSTEMS'],
   },
@@ -2111,7 +2111,7 @@ const raiStages = [
     key: 'pillars', tab: 'PILLARS', num: '01',
     tag: 'FOUR PILLARS',
     title: 'Fairness · Transparency · Privacy · Accountability',
-    sub: 'The principles the framework operationalises — turned from posters into enforced, logged, auditable controls.',
+    sub: 'The principles the framework operationalises - turned from posters into enforced, logged, auditable controls.',
     pillars: [
       { name: 'FAIRNESS', tag: 'Equitable by design', tools: ['Bias probes', 'Ground-truth labels'] },
       { name: 'TRANSPARENCY', tag: 'Inspectable interface', tools: ['NIST AI RMF', 'Audit logging'] },
@@ -2123,26 +2123,26 @@ const raiStages = [
     key: 'pipeline', tab: 'PIPELINE', num: '02', pipeline: true, badge: 'CONTINUOUS ASSURANCE',
     tag: 'OBLIGATION → EVIDENCE',
     title: 'The Evidence Pipeline',
-    sub: 'Every obligation flows automatically through the pipeline — control, probe, finding, signed evidence, remediation and retest.',
+    sub: 'Every obligation flows automatically through the pipeline - control, probe, finding, signed evidence, remediation and retest.',
     meta: ['AUTOMATED', 'CLAUSE-LINKED', 'REPRODUCIBLE'],
   },
   {
     key: 'taxonomy', tab: 'TAXONOMY', num: '03', ring: raiUmbrellas, core: 'OWASP ASI', badge: 'FIVE UMBRELLAS',
-    tag: 'THREAT TAXONOMY — OWASP ASI 2026',
+    tag: 'THREAT TAXONOMY - OWASP ASI 2026',
     title: 'Five-Umbrella Taxonomy',
-    sub: 'Agentic threats mapped across five umbrellas — from memory poisoning to autonomy and oversight — as evidence-producing probes.',
+    sub: 'Agentic threats mapped across five umbrellas - from memory poisoning to autonomy and oversight - as evidence-producing probes.',
     meta: ['5 UMBRELLAS', 'PROBE LIBRARY'],
   },
   {
     key: 'measure', tab: 'MEASURE', num: '04',
     tag: 'THE MEASURED CORE',
     title: 'Residual-Risk Surface & Attribution',
-    sub: 'With governance toggled ON/OFF, the framework measures detectability and attributability — mapping the residual surface that even audited-maximal governance cannot reach.',
+    sub: 'With governance toggled ON/OFF, the framework measures detectability and attributability - mapping the residual surface that even audited-maximal governance cannot reach.',
     steps: [
-      'Governance ON/OFF — the single instrumented variable',
-      'Detectability — provable + empirical residual subsets',
-      'Attribution — rank-trend over structural distance',
-      'Residual overlap — undetected ∩ misattributed',
+      'Governance ON/OFF - the single instrumented variable',
+      'Detectability - provable + empirical residual subsets',
+      'Attribution - rank-trend over structural distance',
+      'Residual overlap - undetected ∩ misattributed',
     ],
     meta: ['DETECTABILITY', 'ATTRIBUTABILITY', 'RESIDUAL SURFACE'],
   },
@@ -2235,7 +2235,7 @@ const ResponsibleAiCase = ({ open, onClose }) => {
   if (!open) return null
   return (
     <CaseExplorer
-      name="RESPONSIBLE AI — ASSURANCE FRAMEWORK CASE"
+      name="RESPONSIBLE AI - ASSURANCE FRAMEWORK CASE"
       stages={raiStages}
       stage={stage} setStage={setStage}
       paused={paused} setPaused={setPaused}

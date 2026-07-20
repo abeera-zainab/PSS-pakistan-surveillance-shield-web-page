@@ -56,7 +56,7 @@ const slides = [
   {
     id: 's1', no: '01', img: '/geoint-1.png', kind: 'MAP', code: 'GEO-GRID',
     title: 'Geolocated Training Videos', region: 'KPK · Balochistan · Afghanistan',
-    tag: 'OVERVIEW — GEOLOCATED FEEDS',
+    tag: 'OVERVIEW - GEOLOCATED FEEDS',
     summary: 'Six hostile training videos geolocated to precise coordinates through terrain-feature matching.',
     flow: ['Feed Intake', 'Frame Extraction', 'Terrain Match', 'Coordinate Fix'],
     tags: ['6 SITES', 'COORDINATE-LOCKED'],
@@ -64,7 +64,7 @@ const slides = [
   {
     id: 's2', no: '02', img: '/geoint-2.png', kind: 'VID', code: 'FEATURE-MATCH',
     title: 'Distinctive Terrain Feature', region: 'Ras Koh / Dranjan belt',
-    tag: 'ENHANCEMENT — FEATURE ISOLATION',
+    tag: 'ENHANCEMENT - FEATURE ISOLATION',
     summary: 'Enhanced terrain frames matched to a distinctive pyramid-shaped peak, confirmed against satellite terrain view.',
     flow: ['Enhanced Frame', 'Feature Isolation', 'Satellite Compare'],
     tags: ['PYRAMID PEAK', 'ARID · RUGGED'],
@@ -72,7 +72,7 @@ const slides = [
   {
     id: 's3', no: '03', img: '/geoint-3.png', kind: 'MAP', code: 'DRANJAN',
     title: 'Source → Enhanced → Map', region: 'Dranjan / Bolan area',
-    tag: 'PIPELINE — CANYON GEOLOCATION',
+    tag: 'PIPELINE - CANYON GEOLOCATION',
     summary: 'Source frame enhanced to isolate the canyon floor and rocky slopes; map pin aligned with Dranjan/Bolan formations.',
     flow: ['Source Frame', 'AI-Enhanced', 'Terrain Compare', 'Map Fix'],
     tags: ['CANYON', '29°34′ N · 67°22′ E'],
@@ -80,7 +80,7 @@ const slides = [
   {
     id: 's4', no: '04', img: '/geoint-4.png', kind: 'MAP', code: 'BAGH-CORRIDOR',
     title: 'Frame Match & Satellite Correlation', region: 'Bagh · Aghal · Tarangi',
-    tag: 'CORRELATION — NARROWED AOI',
+    tag: 'CORRELATION - NARROWED AOI',
     summary: 'Riverbed and cliff frames matched across two satellite views; both coordinate estimates fall within one terrain corridor.',
     flow: ['Evidence Frame', 'Riverbed Match', 'Satellite ×2', 'Narrow AOI'],
     tags: ['33.816, 70.838', 'SINGLE CORRIDOR'],
@@ -88,7 +88,7 @@ const slides = [
   {
     id: 's5', no: '05', img: '/geoint-5.png', kind: 'VID', code: 'RUIN-SEQ',
     title: 'Visual Evidence Sequence', region: 'Desert mountains & settlements',
-    tag: 'EVIDENCE — FEED vs SATELLITE',
+    tag: 'EVIDENCE - FEED vs SATELLITE',
     summary: 'Enhanced feed frames of mud-brick ruins and open desert compared against satellite terrain cues.',
     flow: ['Enhanced Feed', 'Ruin Structure', 'Satellite Cues'],
     tags: ['MUD-BRICK RUIN', 'DESERT TERRAIN'],
@@ -179,7 +179,7 @@ const GeoIntReel = () => {
           <h2 className="geo__title">Terrain Feature Analysis</h2>
           <p className="geo__lead">
             Hostile training footage geolocated by matching enhanced video frames to distinctive
-            terrain features and satellite imagery — from source frame to a pinned coordinate.
+            terrain features and satellite imagery - from source frame to a pinned coordinate.
           </p>
         </header>
 

@@ -1,5 +1,5 @@
 /* ===========================================
-   ABOUT US — FULL-WIDTH PROFESSIONAL TECH
+   ABOUT US - FULL-WIDTH PROFESSIONAL TECH
    =========================================== */
 
 .about {
@@ -127,7 +127,7 @@
 }
 
 /* ===========================================
-   INTRO — FULL WIDTH
+   INTRO - FULL WIDTH
    =========================================== */
 
 .about__intro {
@@ -288,7 +288,7 @@
 }
 
 /* ===========================================
-   COMMAND STRUCTURE — FULL WIDTH TECH
+   COMMAND STRUCTURE - FULL WIDTH TECH
    =========================================== */
 
 .about__structure {
@@ -498,7 +498,7 @@
   100% { top: calc(100% + 6px); opacity: 0; }
 }
 
-/* Rail — full width */
+/* Rail - full width */
 .about__rail {
   position: relative;
   width: 100%;
@@ -558,7 +558,7 @@
 .about__rail-drop:nth-child(7) { left: calc(100% * 9 / 12); }
 .about__rail-drop:nth-child(8) { left: calc(100% * 11 / 12); }
 
-/* Teams — full page width */
+/* Teams - full page width */
 .about__teams {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -680,7 +680,7 @@
 }
 
 /* ===========================================
-   STATS — LIGHT TECHNICAL MISSION OUTPUT
+   STATS - LIGHT TECHNICAL MISSION OUTPUT
    =========================================== */
 
 .about__stats-section {

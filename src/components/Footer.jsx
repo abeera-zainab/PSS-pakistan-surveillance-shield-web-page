@@ -11,7 +11,7 @@ const Footer = () => (
     <div className="footer__content">
       <div className="footer__top">
         <div className="footer__brand">
-          <img src="/logo.png.png" alt="PSS" className="footer__logo" />
+          <img src="/team_logo.png" alt="PSS" className="footer__logo" />
           <div className="footer__brand-text">
             <span className="footer__brand-name">Pakistan Surveillance Shield</span>
             <span className="footer__brand-tag">UNIT-47 DIVISION</span>

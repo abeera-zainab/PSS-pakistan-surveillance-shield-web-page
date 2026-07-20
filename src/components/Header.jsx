@@ -79,7 +79,7 @@ const Header = () => {
             <div className="header__logo-ring-outer" />
             <div className="header__logo-ring-inner" />
             <div className="header__logo-scan" />
-            <img src="/logo.png.png" alt="PSS Logo" className="header__logo-img" />
+            <img src="/team_logo.png" alt="PSS Logo" className="header__logo-img" />
             <div className="header__logo-pulse" />
             <div className="header__logo-pulse header__logo-pulse--delayed" />
           </div>
@@ -110,12 +110,6 @@ const Header = () => {
             </button>
           ))}
         </nav>
-
-        <div className="header__status">
-          <span className="header__status-dot" />
-          <span className="header__status-text">SYSTEM ACTIVE</span>
-          <span className="header__status-ping" />
-        </div>
       </div>
 
       <div className="header__bottom-line" />

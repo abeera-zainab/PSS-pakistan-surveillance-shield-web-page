@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { createPortal } from 'react-dom'
 import './Hero.css'
 
 const useTypewriter = (text, delay = 60, startDelay = 0) => {
@@ -16,17 +15,112 @@ const useTypewriter = (text, delay = 60, startDelay = 0) => {
   return { displayed, done }
 }
 
+// Each capability panel maps to a live app (opened on click at the current host + port).
+// DEFENSIVE SUITE has no port yet (project in progress) so its panel does not link out.
 const projectCards = [
-  { title: 'AGEX IRIS', logo: '/logo-agex-iris.png', bgImage: '/bg-agex-iris.png', desc: 'AI-powered facial reconstruction & enhancement system for precision identity analysis, feature mapping, and real-time biometric recognition.' },
-  { title: 'NIGRAN', subtitle: 'Media Monitoring', logo: '/logo-nigran.png', bgImage: '/bg-nigran.png', desc: 'Autonomous digital pulse reporting system' },
-  { title: 'GEO INT', subtitle: 'Terrain Feature Analysis', logo: '/logo-terrain.png', bgImage: '/bg-terrain.png', desc: 'Geolocation and Terrain analysis of target areas from a video or image feed' },
-  { title: 'CyberINT', logo: '/logo-cyberint.png', bgImage: '/bg-cyberint.png', desc: 'Full-spectrum OSINT, target profiling, data harvesting, dark web monitoring, and continuous watchdog' },
-  { title: 'Pakistan Surveillance Shield', subtitle: '(PSS)', logo: '/logo.png.png', bgImage: '/logo.png.png', desc: 'Smart Surveillance. Safer Pakistan.', isPss: true },
-  { title: 'NoX', subtitle: 'CyberINT', logo: '/logo-nox.png', bgImage: '/bg-nox.png', desc: 'Adversarial offensive cyber toolset & capability' },
-  { title: 'RAVEN', logo: '/logo-raven.png', bgImage: '/bg-raven.png', desc: 'Spotting the subtle changes to secure the road ahead' },
-  { title: 'DEFENSIVE SUITE', subtitle: 'See · Control · Respond', logo: '/logo-defensive.png', bgImage: '/defensive-suite.jpg', logoBlend: true, desc: 'Unified Security Operations — detection, endpoint control & DLP, and automated response on one platform.' },
-  { title: 'RESPONSIBLE AI', subtitle: 'Ethical by Design', logo: '/logo-responsible-ai.png', bgImage: '/responsible-ai.png', logoBlend: true, desc: 'Regulation-agnostic assurance for agentic AI — turning obligations into signed, auditor-grade evidence.' },
+  { title: 'DEFENSIVE SUITE', subtitle: 'See · Control · Respond', icon: 'defend', port: 8130, bgImage: '/defensive-suite.jpg', desc: 'Unified security operations: detection, endpoint control, DLP, and automated response.' },
+  { title: 'AGEX IRIS', subtitle: 'Biometric Identity', icon: 'eye', port: 8120, bgImage: '/bg-agex-iris.png', desc: 'AI facial reconstruction, feature mapping, and real-time biometric identity recognition.' },
+  { title: 'NIGRAN', subtitle: 'Media Monitoring', icon: 'activity', port: 5173, bgImage: '/bg-nigran.png', desc: 'Autonomous social-media monitoring and digital-pulse intelligence reporting.' },
+  { title: 'RESPONSIBLE AI', subtitle: 'Ethical by Design', icon: 'shieldCheck', port: 5176, bgImage: '/responsible-ai.png', desc: 'Regulation-agnostic assurance for agentic AI with signed, auditor-grade evidence.' },
+  { title: 'Pakistan Surveillance Shield', subtitle: '(PSS)', icon: 'shield', bgImage: '/logo.png.png', desc: 'Smart Surveillance. Safer Pakistan.', isPss: true },
+  { title: 'GEO INT', subtitle: 'Terrain Analysis', icon: 'globe', port: 5174, bgImage: '/bg-terrain.png', desc: 'Geolocation and terrain feature analysis of targets from video or image feeds.' },
+  { title: 'NoX', subtitle: 'Offensive CyberINT', icon: 'target', port: 5177, bgImage: '/bg-nox.png', desc: 'Full-spectrum OSINT, dark-web monitoring, and adversarial offensive cyber tooling.' },
+  { title: 'RAVEN', subtitle: 'Change Detection', icon: 'radar', port: 8095, bgImage: '/bg-raven.png', desc: 'Subtle change-detection for route and perimeter security assurance.' },
 ]
+
+// Artistic, theme-matched emblem icons (forest-green + gold intelligence palette).
+const SV = { viewBox: '0 0 24 24', fill: 'none' }
+const ICONS = {
+  // AGEX IRIS — biometric iris with gold reticle
+  eye: (
+    <svg {...SV}>
+      <defs>
+        <radialGradient id="ic-iris" cx="0.5" cy="0.42" r="0.6"><stop offset="0" stopColor="#d1fae5" /><stop offset="0.45" stopColor="#34d399" /><stop offset="1" stopColor="#1f8a4c" /></radialGradient>
+        <linearGradient id="ic-iris-r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#e6c766" /><stop offset="1" stopColor="#c8a84e" /></linearGradient>
+      </defs>
+      <path d="M2 12S5.6 5.4 12 5.4 22 12 22 12 18.4 18.6 12 18.6 2 12 2 12Z" fill="#0c1f16" stroke="url(#ic-iris-r)" strokeWidth="1.1" />
+      <circle cx="12" cy="12" r="4.6" fill="url(#ic-iris)" />
+      <circle cx="12" cy="12" r="4.6" fill="none" stroke="#e6c766" strokeWidth="0.5" opacity="0.7" />
+      <circle cx="12" cy="12" r="2" fill="#08130d" />
+      <circle cx="10.8" cy="10.7" r="0.8" fill="#eafff5" />
+      <path d="M12 6.6v1.4M12 16v1.4M6.8 12h1.4M15.8 12h1.4" stroke="#e6c766" strokeWidth="0.7" strokeLinecap="round" opacity="0.85" />
+    </svg>
+  ),
+  // NIGRAN — broadcast / signal arcs
+  activity: (
+    <svg {...SV}>
+      <defs><linearGradient id="ic-sig" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#1f8a4c" /><stop offset="1" stopColor="#e6c766" /></linearGradient></defs>
+      <path d="M4 9.6a11.5 11.5 0 0 1 16 0" stroke="#e6c766" strokeWidth="1.1" strokeLinecap="round" opacity="0.7" />
+      <path d="M6 11.9a8.6 8.6 0 0 1 12 0" stroke="#7dd39a" strokeWidth="1.3" strokeLinecap="round" opacity="0.85" />
+      <path d="M8.2 14.1a5.4 5.4 0 0 1 7.6 0" stroke="#34d399" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="12" cy="16.4" r="2.2" fill="url(#ic-sig)" />
+      <circle cx="12" cy="16.4" r="0.85" fill="#eafff5" />
+    </svg>
+  ),
+  // GEO INT — globe with gold graticule + pin
+  globe: (
+    <svg {...SV}>
+      <defs><linearGradient id="ic-geo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#e6c766" /><stop offset="1" stopColor="#34d399" /></linearGradient></defs>
+      <circle cx="12" cy="12" r="9" fill="#0c1f16" stroke="url(#ic-geo)" strokeWidth="1.2" />
+      <path d="M3 12h18M12 3c3.2 3 3.2 15 0 18M12 3c-3.2 3-3.2 15 0 18M5 7.4c4 1.9 9 1.9 14 0M5 16.6c4-1.9 9-1.9 14 0" stroke="#34d399" strokeWidth="0.8" opacity="0.85" />
+      <path d="M15.4 6.1a2.1 2.1 0 0 0-2.1 2.1c0 1.6 2.1 3.6 2.1 3.6s2.1-2 2.1-3.6a2.1 2.1 0 0 0-2.1-2.1z" fill="none" stroke="#e6c766" strokeWidth="1" />
+      <circle cx="15.4" cy="8.2" r="0.7" fill="#e6c766" />
+    </svg>
+  ),
+  // NoX — rising phoenix flame
+  target: (
+    <svg {...SV}>
+      <defs><linearGradient id="ic-nox" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stopColor="#1f8a4c" /><stop offset="0.55" stopColor="#34d399" /><stop offset="1" stopColor="#e6c766" /></linearGradient></defs>
+      <path d="M12 2.4c1.8 2.7 1 4.5 2 6.5.85-.7 1.25-1.85 1-3 1.9 1.85 3 4.2 3 6.6a6.1 6.1 0 1 1-12.2 0c0-2.6 1.45-5 3.45-6.4-.2 1.35.25 2.5 1.15 3.25C13.1 8.3 10.7 5.7 12 2.4Z" fill="#0c1f16" stroke="url(#ic-nox)" strokeWidth="1.2" strokeLinejoin="round" />
+      <path d="M12 11.6c1 .9 1.5 1.9 1.5 3a1.5 1.5 0 1 1-3 0c0-.8.4-1.5.95-2 .2.6.5 1 .95 1.25-.5-.8-.65-1.55-.35-2.25Z" fill="none" stroke="#34d399" strokeWidth="0.9" />
+    </svg>
+  ),
+  // RAVEN — radar sweep
+  radar: (
+    <svg {...SV}>
+      <defs><linearGradient id="ic-rdr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#34d399" /><stop offset="1" stopColor="#c8a84e" /></linearGradient></defs>
+      <circle cx="12" cy="12" r="8.6" fill="#0c1f16" stroke="#e6c766" strokeWidth="0.9" />
+      <circle cx="12" cy="12" r="5.6" fill="none" stroke="#2d5a3d" strokeWidth="0.7" />
+      <circle cx="12" cy="12" r="2.8" fill="none" stroke="#2d5a3d" strokeWidth="0.7" />
+      <path d="M12 12 12 3.4 A8.6 8.6 0 0 1 19.8 14.4 Z" fill="url(#ic-rdr)" opacity="0.5" />
+      <path d="M12 12 19.6 8.2" stroke="#e6c766" strokeWidth="1" strokeLinecap="round" />
+      <circle cx="16.4" cy="8.4" r="1.1" fill="#7dffb0" />
+      <circle cx="12" cy="12" r="1.2" fill="#e6c766" />
+    </svg>
+  ),
+  // RESPONSIBLE AI — governed neural shield
+  // RESPONSIBLE AI — assurance seal (certified / audited)
+  shieldCheck: (
+    <svg {...SV}>
+      <defs><linearGradient id="ic-rai" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#e6c766" /><stop offset="1" stopColor="#34d399" /></linearGradient></defs>
+      <path d="M9.4 14.8 7.7 20.8l4.3-2.1 4.3 2.1-1.7-6" fill="#0c1f16" stroke="#34d399" strokeWidth="0.9" strokeLinejoin="round" />
+      <circle cx="12" cy="9.3" r="6.9" fill="#0c1f16" stroke="url(#ic-rai)" strokeWidth="1.2" />
+      <circle cx="12" cy="9.3" r="4.7" fill="none" stroke="#34d399" strokeWidth="0.7" opacity="0.7" />
+      <path d="M8.8 9.4 11 11.6l4.3-4.6" stroke="#e6c766" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  // DEFENSIVE SUITE — layered aegis shield (defense-in-depth)
+  defend: (
+    <svg {...SV}>
+      <defs><linearGradient id="ic-def" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#34d399" /><stop offset="1" stopColor="#e6c766" /></linearGradient></defs>
+      <path d="M12 2.4l7.4 2.7v6c0 4.7-3.2 8.1-7.4 9.6-4.2-1.5-7.4-4.9-7.4-9.6v-6L12 2.4Z" fill="#0c1f16" stroke="url(#ic-def)" strokeWidth="1.3" strokeLinejoin="round" />
+      <circle cx="12" cy="10.6" r="3.6" fill="none" stroke="#34d399" strokeWidth="0.8" opacity="0.8" />
+      <circle cx="12" cy="10.6" r="2.1" fill="none" stroke="#e6c766" strokeWidth="0.9" />
+      <circle cx="12" cy="10.6" r="0.9" fill="#e6c766" />
+    </svg>
+  ),
+  // PSS — crest shield
+  shield: (
+    <svg {...SV}>
+      <defs><linearGradient id="ic-pss" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#e6c766" /><stop offset="1" stopColor="#2d5a3d" /></linearGradient></defs>
+      <path d="M12 2.2l8 3v6.2c0 4.9-3.4 8.5-8 10.1-4.6-1.6-8-5.2-8-10.1V5.2l8-3z" fill="url(#ic-pss)" />
+      <path d="M12 4l6 2.3v4.9c0 3.8-2.6 6.6-6 7.9-3.4-1.3-6-4.1-6-7.9V6.3L12 4z" fill="none" stroke="#0c1f16" strokeWidth="0.7" opacity="0.6" />
+      <path d="M8.6 11.6l2.4 2.4 4.6-4.9" stroke="#0c1f16" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+}
+
+const APP_URL = (port) => `${window.location.protocol}//${window.location.hostname}:${port}`
 
 const CENTER = Math.floor(projectCards.length / 2)
 const SLIDE_SPEED = 0.52
@@ -44,8 +138,6 @@ const Hero = () => {
   // hidden → assembling → stacked → spreading → dissolving → sliding
   const [phase, setPhase] = useState('hidden')
   const [cardH, setCardH] = useState(300)
-  const [activeCard, setActiveCard] = useState(null)
-  const [modalVisible, setModalVisible] = useState(false)
 
   const wrapRef = useRef(null)
   const cardRefs = useRef([])
@@ -88,7 +180,7 @@ const Hero = () => {
     return () => window.removeEventListener('resize', measure)
   }, [line1.done])
 
-  // Left / right scroll only — horizontal wheel, shift+wheel, or touch swipe
+  // Left / right scroll only - horizontal wheel, shift+wheel, or touch swipe
   useEffect(() => {
     if (phase !== 'sliding') return
     const wrap = wrapRef.current
@@ -153,11 +245,14 @@ const Hero = () => {
       lastT = now
 
       // Ease the coverflow depth in over the first ~650ms so cards glide out of the
-      // dissolving layout instead of popping into 3D — seamless hand-off.
+      // dissolving layout instead of popping into 3D - seamless hand-off.
       const p = Math.min((now - startT) / 650, 1)
       const settle = 1 - Math.pow(1 - p, 3)
 
       if (!pausedRef.current) autoXRef.current -= SLIDE_SPEED * dt
+
+      // slow, gentle ease-in of the hover pop for the hovered card
+      if (tiltRef.current.idx >= 0) tiltRef.current.k = Math.min(1, (tiltRef.current.k || 0) + 0.05 * dt)
 
       // Frame-rate-independent lerp for the manual scroll contribution
       scrollCurrentRef.current += (scrollTargetRef.current - scrollCurrentRef.current) * (1 - Math.pow(0.86, dt))
@@ -182,16 +277,17 @@ const Hero = () => {
         if (!el) return
         let x = (si - SLIDE_CENTER) * stride + slideX + setOffset
 
-        // Instant wrap: leave one side, appear on the other — no edge fade
+        // Instant wrap: leave one side, appear on the other - no edge fade
         while (x < -totalW) x += totalW * 2
         while (x > totalW) x -= totalW * 2
 
         el.style.opacity = '1'
 
         if (tiltRef.current.idx === cardIdx) {
+          const k = tiltRef.current.k || 0
           const tx = tiltRef.current.x
           const tiltY = tiltRef.current.y
-          el.style.transform = `translateX(${x}px) translateY(-10px) rotateY(${tx * 17}deg) rotateX(${-tiltY * 12}deg) scale(1.09)`
+          el.style.transform = `translateX(${x}px) translateY(${-5 * k}px) rotateY(${tx * 9 * k}deg) rotateX(${-tiltY * 6 * k}deg) scale(${1 + 0.045 * k})`
           el.style.zIndex = '20'
         } else {
           const nx = Math.max(-1, Math.min(1, x / (vw / 2)))
@@ -241,7 +337,7 @@ const Hero = () => {
     const rect = el.getBoundingClientRect()
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2
-    tiltRef.current = { x, y, idx: i }
+    tiltRef.current = { x, y, idx: i, k: tiltRef.current.idx === i ? (tiltRef.current.k || 0) : 0 }
     // glare position + parallax depth for bg image & content
     el.style.setProperty('--mx', `${((x + 1) / 2) * 100}%`)
     el.style.setProperty('--my', `${((y + 1) / 2) * 100}%`)
@@ -256,21 +352,10 @@ const Hero = () => {
     tiltRef.current = { x: 0, y: 0, idx: -1 }
   }, [])
 
-  const openCard = (index) => {
-    setActiveCard(index)
-    requestAnimationFrame(() => setModalVisible(true))
+  const openApp = (card) => {
+    if (!card || !card.port) return // DEFENSIVE SUITE (in progress) — no link yet
+    window.open(APP_URL(card.port), '_blank', 'noopener,noreferrer')
   }
-
-  const closeCard = () => {
-    setModalVisible(false)
-    setTimeout(() => setActiveCard(null), 400)
-  }
-
-  useEffect(() => {
-    const handleEsc = (e) => { if (e.key === 'Escape' && activeCard !== null) closeCard() }
-    window.addEventListener('keydown', handleEsc)
-    return () => window.removeEventListener('keydown', handleEsc)
-  }, [activeCard])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -358,7 +443,7 @@ const Hero = () => {
                     '--slide-dist': Math.abs(slideOffset),
                   }}
                   onMouseMove={isInteractive ? (e) => handleMouseMove(e, refIndex) : undefined}
-                  onClick={() => openCard(i)}
+                  onClick={() => openApp(card)}
                 >
                   {card.bgImage && (
                     <img
@@ -380,14 +465,18 @@ const Hero = () => {
                     </>
                   )}
                   <div className="hero__card-content">
-                    {card.logo && <img src={card.logo} alt={card.title} className={`hero__card-logo ${card.logoBlend ? 'hero__card-logo--blend' : ''}`} />}
+                    <div className="hero__card-icon">
+                      {card.isPss
+                        ? <img src="/team_logo.png" alt="PSS" className="hero__card-logo-img" />
+                        : ICONS[card.icon]}
+                    </div>
                     <h3 className="hero__card-title">{card.title}</h3>
-                    {card.subtitle && <span className="hero__card-subtitle">{card.subtitle}</span>}
+                    <span className="hero__card-subtitle">{card.subtitle}</span>
                     <p className="hero__card-desc">{card.desc}</p>
                     {!isPss && (
                       <button
                         className="hero__card-cta"
-                        onClick={(e) => { e.stopPropagation(); openCard(i) }}
+                        onClick={(e) => { e.stopPropagation(); openApp(card) }}
                       >
                         Explore Project
                         <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
@@ -406,7 +495,7 @@ const Hero = () => {
       <div className="hero__corner hero__corner--bl" />
       <div className="hero__corner hero__corner--br" />
 
-      {/* Corner seal emblems — PSS top-left, NIFTAC top-right */}
+      {/* Corner seal emblems - PSS top-left, NIFTAC top-right */}
       <div className={`hero__corner-seal hero__corner-seal--tl ${line1.done ? 'hero__corner-seal--visible' : ''}`}>
         <div className="hero__seal-wrap hero__seal-wrap--left">
           <img
@@ -421,29 +510,13 @@ const Hero = () => {
         <div className="hero__seal-wrap hero__seal-wrap--right">
           <img
             src="/niftac-logo.png"
-            alt="NIFTAC — National Intelligence Fusion & Threat Assessment Center"
+            alt="NIFTAC - National Intelligence Fusion & Threat Assessment Center"
             className="hero__seal"
             onError={(e) => { e.currentTarget.style.display = 'none' }}
           />
         </div>
       </div>
 
-      {activeCard !== null && createPortal(
-        <div className={`hero__modal-overlay ${modalVisible ? 'hero__modal-overlay--visible' : 'hero__modal-overlay--closing'}`} onClick={closeCard}>
-          <div className={`hero__modal-card ${modalVisible ? 'hero__modal-card--visible' : 'hero__modal-card--closing'}`} onClick={(e) => e.stopPropagation()}>
-            {projectCards[activeCard].bgImage && <img src={projectCards[activeCard].bgImage} alt="" className="hero__modal-bg" />}
-            <div className="hero__modal-glass" />
-            <div className="hero__modal-content">
-              {projectCards[activeCard].logo && <img src={projectCards[activeCard].logo} alt={projectCards[activeCard].title} className="hero__modal-logo" />}
-              <h3 className="hero__modal-title">{projectCards[activeCard].title}</h3>
-              {projectCards[activeCard].subtitle && <span className="hero__modal-subtitle">{projectCards[activeCard].subtitle}</span>}
-              <p className="hero__modal-desc">{projectCards[activeCard].desc}</p>
-            </div>
-            <button className="hero__modal-close" onClick={closeCard}>✕</button>
-          </div>
-        </div>,
-        document.body
-      )}
     </section>
   )
 }
