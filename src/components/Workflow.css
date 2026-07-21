@@ -59,7 +59,16 @@
 .workflow__title-line { width: 140px; height: 2px; background: linear-gradient(90deg, transparent, var(--sage-green, #7a8b6a), transparent); margin: 0 auto; }
 
 /* ===== TIMELINE ===== */
-.workflow__timeline { position: relative; z-index: 10; margin: 0 auto; padding: 0 24px; perspective: 1200px; }
+/* Keep every workflow card centered instead of stretching across the page. */
+.workflow__timeline {
+  position: relative;
+  z-index: 10;
+  width: min(1250px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 0;
+  perspective: 1200px;
+  box-sizing: border-box;
+}
 
 /* ===== PHASE CARD - 3D SWIPE IN ===== */
 .wf-phase {
@@ -84,6 +93,13 @@
 .wf-phase--visible {
   opacity: 1;
   transform: translateX(0) rotateY(0deg) scale(1);
+}
+
+/* Only the workflow card crossing the viewport center keeps animating. */
+.wf-phase--visible:not(.wf-phase--active) *,
+.wf-phase--visible:not(.wf-phase--active) *::before,
+.wf-phase--visible:not(.wf-phase--active) *::after {
+  animation-play-state: paused !important;
 }
 
 /* ===== PHASE HEADER ===== */
@@ -136,7 +152,7 @@
 }
 
 .wf-phase__header { width: 100%; }
-.wf-phase__body { width: 100%; }
+.wf-phase__body { width: 100%; box-sizing: border-box; }
 
 .wf-phase--visible .wf-phase__body {
   border-color: var(--sage-green, #7a8b6a);
@@ -1461,7 +1477,7 @@
   .workflow { padding: 60px 0 40px; }
   .workflow__title { font-size: 24px; letter-spacing: 4px; }
   .workflow__desc { font-size: 15px; }
-  .workflow__timeline { padding: 0 16px; }
+  .workflow__timeline { width: calc(100% - 32px); }
   .wf-phase__num { font-size: 26px; min-width: 48px; }
   .wf-phase__title { font-size: 19px; letter-spacing: 3px; }
   .wf-phase__subtitle { font-size: 14px; letter-spacing: 2px; }
@@ -1794,3 +1810,227 @@
 }
 /* space stacked reels apart in multi-module cards */
 .wf-inline-reel + .wf-inline-reel { margin-top: 30px; }
+
+/* ===== BIGGER + BOLDER TYPOGRAPHY v3 (wider 1250px cards) ===== */
+.wf-phase__title { font-size: 38px; letter-spacing: 5px; }
+.wf-phase__subtitle { font-size: 23px; font-weight: 800; }
+.wf-phase__num { font-size: 50px; min-width: 88px; }
+
+.wf-sources__label { font-size: 16px; font-weight: 800; }
+.wf-sources__item { font-size: 17px; font-weight: 800; padding: 9px 18px; }
+.wf-scan-item { font-size: 20px; font-weight: 800; }
+.wf-scan-item--done { font-weight: 900; }
+.wf-system-box__label { font-size: 24px; font-weight: 800; }
+.wf-system-box__sub { font-size: 18px; font-weight: 800; }
+.wf-unit { font-size: 14px; font-weight: 800; padding: 11px 19px; }
+.wf-flow-item { font-size: 17px; font-weight: 800; }
+.wf-flow-item--done { font-weight: 800; }
+.wf-column__title { font-size: 13px; font-weight: 800; }
+.wf-module__header { font-size: 15px; }
+.wf-module__item { font-size: 15px; font-weight: 800; }
+.wf-module__result { font-size: 15px; font-weight: 800; }
+.wf-widget { font-size: 16px; font-weight: 800; }
+.wf-report-item { font-size: 16px; font-weight: 800; }
+.wf-output-item { font-size: 17px; font-weight: 800; }
+.wf-match__label { font-size: 14px; font-weight: 700; }
+.wf-match__val { font-size: 27px; }
+.wf-confidence__label { font-size: 13px; }
+.wf-confidence__value { font-size: 38px; font-weight: 900; }
+.wf-output__text { font-size: 15px; font-weight: 800; }
+
+/* case reel (slideshow) text */
+.wf-inline-reel .wf-case__stage-tag { font-size: 12px; font-weight: 700; }
+.wf-inline-reel .wf-case__title { font-size: 29px; font-weight: 800; }
+.wf-inline-reel .wf-case__sub { font-size: 19px; font-weight: 600; line-height: 1.6; }
+.wf-inline-reel .wf-case__list-item { font-size: 18px; font-weight: 700; }
+.wf-inline-reel .wf-case__meta-chip,
+.wf-inline-reel .wf-case__flow-chip { font-size: 11.5px; font-weight: 800; padding: 7px 13px; }
+.wf-inline-reel .wf-case__coords { font-size: 30px; }
+.wf-inline-reel .wf-case__place { font-size: 17px; font-weight: 800; }
+.wf-inline-reel .wf-case__note { font-size: 14px; font-weight: 700; }
+.wf-inline-reel .wf-case__matchline { font-size: 17px; font-weight: 800; }
+.wf-inline-reel .wf-explorer__tab { font-size: 10.5px; font-weight: 800; padding: 9px 16px; }
+.wf-inline-reel__name { font-size: 13px; }
+.wf-stat3d__val { font-size: 34px; }
+.wf-stat3d__label { font-size: 14px; font-weight: 700; }
+.wf-def-pillar__name { font-size: 13.5px; }
+.wf-def-pillar__tag { font-size: 13px; font-weight: 700; }
+.wf-def-pillar__tool { font-size: 13px; font-weight: 700; }
+
+/* ===== NIGRAN CARD — taller stages so nothing is cropped or crowded ===== */
+/* Dashboard: size the frame to the screenshot's own proportions and show it whole */
+.wf-phase--phase1 .wf-inline-reel .wf-sat.wf-focus__card .wf-case__visual--tall {
+  min-height: 0;
+  height: auto;
+  aspect-ratio: 760 / 633;
+}
+.wf-phase--phase1 .wf-inline-reel .wf-case__photo--top {
+  object-fit: contain;
+  object-position: center top;
+  background: #f4f1e8;
+}
+/* Platform feed stack: more vertical room so the 3D cards and labels don't collide */
+.wf-phase--phase1 .wf-inline-reel .wf-sat.wf-focus__card .wf-case__visual--stack {
+  min-height: 430px;
+}
+
+/* ===== LARGE-SCREEN ANIMATION TYPOGRAPHY + COMPACT SLIDESHOW CONTROLS ===== */
+.wf-inline-reel,
+.wf-inline-reel * {
+  font-weight: 700;
+}
+
+.wf-inline-reel__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.wf-inline-reel__nav .wf-inline-reel__tabs {
+  margin-bottom: 0;
+}
+
+.wf-reel-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.wf-reel-control {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--sage-green, #7a8b6a);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--forest-green, #1a3a2a);
+  font-family: Arial, sans-serif;
+  font-size: 21px;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.wf-reel-control:hover {
+  color: #fff;
+  background: var(--forest-green, #1a3a2a);
+  transform: scale(1.08);
+}
+
+.wf-reel-controls__count {
+  min-width: 30px;
+  font-family: 'Orbitron', monospace;
+  font-size: 10px;
+  font-weight: 800;
+  text-align: center;
+  color: var(--forest-green, #1a3a2a);
+}
+
+.wf-reel-controls--modal {
+  margin-left: auto;
+}
+
+@media (min-width: 769px) {
+  .wf-inline-reel__name {
+    font-size: 15px;
+    font-weight: 900;
+  }
+
+  .wf-inline-reel .wf-case__stage-tag {
+    font-size: 14px;
+    font-weight: 900;
+  }
+
+  .wf-inline-reel .wf-case__title {
+    font-size: 34px;
+    font-weight: 900;
+  }
+
+  .wf-inline-reel .wf-case__sub {
+    font-size: 21px;
+    font-weight: 700;
+  }
+
+  .wf-inline-reel .wf-case__list-item,
+  .wf-inline-reel .wf-case__matchline {
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .wf-inline-reel .wf-case__meta-chip,
+  .wf-inline-reel .wf-case__flow-chip {
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  .wf-inline-reel .wf-case__result-label,
+  .wf-inline-reel .wf-case__note,
+  .wf-inline-reel .wf-stat3d__note {
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  .wf-inline-reel .wf-case__coords {
+    font-size: 34px;
+    font-weight: 900;
+  }
+
+  .wf-inline-reel .wf-case__place,
+  .wf-inline-reel .wf-stat3d__label,
+  .wf-inline-reel .wf-def-pillar__tag,
+  .wf-inline-reel .wf-def-pillar__tool {
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .wf-inline-reel .wf-stat3d__val {
+    font-size: 38px;
+    font-weight: 900;
+  }
+
+  .wf-inline-reel .wf-def-pillar__name {
+    font-size: 16px;
+    font-weight: 900;
+  }
+
+  .wf-inline-reel .wf-dova__brand,
+  .wf-inline-reel .wf-dova__ops,
+  .wf-inline-reel .wf-dova-stat__label,
+  .wf-inline-reel .wf-dova__ctab,
+  .wf-inline-reel .wf-dova__feed-head,
+  .wf-inline-reel .wf-dova-feed__route,
+  .wf-inline-reel .wf-arie__lock,
+  .wf-inline-reel .wf-arie__col-head,
+  .wf-inline-reel .wf-arie__term-head,
+  .wf-inline-reel .wf-arie__term-line,
+  .wf-inline-reel .wf-arie__health-label,
+  .wf-inline-reel .wf-raven-filter__head,
+  .wf-inline-reel .wf-rai__bar {
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .wf-inline-reel .wf-dova-feed__tag,
+  .wf-inline-reel .wf-arie__node,
+  .wf-inline-reel .wf-arie__alert,
+  .wf-inline-reel .wf-raven-filter__noise,
+  .wf-inline-reel .wf-raven-filter__keep,
+  .wf-inline-reel .wf-rai__step,
+  .wf-inline-reel .wf-rai__note {
+    font-size: 15px;
+    font-weight: 800;
+  }
+}
+
+@media (max-width: 768px) {
+  .wf-inline-reel__nav {
+    flex-direction: column;
+  }
+}

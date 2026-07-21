@@ -26,7 +26,7 @@ const phases = [
     output: 'Threat Detected', confidence: '93%',
   },
   {
-    id: 'phase2', num: '02', title: 'CYBERINT RESPONSE', system: 'GEOINT', subtitle: 'Response Units',
+    id: 'phase2', num: '02', title: 'GEO INT', system: 'GEOINT', subtitle: 'Terrain Feature Analysis',
     systemSub: 'Location Analysis',
     units: ['GEOINT', 'FR/FE · AGEX IRIS', 'SOCIAL MEDIA RECON', 'CYBERINT RECON'],
     scanItems: ['Satellite Imagery', 'Terrain Feature Analysis', 'Terrain', 'Roads', 'Buildings', 'GPS'],
@@ -37,13 +37,19 @@ const phases = [
   {
     id: 'phase3', num: '03', title: 'CYBERINT', system: 'CYBERINT', subtitle: 'Cyber Intelligence Engine',
     modules: [
-      { name: 'AGEX IRIS · FR/FE', caseId: 'agex', steps: ['Frame Extraction', 'AI Face Enhancement', 'GAN Reconstruction', 'Face Recognition', 'Identity Matching'], result: 'Identity Candidate Found' },
       { name: 'SOCIAL MEDIA RECON', caseId: 'social', items: ['Facebook', 'Instagram', 'TikTok', 'Telegram', 'LinkedIn', 'Twitter/X', 'YouTube'], result: 'Relationship Graph Built' },
       { name: 'CYBERINT RECON', caseId: 'cyber', items: ['Gov Records', 'Public Databases', 'Domains', 'Emails', 'Phone Numbers', 'Leaked Databases'], result: 'Recon Intelligence Compiled' },
     ],
   },
   {
-    id: 'noxphase', num: '04', title: 'NOX CYBERINT', system: 'NOX', subtitle: 'Dark Web & Offensive Cyber',
+    id: 'agexphase', num: '04', title: 'AGEX IRIS', system: 'AGEX IRIS', subtitle: 'Facial Reconstruction & Recognition',
+    systemSub: 'FR/FE Reconstruction & Matching',
+    modules: [
+      { name: 'AGEX IRIS · FR/FE', caseId: 'agex', steps: ['Frame Extraction', 'AI Face Enhancement', 'GAN Reconstruction', 'Face Recognition', 'Identity Matching'], result: 'Identity Candidate Found' },
+    ],
+  },
+  {
+    id: 'noxphase', num: '05', title: 'NOX CYBERINT', system: 'NOX', subtitle: 'Dark Web & Offensive Cyber',
     systemSub: 'Cyber Operations',
     modules: [
       { name: 'DARKOVA · DARK WEB MONITORING', caseId: 'nox-darkweb', items: ['TOR Network', 'Dark Web Portals', 'Marketplaces', 'Threat Actor Channels', 'Credential Dumps', 'Leaked Databases'], result: 'Dark Web Intel Harvested' },
@@ -52,12 +58,12 @@ const phases = [
     ],
   },
   {
-    id: 'ravenphase', num: '05', title: 'RAVEN', system: 'RAVEN', subtitle: 'Route Anomaly & Verification',
+    id: 'ravenphase', num: '06', title: 'RAVEN', system: 'RAVEN', subtitle: 'Route Anomaly & Verification',
     units: ['CAPTURE', 'STITCH', 'COMPARE', 'FILTER', 'REPORT'],
     output: 'Change Sites Confirmed',
   },
   {
-    id: 'defensivephase', num: '06', title: 'DEFENSIVE SUITE', system: 'DEFENSIVE SUITE', subtitle: 'See · Control · Respond',
+    id: 'defensivephase', num: '07', title: 'DEFENSIVE SUITE', system: 'DEFENSIVE SUITE', subtitle: 'See · Control · Respond',
     systemSub: 'Security Operations Platform',
     modules: [
       { name: 'SECURITY · SEE', items: ['Wazuh', 'Prometheus', 'Exporters', 'Grafana', 'Axn Telemetry'], result: 'Full Visibility' },
@@ -66,18 +72,18 @@ const phases = [
     ],
   },
   {
-    id: 'raiphase', num: '07', title: 'RESPONSIBLE AI', system: 'RESPONSIBLE AI', subtitle: 'Assurance & Governance',
+    id: 'raiphase', num: '08', title: 'TRUSTWORTHY AI', system: 'TRUSTWORTHY AI', subtitle: 'Secure, Responsible, Ethical',
     systemSub: 'Ethical by Design · Trusted by Default',
     units: ['FAIRNESS', 'TRANSPARENCY', 'PRIVACY', 'ACCOUNTABILITY'],
     output: 'Signed Assurance Evidence',
   },
   {
-    id: 'phase5', num: '08', title: 'INTELLIGENCE FUSION', system: 'FUSION', subtitle: 'Command Dashboard',
+    id: 'phase5', num: '09', title: 'INTELLIGENCE FUSION', system: 'FUSION', subtitle: 'Command Dashboard',
     widgets: ['Target Identity', 'Face Match', 'Geo Coordinates', 'Social Accounts', 'Threat Network', 'Timeline', 'Vehicle', 'Device', 'Communication Pattern', 'Heatmaps', 'Routes', 'Link Analysis'],
     output: 'Predicting Future Activity',
   },
   {
-    id: 'phase6', num: '09', title: 'MISSION INTELLIGENCE REPORT', system: 'PSS', subtitle: 'Final Output',
+    id: 'phase6', num: '10', title: 'MISSION INTELLIGENCE REPORT', system: 'PSS', subtitle: 'Final Output',
     reportItems: ['Identity', 'Location', 'Threat Score', 'Timeline', 'Known Associates', 'Face Evidence', 'Media', 'Maps', 'Dark Web Intel', 'Social Intel', 'Geo Intel', 'Recommendations'],
     output: 'Pakistan Surveillance Shield', final: true,
   },
@@ -581,6 +587,8 @@ const FaceScene = ({ variant }) => {
 /* Glossy full-case explorer, opened from the phase's name in the workflow */
 const CaseExplorer = ({ name, stages, stage, setStage, paused, setPaused, onClose, renderBody, inline }) => {
   const s = stages[stage]
+  const previousStage = () => setStage((stage - 1 + stages.length) % stages.length)
+  const nextStage = () => setStage((stage + 1) % stages.length)
 
   // Inline mode: the case file plays as a slideshow inside the product card
   // itself instead of a fullscreen modal.
@@ -592,18 +600,25 @@ const CaseExplorer = ({ name, stages, stage, setStage, paused, setPaused, onClos
         onMouseLeave={() => setPaused(false)}
       >
         {name && <div className="wf-inline-reel__name">{name}</div>}
-        <div className="wf-explorer__tabs wf-inline-reel__tabs">
-          {stages.map((st, i) => (
-            <button
-              key={st.key} type="button"
-              className={`wf-explorer__tab ${i === stage ? 'wf-explorer__tab--active' : ''}`}
-              onClick={() => setStage(i)}
-            >
-              <span className="wf-explorer__tab-num">{st.num}</span>
-              {st.tab}
-              {i === stage && !paused && <span key={`p-${stage}`} className="wf-explorer__tab-progress" />}
-            </button>
-          ))}
+        <div className="wf-inline-reel__nav">
+          <div className="wf-explorer__tabs wf-inline-reel__tabs">
+            {stages.map((st, i) => (
+              <button
+                key={st.key} type="button"
+                className={`wf-explorer__tab ${i === stage ? 'wf-explorer__tab--active' : ''}`}
+                onClick={() => setStage(i)}
+              >
+                <span className="wf-explorer__tab-num">{st.num}</span>
+                {st.tab}
+                {i === stage && !paused && <span key={`p-${stage}`} className="wf-explorer__tab-progress" />}
+              </button>
+            ))}
+          </div>
+          <div className="wf-reel-controls">
+            <button type="button" className="wf-reel-control" onClick={previousStage} aria-label="Previous slide">‹</button>
+            <span className="wf-reel-controls__count">{stage + 1}/{stages.length}</span>
+            <button type="button" className="wf-reel-control" onClick={nextStage} aria-label="Next slide">›</button>
+          </div>
         </div>
         <div key={s.key} className="wf-sat wf-sat--active wf-focus__card wf-explorer__card">
           {renderBody(s, true)}
@@ -636,6 +651,11 @@ const CaseExplorer = ({ name, stages, stage, setStage, paused, setPaused, onClos
               {i === stage && !paused && <span key={`p-${stage}`} className="wf-explorer__tab-progress" />}
             </button>
           ))}
+          <div className="wf-reel-controls wf-reel-controls--modal">
+            <button type="button" className="wf-reel-control" onClick={previousStage} aria-label="Previous slide">‹</button>
+            <span className="wf-reel-controls__count">{stage + 1}/{stages.length}</span>
+            <button type="button" className="wf-reel-control" onClick={nextStage} aria-label="Next slide">›</button>
+          </div>
         </div>
         <div key={s.key} className="wf-sat wf-sat--active wf-focus__card wf-explorer__card">
           {renderBody(s, true)}
@@ -2290,6 +2310,7 @@ const ResponsibleAiCase = ({ open, onClose, inline }) => {
 const PhaseCard = ({ phase, index }) => {
   const ref = useRef(null)
   const [visible, setVisible] = useState(false)
+  const [active, setActive] = useState(false)
   const [stepped, setStepped] = useState(false)
   const [openCaseId, setOpenCaseId] = useState(null)
   const [showReel, setShowReel] = useState(false)
@@ -2298,15 +2319,16 @@ const PhaseCard = ({ phase, index }) => {
   const hasCase = false
   const closeCase = () => setOpenCaseId(null)
   // phases that own a case reel swap workflow -> slideshow; others keep the workflow view
-  const hasReel = ['phase1', 'phase2', 'phase3', 'noxphase', 'ravenphase', 'defensivephase', 'raiphase'].includes(phase.id)
+  const hasReel = ['phase1', 'phase2', 'phase3', 'agexphase', 'noxphase', 'ravenphase', 'defensivephase', 'raiphase'].includes(phase.id)
   const reelActive = hasReel && showReel
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
     const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { setVisible(true); obs.unobserve(el) }
-    }, { threshold: 0.2 })
+      setActive(e.isIntersecting)
+      if (e.isIntersecting) setVisible(true)
+    }, { threshold: 0, rootMargin: '-35% 0px -35% 0px' })
     obs.observe(el)
     return () => obs.disconnect()
   }, [])
@@ -2318,14 +2340,14 @@ const PhaseCard = ({ phase, index }) => {
   }, [visible])
 
   useEffect(() => {
-    if (!visible) { setShowReel(false); return }
+    if (!active) { setShowReel(false); return }
     if (!stepped || !hasReel) return
     const t = setTimeout(() => setShowReel(true), 4200)
     return () => clearTimeout(t)
-  }, [visible, stepped, hasReel])
+  }, [active, stepped, hasReel])
 
   return (
-    <div ref={ref} className={`wf-phase wf-phase--${phase.id} wf-phase--from-${direction} ${visible ? 'wf-phase--visible' : ''}`}>
+    <div ref={ref} className={`wf-phase wf-phase--${phase.id} wf-phase--from-${direction} ${visible ? 'wf-phase--visible' : ''} ${active ? 'wf-phase--active' : ''}`}>
 
       <div className="wf-phase__header">
         <span className="wf-phase__num">{phase.num}</span>
@@ -2537,30 +2559,30 @@ const PhaseCard = ({ phase, index }) => {
 
           {hasReel && (
             <div className="wf-phase__reel">
-              {phase.id === 'phase1' && <NigranCase inline={visible && reelActive} />}
-              {phase.id === 'phase2' && <TerrainCase inline={visible && reelActive} />}
-              {phase.id === 'phase3' && <AgexCase inline={visible && reelActive} />}
-              {phase.id === 'phase3' && <SocialCase inline={visible && reelActive} />}
-              {phase.id === 'phase3' && <CyberCase inline={visible && reelActive} />}
-              {phase.id === 'noxphase' && <DarkovaCase inline={visible && reelActive} />}
-              {phase.id === 'noxphase' && <OffensiveCase inline={visible && reelActive} />}
-              {phase.id === 'noxphase' && <ArieCase inline={visible && reelActive} />}
-              {phase.id === 'ravenphase' && <RavenCase inline={visible && reelActive} />}
-              {phase.id === 'defensivephase' && <DefensiveCase inline={visible && reelActive} />}
-              {phase.id === 'raiphase' && <ResponsibleAiCase inline={visible && reelActive} />}
+              {phase.id === 'phase1' && <NigranCase inline={active && reelActive} />}
+              {phase.id === 'phase2' && <TerrainCase inline={active && reelActive} />}
+              {phase.id === 'phase3' && <SocialCase inline={active && reelActive} />}
+              {phase.id === 'phase3' && <CyberCase inline={active && reelActive} />}
+              {phase.id === 'agexphase' && <AgexCase inline={active && reelActive} />}
+              {phase.id === 'noxphase' && <DarkovaCase inline={active && reelActive} />}
+              {phase.id === 'noxphase' && <OffensiveCase inline={active && reelActive} />}
+              {phase.id === 'noxphase' && <ArieCase inline={active && reelActive} />}
+              {phase.id === 'ravenphase' && <RavenCase inline={active && reelActive} />}
+              {phase.id === 'defensivephase' && <DefensiveCase inline={active && reelActive} />}
+              {phase.id === 'raiphase' && <ResponsibleAiCase inline={active && reelActive} />}
             </div>
           )}
         </div>
       </div>
 
-      {index < phases.length - 1 && !['03', '04', '05', '06'].includes(phase.num) && (
+      {index < phases.length - 1 && !['03', '04', '05', '06', '07'].includes(phase.num) && (
         <div className={`wf-connector ${stepped ? 'wf-connector--active' : ''}`}>
           <div className="wf-connector__line" />
           <div className="wf-connector__beam" />
         </div>
       )}
 
-      {['03', '04', '05', '06'].includes(phase.num) && (
+      {['03', '04', '05', '06', '07'].includes(phase.num) && (
         <div className={`wf-separator ${stepped ? 'wf-separator--active' : ''}`}>
           <span className="wf-separator__line" />
           <span className="wf-separator__node">

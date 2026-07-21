@@ -292,55 +292,6 @@ const CasesSolved = () => {
                 <li key={o}>{o}</li>
               ))}
             </ul>
-
-            <div className="iris-intel">
-              <div className="iris-intel__panel iris-intel__panel--terrain">
-                <div className="iris-intel__head">
-                  <span className="iris-intel__label">GEOINT · TERRAIN</span>
-                  <span className="iris-intel__region">{item.geoint.region}</span>
-                </div>
-                <p className="iris-intel__text">{item.geoint.summary}</p>
-                {item.geoint.details?.length > 0 && (
-                  <ul className="iris-intel__detail">
-                    {item.geoint.details.map((d) => (
-                      <li key={d}>{d}</li>
-                    ))}
-                  </ul>
-                )}
-                <div className="iris-intel__tags">
-                  {item.geoint.tags.map((t) => (
-                    <span key={t} className="iris-intel__tag">{t}</span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="iris-intel__panel iris-intel__panel--cyber">
-                <div className="iris-intel__head">
-                  <span className="iris-intel__label">CYBERINT · AGEX</span>
-                </div>
-                <p className="iris-intel__text">{item.cyberint.summary}</p>
-                {item.cyberint.details?.length > 0 && (
-                  <ul className="iris-intel__detail">
-                    {item.cyberint.details.map((d) => (
-                      <li key={d}>{d}</li>
-                    ))}
-                  </ul>
-                )}
-                <div className="iris-intel__flow">
-                  {item.cyberint.flow.map((step, i) => (
-                    <span key={step} className="iris-intel__flow-step">
-                      {i > 0 && <span className="iris-intel__flow-arrow">›</span>}
-                      <span className="iris-intel__flow-chip">{step}</span>
-                    </span>
-                  ))}
-                </div>
-                <div className="iris-intel__tags">
-                  {item.cyberint.tags.map((t) => (
-                    <span key={t} className="iris-intel__tag iris-intel__tag--cyber">{t}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
