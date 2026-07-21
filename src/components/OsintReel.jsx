@@ -50,31 +50,57 @@ const impact = [
   { code: 'OS-05', val: 5, mult: true, label: 'Leads Retained', sub: 'Verified links' },
 ]
 
-/* ---- REEL SLIDES (provided screenshots) ---- */
+/* ---- REEL SLIDES (case screenshots + short detail) ---- */
 const slides = [
   {
-    id: 'o1', no: '01', img: '/osint-1.png', kind: 'BOARD', code: 'CASE-BOARD',
-    title: 'OSINT Case Board', region: 'IO110 · IO111 · IO106',
-    tag: 'OVERVIEW - ACTIVE OSINT CASES',
-    summary: 'Three OSINT cases tracked in parallel - social-media tracing, CCTV enhancement, and protest attribution.',
-    flow: ['Intake', 'Trace', 'Extract', 'Map'],
-    tags: ['3 CASES', 'MULTI-SOURCE'],
+    id: 'o1', no: '01', img: '/osint-source-frame.png', kind: 'OSINT', code: 'IO110',
+    title: 'Source Frame / Video Context', region: '04/06/2026 · Social Media Analysis',
+    tag: 'SOURCE FRAME · VIDEO CONTEXT',
+    summary: 'Chaos video source frame retained for OSINT tracing.',
+    detail: 'Starting frame for face extraction and dissemination review.',
+    flow: ['Source Frame', 'Extract Faces', 'Reconstruction', 'Recognition'],
+    outputs: ['Source frame retained', 'Trace path opened', 'Ready for face extract'],
+    tags: ['SOURCE FRAME', 'CHAOS'],
   },
   {
-    id: 'o2', no: '02', img: '/osint-2.png', kind: 'OSINT', code: 'IO110',
-    title: 'BLF “Chaos” OSINT', region: '04/06/2026 · Social Media Analysis',
-    tag: 'DIGITAL FOOTPRINT - FACE EXTRACTION',
-    summary: '“Chaos” video traced across three X uploads; eight candidate face crops prepared for reconstruction / recognition.',
-    flow: ['Face Extraction', 'Reconstruction', 'Recognition', 'Candidate Shortlist'],
-    tags: ['8 FACES', '3 UPLOAD TRACES'],
+    id: 'o2', no: '02', img: '/osint-faces.png', kind: 'FACES', code: 'IO110',
+    title: 'Faces Extracted from Video', region: '04/06/2026 · Social Media Analysis',
+    tag: 'FACES EXTRACTED FROM VIDEO',
+    summary: 'Candidate face crops prepared for reconstruction / recognition.',
+    detail: 'Eight faces extracted for downstream recognition.',
+    flow: ['Source Frame', 'Extract Faces', 'Reconstruction', 'Recognition'],
+    outputs: ['FACE 01–08 prepared', 'Queued for reconstruction', 'Recognition ready'],
+    tags: ['FACE 01–08', 'RECOGNITION'],
   },
   {
-    id: 'o3', no: '03', img: '/osint-3.png', kind: 'CCTV', code: 'IO111',
-    title: 'CCTV Enhancement', region: '03/06/2026 · Image Extraction',
-    tag: 'SOURCE → ENHANCED FACE VIEWS',
-    summary: 'CCTV footage processed; driver/passenger frames extracted and enhanced for clearer facial review.',
-    flow: ['Source CCTV', 'Frame Extract', 'AI Enhance', 'ID Support'],
-    tags: ['DRIVER / PASSENGER', 'ENHANCED'],
+    id: 'o3', no: '03', img: '/osint-io111.png', kind: 'CCTV', code: 'IO111',
+    title: 'IO111 — CCTV Enhancement', region: 'Field Surveillance · Image Extraction',
+    tag: 'RECEIVE → EXTRACT → ENHANCE',
+    summary: 'CCTV frames extracted and enhanced for ID support.',
+    detail: 'Clearer facial views prepared for analyst review.',
+    flow: ['Receive', 'Extract', 'Enhance'],
+    outputs: ['CCTV frames isolated', 'Faces enhanced', 'Analyst-ready set'],
+    tags: ['CCTV', 'AI ENHANCE'],
+  },
+  {
+    id: 'o4', no: '04', img: '/osint-io111-enhance.png', kind: 'CCTV', code: 'IO111',
+    title: 'Source → Enhanced Faces', region: 'AI Enhancement Pipeline',
+    tag: 'SOURCE FRAME → ENHANCED FACE VIEWS',
+    summary: 'Source CCTV frame enhanced into clearer face views.',
+    detail: 'Before/after pair for facial review.',
+    flow: ['Source CCTV', 'AI Enhance', 'Face Views'],
+    outputs: ['Source frame kept', 'Enhanced faces generated', 'ID clarity improved'],
+    tags: ['BEFORE / AFTER', 'ENHANCED'],
+  },
+  {
+    id: 'o5', no: '05', img: '/osint-io106.png', kind: 'OSINT', code: 'IO106',
+    title: 'BNM Protest OSINT', region: 'Amsterdam · Social Media Analysis',
+    tag: 'SOURCE TRAIL · PARTICIPANT EXTRACTION',
+    summary: 'Initial clip led to Amsterdam news package confirming the protest.',
+    detail: 'Participant frames, channel tracing, and social-link mapping.',
+    flow: ['Clip Review', 'News Trace', 'Frame Extract', 'Link Map'],
+    outputs: ['News package confirmed', 'P01–P06 extracted', 'Social links mapped'],
+    tags: ['AMSTERDAM', 'BNM', 'P01–P06'],
   },
 ]
 
@@ -88,12 +114,12 @@ const osintCases = [
   {
     code: 'IO111', title: 'CCTV Enhancement', date: '03/06/2026', tech: 'Image Extraction',
     outputs: ['Driver / passenger focus frames', 'Degraded footage enhanced', 'Identification support output'],
-    leads: ['Internal evidence', 'No public lead'],
+    leads: ['Internal evidence'],
   },
   {
     code: 'IO106', title: 'BNM Protest OSINT', date: '01/06/2026', tech: 'Social Media Analysis',
-    outputs: ['Broadcast source identified', 'Participant frames extracted', 'Social profiles mapped / flagged'],
-    leads: ['X lead', 'YouTube'],
+    outputs: ['Amsterdam news package confirmed', 'Participant frames extracted', 'Social-link mapping completed'],
+    leads: ['Zrumbesh TV', 'ZBC News'],
   },
 ]
 
@@ -167,7 +193,7 @@ const OsintReel = () => {
             </span>
             <span className="os__sys">OSINT · TRACE &amp; EXTRACT</span>
           </div>
-          <h2 className="os__title">OSINT Case Reel</h2>
+          <h2 className="os__title">Cyber Int</h2>
           <p className="os__lead">
             Open-source tracing across social platforms and CCTV - video dissemination mapped,
             frames extracted and enhanced, and candidate faces surfaced for the recognition pipeline.
@@ -228,6 +254,7 @@ const OsintReel = () => {
               <span className="os__caption-region">{item.region}</span>
             </h3>
             <p className="os__caption-sub">{item.summary}</p>
+            {item.detail && <p className="os__caption-detail">{item.detail}</p>}
 
             <div className="os__flow">
               {item.flow.map((p, i) => (
@@ -237,6 +264,17 @@ const OsintReel = () => {
                 </span>
               ))}
             </div>
+
+            {item.outputs?.length > 0 && (
+              <div className="os__outputs">
+                <span className="os__outputs-label">Key outputs</span>
+                <ul className="os__outputs-list">
+                  {item.outputs.map((o) => (
+                    <li key={o}>{o}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             <div className="os__tags">
               {item.tags.map((t) => (

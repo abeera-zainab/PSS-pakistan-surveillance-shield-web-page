@@ -15,17 +15,115 @@ const useTypewriter = (text, delay = 60, startDelay = 0) => {
   return { displayed, done }
 }
 
+// Keys out a solid near-black or near-white logo background into transparency
+// at runtime, so the logo merges cleanly with the card's background image.
+const logoCache = {}
+const ProjectLogo = ({ src, bg = 'dark', alt, className }) => {
+  const [url, setUrl] = useState(logoCache[src] || null)
+  useEffect(() => {
+    if (logoCache[src]) { setUrl(logoCache[src]); return }
+    let cancelled = false
+    const img = new Image()
+    img.src = src
+    img.onload = () => {
+      const c = document.createElement('canvas')
+      c.width = img.naturalWidth
+      c.height = img.naturalHeight
+      const ctx = c.getContext('2d')
+      ctx.drawImage(img, 0, 0)
+      const data = ctx.getImageData(0, 0, c.width, c.height)
+      const p = data.data
+      for (let i = 0; i < p.length; i += 4) {
+        const L = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2]
+        // Soft alpha ramp keeps edges antialiased instead of hard-cut.
+        const t = bg === 'light' ? (231 - L) / 66 : (L - 34) / 56
+        p[i + 3] *= Math.max(0, Math.min(1, t))
+      }
+      ctx.putImageData(data, 0, 0)
+      const out = c.toDataURL('image/png')
+      logoCache[src] = out
+      if (!cancelled) setUrl(out)
+    }
+    return () => { cancelled = true }
+  }, [src, bg])
+  if (!url) return null
+  return <img src={url} alt={alt} className={className} />
+}
+
 // Each capability panel maps to a live app (opened on click at the current host + port).
-// DEFENSIVE SUITE has no port yet (project in progress) so its panel does not link out.
 const projectCards = [
-  { title: 'DEFENSIVE SUITE', subtitle: 'See · Control · Respond', icon: 'defend', port: 8130, bgImage: '/defensive-suite.jpg', desc: 'Unified security operations: detection, endpoint control, DLP, and automated response.' },
-  { title: 'AGEX IRIS', subtitle: 'Biometric Identity', icon: 'eye', port: 8120, bgImage: '/bg-agex-iris.png', desc: 'AI facial reconstruction, feature mapping, and real-time biometric identity recognition.' },
-  { title: 'NIGRAN', subtitle: 'Media Monitoring', icon: 'activity', port: 5173, bgImage: '/bg-nigran.png', desc: 'Autonomous social-media monitoring and digital-pulse intelligence reporting.' },
-  { title: 'RESPONSIBLE AI', subtitle: 'Ethical by Design', icon: 'shieldCheck', port: 5176, bgImage: '/responsible-ai.png', desc: 'Regulation-agnostic assurance for agentic AI with signed, auditor-grade evidence.' },
-  { title: 'Pakistan Surveillance Shield', subtitle: '(PSS)', icon: 'shield', bgImage: '/logo.png.png', desc: 'Smart Surveillance. Safer Pakistan.', isPss: true },
-  { title: 'GEO INT', subtitle: 'Terrain Analysis', icon: 'globe', port: 5174, bgImage: '/bg-terrain.png', desc: 'Geolocation and terrain feature analysis of targets from video or image feeds.' },
-  { title: 'NoX', subtitle: 'Offensive CyberINT', icon: 'target', port: 5177, bgImage: '/bg-nox.png', desc: 'Full-spectrum OSINT, dark-web monitoring, and adversarial offensive cyber tooling.' },
-  { title: 'RAVEN', subtitle: 'Change Detection', icon: 'radar', port: 8095, bgImage: '/bg-raven.png', desc: 'Subtle change-detection for route and perimeter security assurance.' },
+  {
+    title: 'AGEX IRIS',
+    subtitle: 'Facial Reconstruction',
+    icon: 'eye',
+    logo: '/agex-logo.png',
+    port: 8120,
+    bgImage: '/bg-agex-iris.png',
+    desc: 'Restores degraded facial imagery — noise reduction, detail recovery, and AI reconstruction.',
+  },
+  {
+    title: 'NIGRAN',
+    subtitle: 'Media Monitoring Platform',
+    icon: 'activity',
+    logo: '/nigran-logo.png',
+    logoBg: 'light',
+    port: 5173,
+    bgImage: '/bg-nigran.png',
+    desc: 'Real-time media tracking with instant alerts when watched accounts publish or act.',
+  },
+  {
+    title: 'GEO INT',
+    subtitle: 'Terrain Feature Analysis',
+    icon: 'globe',
+    logo: '/geoint-logo.png',
+    port: 5174,
+    bgImage: '/bg-terrain.png',
+    desc: 'Estimates image and video locations from terrain, landmarks, and environmental cues.',
+  },
+  {
+    title: 'CYBER INT',
+    subtitle: 'Cyber Intelligence Platform',
+    icon: 'cyber',
+    logo: '/cyberint-logo.png',
+    bgImage: '/bg-cyberint.png',
+    desc: 'OSINT tracing across social platforms with hostile account mapping and profiling.',
+  },
+  {
+    title: 'Pakistan Surveillance Shield',
+    subtitle: 'PSS Technology Portfolio',
+    icon: 'shield',
+    bgImage: '/logo.png.png',
+    desc: 'Integrated CyberINT, MediaINT, GEOINT, AI security, route surveillance, and cyber defense.',
+    isPss: true,
+  },
+  {
+    title: 'NOX CYBERINT',
+    subtitle: 'Dark Web · Offensive · Auto Pentest',
+    icon: 'target',
+    logo: '/nox-logo.png',
+    logoBg: 'light',
+    port: 5177,
+    bgImage: '/bg-nox.png',
+    desc: 'Dark-web monitoring, ethical hacking, and automated penetration testing.',
+  },
+  {
+    title: 'DEFENSIVE SUITE',
+    subtitle: 'All-in-One Cyber Defense',
+    icon: 'defend',
+    logo: '/logo-defensive.png',
+    port: 8130,
+    bgImage: '/bg-defensive.jpg',
+    desc: 'In-house enterprise AXN EDR with SIEM, SOAR and SOC — 360° cyber defense in one suite.',
+  },
+  {
+    title: 'TRUSTWORTHY AI',
+    subtitle: 'Secure · Responsible · Ethical',
+    icon: 'shieldCheck',
+    logo: '/logo-responsible-ai.png',
+    port: 5176,
+    bgImage: '/responsible-ai.png',
+    desc: 'AI governance, data protection, prompt security, and adversarial testing for safe AI use.',
+  },
 ]
 
 // Artistic, theme-matched emblem icons (forest-green + gold intelligence palette).
@@ -44,6 +142,19 @@ const ICONS = {
       <circle cx="12" cy="12" r="2" fill="#08130d" />
       <circle cx="10.8" cy="10.7" r="0.8" fill="#eafff5" />
       <path d="M12 6.6v1.4M12 16v1.4M6.8 12h1.4M15.8 12h1.4" stroke="#e6c766" strokeWidth="0.7" strokeLinecap="round" opacity="0.85" />
+    </svg>
+  ),
+  // CYBER INT — multi-source intel node
+  cyber: (
+    <svg {...SV}>
+      <defs><linearGradient id="ic-cint" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#e6c766" /><stop offset="1" stopColor="#34d399" /></linearGradient></defs>
+      <rect x="3.2" y="3.2" width="17.6" height="17.6" rx="3.2" fill="#0c1f16" stroke="url(#ic-cint)" strokeWidth="1.2" />
+      <circle cx="8.2" cy="8.2" r="1.4" fill="#e6c766" />
+      <circle cx="15.8" cy="8.2" r="1.4" fill="#34d399" />
+      <circle cx="8.2" cy="15.8" r="1.4" fill="#34d399" />
+      <circle cx="15.8" cy="15.8" r="1.4" fill="#e6c766" />
+      <circle cx="12" cy="12" r="1.7" fill="#7dffb0" />
+      <path d="M9.4 8.8 10.8 11M14.6 8.8 13.2 11M9.4 15.2 10.8 13M14.6 15.2 13.2 13" stroke="#c8a84e" strokeWidth="1" strokeLinecap="round" />
     </svg>
   ),
   // NIGRAN — broadcast / signal arcs
@@ -123,8 +234,8 @@ const ICONS = {
 const APP_URL = (port) => `${window.location.protocol}//${window.location.hostname}:${port}`
 
 const CENTER = Math.floor(projectCards.length / 2)
-const SLIDE_SPEED = 0.52
-const CARD_GAP = 48
+const SLIDE_SPEED = 0.22
+const CARD_GAP = 56
 
 // After the PSS card dissolves, only these cards live in the carousel
 const SLIDER_INDICES = projectCards.map((c, i) => (c.isPss ? -1 : i)).filter((i) => i !== -1)
@@ -173,7 +284,10 @@ const Hero = () => {
       const available = section
         ? section.offsetHeight - 32
         : window.innerHeight - 64 - 250
-      setCardH(Math.max(180, Math.min(430, available)))
+      // Cap scales with display: larger LED walls need taller cards.
+      const w = window.innerWidth
+      const maxH = w >= 3840 ? 800 : w >= 2560 ? 680 : w >= 1920 ? 580 : w >= 1600 ? 520 : 480
+      setCardH(Math.max(220, Math.min(maxH, available)))
     }
     measure()
     window.addEventListener('resize', measure)
@@ -468,7 +582,16 @@ const Hero = () => {
                     <div className="hero__card-icon">
                       {card.isPss
                         ? <img src="/team_logo.png" alt="PSS" className="hero__card-logo-img" />
-                        : ICONS[card.icon]}
+                        : card.logo
+                          ? (
+                              <ProjectLogo
+                                src={card.logo}
+                                bg={card.logoBg === 'light' ? 'light' : 'dark'}
+                                alt={`${card.title} logo`}
+                                className="hero__project-logo"
+                              />
+                            )
+                          : ICONS[card.icon]}
                     </div>
                     <h3 className="hero__card-title">{card.title}</h3>
                     <span className="hero__card-subtitle">{card.subtitle}</span>

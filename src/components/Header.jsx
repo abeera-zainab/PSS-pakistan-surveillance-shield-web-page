@@ -30,7 +30,7 @@ const Header = () => {
   }, [])
 
   useEffect(() => {
-    const sectionIds = ['home', 'capabilities', 'workflow', 'about']
+    const sectionIds = ['home', 'capabilities', 'workflow', 'about', 'dividents']
 
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
@@ -63,6 +63,7 @@ const Header = () => {
     { id: 'capabilities', label: 'Capabilities' },
     { id: 'workflow', label: 'Workflow' },
     { id: 'about', label: 'About Us' },
+    { id: 'dividents', label: 'Dividents' },
   ]
 
   return (
@@ -74,28 +75,6 @@ const Header = () => {
       <div className="header__energy-line header__energy-line--2" />
 
       <div className="header__container">
-        <div className="header__logo-group" onClick={() => scrollTo('home')} style={{ cursor: 'pointer' }}>
-          <div className="header__logo-ring">
-            <div className="header__logo-ring-outer" />
-            <div className="header__logo-ring-inner" />
-            <div className="header__logo-scan" />
-            <img src="/team_logo.png" alt="PSS Logo" className="header__logo-img" />
-            <div className="header__logo-pulse" />
-            <div className="header__logo-pulse header__logo-pulse--delayed" />
-          </div>
-          <div className="header__brand">
-            <span className="header__brand-name">
-              <span className="header__brand-accent">P</span>akistan{' '}
-              <span className="header__brand-accent">S</span>urveillance{' '}
-              <span className="header__brand-accent">S</span>hield
-            </span>
-            <span className="header__brand-tagline">
-              <span className="header__tagline-dot" />
-              UNIT-47 DIVISION
-            </span>
-          </div>
-        </div>
-
         <nav className="header__nav">
           {navItems.map((item, index) => (
             <button

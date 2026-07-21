@@ -50,9 +50,6 @@ const Icon = ({ name }) => {
     users: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
     scan: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/></svg>,
     video: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="6" width="15" height="12" rx="2"/><path d="M17 10l5-3v10l-5-3z"/></svg>,
-    cpu: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg>,
-    eye: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>,
-    network: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v4M12 11l-5.5 6M12 11l5.5 6"/></svg>,
   }
   return <span className="about__icon-svg">{icons[name]}</span>
 }
@@ -66,12 +63,6 @@ const teams = [
   { name: 'Dev Team', code: '06', icon: 'code', desc: 'Platform engineering & tooling' },
 ]
 
-const pillars = [
-  { icon: 'eye', title: 'Surveillance Intelligence', text: 'Continuous monitoring across open, social, and dark-web channels to surface threats early.' },
-  { icon: 'cpu', title: 'AI Correlation', text: 'Multi-source fusion engines that connect identities, locations, and behavioural patterns.' },
-  { icon: 'network', title: 'Mission Delivery', text: 'Actionable intelligence reports designed for operational decision-making under pressure.' },
-]
-
 const stats = [
   { icon: 'folder', value: '63+', label: 'Cases Supported', desc: 'Actionable leads delivered', code: 'OPS-01' },
   { icon: 'database', value: '13,000', label: 'Suspects Profiled', desc: 'CyberInt database records', code: 'CINT-02' },
@@ -83,14 +74,56 @@ const stats = [
 
 const StatCard = ({ stat, index, started }) => {
   const display = useCounter(stat.value, 2200, started)
+  const cardRef = useRef(null)
+  const [ready, setReady] = useState(false)
+  const [tilt, setTilt] = useState({ x: 0, y: 0, glowX: 50, glowY: 50 })
+
+  useEffect(() => {
+    if (!started) return
+    const t = setTimeout(() => setReady(true), 900 + index * 100)
+    return () => clearTimeout(t)
+  }, [started, index])
+
+  const onMove = (e) => {
+    if (!ready) return
+    const el = cardRef.current
+    if (!el) return
+    const r = el.getBoundingClientRect()
+    const px = (e.clientX - r.left) / r.width
+    const py = (e.clientY - r.top) / r.height
+    setTilt({
+      x: (py - 0.5) * -16,
+      y: (px - 0.5) * 18,
+      glowX: px * 100,
+      glowY: py * 100,
+    })
+  }
+
+  const onLeave = () => setTilt({ x: 0, y: 0, glowX: 50, glowY: 50 })
+
   return (
-    <div className={`about__stat ${started ? 'about__stat--show' : ''}`} style={{ '--stat-i': index }}>
+    <div
+      ref={cardRef}
+      className={`about__stat ${started ? 'about__stat--show' : ''} ${ready ? 'about__stat--ready' : ''}`}
+      style={{
+        '--stat-i': index,
+        '--tilt-x': `${tilt.x}deg`,
+        '--tilt-y': `${tilt.y}deg`,
+        '--glow-x': `${tilt.glowX}%`,
+        '--glow-y': `${tilt.glowY}%`,
+      }}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+    >
+      <span className="about__stat-glow" aria-hidden="true" />
+      <span className="about__stat-scanline" aria-hidden="true" />
       <span className="about__stat-corner about__stat-corner--tl" />
       <span className="about__stat-corner about__stat-corner--tr" />
       <span className="about__stat-corner about__stat-corner--bl" />
       <span className="about__stat-corner about__stat-corner--br" />
       <div className="about__stat-top">
         <div className="about__stat-icon-wrap">
+          <span className="about__stat-icon-ring" aria-hidden="true" />
           <Icon name={stat.icon} />
         </div>
         <div className="about__stat-meta">
@@ -194,109 +227,80 @@ const AboutUs = () => {
       <div className="about__bg-glow about__bg-glow--tl" />
       <div className="about__bg-glow about__bg-glow--br" />
 
-      {/* ===== INTRO - full bleed ===== */}
+      {/* ===== WHO WE ARE + OPERATIONAL HIERARCHY ===== */}
       <div className={`about__intro ${visible ? 'about__intro--show' : ''}`}>
-        <div className="about__intro-inner">
-          <div className="about__intro-left">
-            <span className="about__eyebrow">
-              <span className="about__eyebrow-dot" />
-              ABOUT UNIT-47
-            </span>
-            <h2 className="about__title">Who We Are</h2>
-            <p className="about__lead">
-              Pakistan Surveillance Shield is a specialized cyber-intelligence division
-              delivering end-to-end threat detection, geolocation, and mission-ready
-              intelligence for national security operations.
-            </p>
-            <div className="about__meta-row">
-              <div className="about__meta">
-                <span className="about__meta-label">DIVISION</span>
-                <span className="about__meta-value">UNIT-47</span>
-              </div>
-              <div className="about__meta-divider" />
-              <div className="about__meta">
-                <span className="about__meta-label">DOMAIN</span>
-                <span className="about__meta-value">CYBER INTEL</span>
-              </div>
-              <div className="about__meta-divider" />
-              <div className="about__meta">
-                <span className="about__meta-label">STATUS</span>
-                <span className="about__meta-value about__meta-value--live">OPERATIONAL</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="about__pillars">
-            {pillars.map((p, i) => (
-              <div
-                key={i}
-                className={`about__pillar ${visible ? 'about__pillar--show' : ''}`}
-                style={{ '--pillar-i': i }}
-              >
-                <div className="about__pillar-icon">
-                  <Icon name={p.icon} />
-                </div>
-                <div className="about__pillar-body">
-                  <h3 className="about__pillar-title">{p.title}</h3>
-                  <p className="about__pillar-text">{p.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="about__intro-inner about__intro-inner--solo">
+          <span className="about__eyebrow">
+            <span className="about__eyebrow-dot" />
+            ABOUT UNIT-47
+          </span>
+          <h2 className="about__title">Who We Are</h2>
         </div>
       </div>
 
-      {/* ===== COMMAND STRUCTURE - full width ===== */}
       <div className={`about__structure ${visible ? 'about__structure--show' : ''}`}>
+        <div className="about__structure-grid" aria-hidden="true" />
         <div className="about__structure-head">
           <span className="about__eyebrow about__eyebrow--center">
             <span className="about__eyebrow-dot" />
             COMMAND STRUCTURE
           </span>
           <h3 className="about__subtitle">Operational Hierarchy</h3>
-          <p className="about__structure-desc">
-            Leadership cascade from technical command through CISO into specialized mission cells.
-          </p>
+          <span className={`about__structure-rule ${visible ? 'about__structure-rule--show' : ''}`} />
         </div>
 
         <div className={`about__chart ${visible ? 'about__chart--visible' : ''}`}>
           <div className={`about__node about__node--cto ${step >= 1 ? 'about__node--show' : ''}`}>
             <div className="about__node-box about__node-box--cto">
+              <span className="about__node-scan" />
               <span className="about__node-corner about__node-corner--tl" />
               <span className="about__node-corner about__node-corner--tr" />
               <span className="about__node-corner about__node-corner--bl" />
               <span className="about__node-corner about__node-corner--br" />
-              <span className="about__node-tag">L0 · COMMAND AUTHORITY</span>
+              <span className="about__node-status">
+                <span className="about__node-status-dot" />
+                ACTIVE
+              </span>
               <span className="about__node-title">Chief Technology Officer</span>
-              <span className="about__node-sub">Strategic Technical Leadership · UNIT-47</span>
             </div>
           </div>
 
-          <div className={`about__vline about__vline--top ${step >= 2 ? 'about__vline--show' : ''}`} />
+          <div className={`about__vline about__vline--top ${step >= 2 ? 'about__vline--show' : ''}`}>
+            <span className="about__vline-pulse" />
+          </div>
 
           <div className={`about__node about__node--ciso ${step >= 2 ? 'about__node--show' : ''}`}>
             <div className="about__node-box about__node-box--ciso">
+              <span className="about__node-scan about__node-scan--light" />
               <span className="about__node-corner about__node-corner--tl" />
               <span className="about__node-corner about__node-corner--tr" />
               <span className="about__node-corner about__node-corner--bl" />
               <span className="about__node-corner about__node-corner--br" />
-              <span className="about__node-tag about__node-tag--alt">L1 · SECURITY COMMAND</span>
+              <span className="about__node-status about__node-status--dark">
+                <span className="about__node-status-dot" />
+                ACTIVE
+              </span>
               <span className="about__node-title">CISO</span>
               <span className="about__node-sub about__node-sub--dark">Chief Information Security Officer</span>
             </div>
           </div>
 
-          <div className={`about__vline about__vline--mid ${step >= 3 ? 'about__vline--show' : ''}`} />
+          <div className={`about__vline about__vline--mid ${step >= 3 ? 'about__vline--show' : ''}`}>
+            <span className="about__vline-pulse" />
+          </div>
 
           <div className={`about__rail ${step >= 3 ? 'about__rail--show' : ''}`}>
             <div className="about__rail-line" />
+            <div className="about__rail-beam" />
             <div className="about__rail-label">{step >= 3 ? 'MISSION CELLS' : ''}</div>
             {teams.map((_, i) => (
               <div
                 key={i}
                 className={`about__rail-drop ${step >= 3 ? 'about__rail-drop--show' : ''}`}
                 style={{ '--drop-i': i }}
-              />
+              >
+                <span className="about__rail-drop-tip" />
+              </div>
             ))}
           </div>
 
@@ -307,16 +311,20 @@ const AboutUs = () => {
                 className={`about__team ${step >= 4 ? 'about__team--show' : ''}`}
                 style={{ '--team-i': i }}
               >
+                <span className="about__team-corner about__team-corner--tl" />
+                <span className="about__team-corner about__team-corner--tr" />
                 <div className="about__team-scan" />
                 <div className="about__team-top">
                   <span className="about__team-code">CELL-{team.code}</span>
                   <span className="about__team-status" />
                 </div>
                 <div className="about__team-icon-wrap">
+                  <span className="about__team-icon-ring" />
                   <Icon name={team.icon} />
                 </div>
                 <h4 className="about__team-name">{team.name}</h4>
                 <p className="about__team-desc">{team.desc}</p>
+                <span className="about__team-bar" />
               </div>
             ))}
           </div>
@@ -337,9 +345,6 @@ const AboutUs = () => {
               <span className="about__stats-sys">SYS · METRICS · LIVE</span>
             </div>
             <h2 className="about__title">What PSS Has Delivered</h2>
-            <p className="about__stats-lead">
-              Quantified operational impact across cases, cyber intelligence, and forensic pipelines.
-            </p>
           </div>
 
           <div className="about__stats-grid">

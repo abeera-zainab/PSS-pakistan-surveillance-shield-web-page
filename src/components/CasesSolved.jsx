@@ -1,13 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import './CasesSolved.css'
 
-/* ============================================================
-   CASES SOLVED - OPERATION RAD-UL-FITNA
-   AGEX IRIS · Face Reconstruction / Face Enhancement (FR/FE)
-   Cinematic auto-playing reel using operational screenshots.
-   Images live in /public as face-cases.png & face-radulfitna.png
-   ============================================================ */
-
 function useOnScreen(ref, threshold = 0.15) {
   const [visible, setVisible] = useState(false)
   useEffect(() => {
@@ -41,7 +34,6 @@ const CountUp = ({ target, duration = 1500, start = false }) => {
   return <span>{n}</span>
 }
 
-/* ---- IMPACT LEDGER (Rad-ul-Fitna dashboard) ---- */
 const impact = [
   { code: 'FR-01', val: 25, mult: true, label: 'Face Reconstructions', sub: 'FR pipeline output' },
   { code: 'IS-02', val: 4, mult: true, label: 'Image Scaling', sub: 'AI super-resolution' },
@@ -50,77 +42,161 @@ const impact = [
   { code: 'MS-05', val: 3, mult: true, label: 'MSISDN Artifacts', sub: 'PK / US / Iran' },
 ]
 
-/* ---- REEL SLIDES (provided screenshots) ---- */
-const slides = [
+const irisCases = [
   {
-    id: 'f1', no: '01', img: '/face-cases.png', kind: 'FR', code: 'CASE-GALLERY',
-    title: 'Reconstructed Case Gallery', region: 'Panjgur · Naukandi · Imambargah',
-    tag: 'OVERVIEW - DEGRADED → RECONSTRUCTED',
-    summary: 'Severely degraded scene media restored via GAN reconstruction and matched to identities across three operations.',
-    flow: ['Degraded Face In', 'GAN Restore', 'Recognition', 'NADRA Match'],
-    tags: ['MULTI-SUBJECT', 'NADRA-MATCHED'],
+    id: 'panjgur',
+    no: '01',
+    code: 'IBO-PANJGUR',
+    name: 'IBO Panjgur – 27ᵗʰ Dec 2025',
+    img: '/agex-01-panjgur.png',
+    date: '27/12/2025',
+    tech: 'FR / FE Pipeline',
+    summary: 'Degraded operation imagery restored through AI face reconstruction for identity attribution.',
+    outputs: ['Faces reconstructed from source frames', 'Identity candidates generated', 'NADRA-match support delivered'],
+    geoint: {
+      region: 'Panjgur District · Balochistan',
+      summary: 'Field imagery tied to the IBO engagement zone — scene frames georeferenced against terrain and route context.',
+      details: [
+        'Terrain: desert scrub belt with dry riverbed crossing',
+        'GEOINT fix on engagement coordinates from field capture',
+        'Route context mapped against known transit corridors',
+      ],
+      tags: ['PANJGUR BELT', 'FIELD CAPTURE'],
+    },
+    cyberint: {
+      summary: 'Source media recovered from operation feeds; faces isolated and queued through the FR/FE reconstruction stack.',
+      details: [
+        'AGEX IRIS: degraded frames fed into GAN restore pipeline',
+        'CyberINT: feed intake and frame extraction from operation media',
+        'NADRA-match candidates generated for analyst review',
+      ],
+      flow: ['Feed Intake', 'Frame Extract', 'GAN Restore', 'NADRA Match'],
+      tags: ['FR / FE', 'IDENTITY LEADS'],
+    },
   },
   {
-    id: 'f2', no: '02', img: '/face-radulfitna.png', kind: 'BOARD', code: 'RAD-UL-FITNA',
-    title: 'Rad-ul-Fitna Impact Board', region: 'FR / FE · Operational Output',
-    tag: 'IMPACT - RECONSTRUCTION LEDGER',
-    summary: 'Before / after reconstructions across the operation - 25 face reconstructions with image scaling, identity attribution, FaceTrace and MSISDN artifacts.',
-    flow: ['Reconstruct', 'Image Scaling', 'Identity Attribution', 'FaceTrace'],
-    tags: ['25 FR', '8 FACETRACE'],
+    id: 'naukandi-a',
+    no: '02',
+    code: 'NAUKANDI',
+    name: 'Naukandi Case – 2ⁿᵈ Dec 2025',
+    img: '/agex-02-naukandi.png',
+    date: '02/12/2025',
+    tech: 'Face Reconstruction',
+    summary: 'Low-quality captures enhanced and reconstructed into recognition-ready face views.',
+    outputs: ['Source captures enhanced', 'Recognition-ready face set', 'Identity leads forwarded'],
+    geoint: {
+      region: 'Naukandi · Chagai District',
+      summary: 'Incident location anchored in the Naukandi sector — imagery cross-checked against regional terrain signatures.',
+      details: [
+        'Terrain: arid border sector with sparse elevation change',
+        'GEOINT anchor on Naukandi coordinate cluster',
+        'Regional terrain signatures cross-checked against incident site',
+      ],
+      tags: ['CHAGAI', 'BORDER SECTOR'],
+    },
+    cyberint: {
+      summary: 'Degraded facial captures enhanced via in-house GAN model; recognition engine surfaced identity candidates.',
+      details: [
+        'AGEX IRIS: single-subject face reconstruction from low-quality capture',
+        'CyberINT: AI enhancement and recognition-ready face set built',
+        'Identity leads forwarded to analyst review queue',
+      ],
+      flow: ['Degraded Input', 'AI Enhance', 'Face Rebuild', 'Candidate ID'],
+      tags: ['GAN RESTORE', 'MATCH SET'],
+    },
+  },
+  {
+    id: 'imambargah',
+    no: '03',
+    code: 'IMAMBARGAH',
+    name: 'Imambargah Incident – 6 February 2026',
+    img: '/agex-03-imambargah.png',
+    date: '06/02/2026',
+    tech: 'FR / FE Pipeline',
+    summary: 'Incident footage processed — suspect faces isolated, enhanced, and matched.',
+    outputs: ['Suspect frames isolated', 'AI enhancement applied', 'Match set compiled for review'],
+    geoint: {
+      region: 'Islamabad · G-10 Sector',
+      summary: 'Scene context mapped to the Imambargah incident footprint for coordinate-locked analyst review.',
+      details: [
+        'Terrain: urban node with fixed scene geometry and access routes',
+        'GEOINT scene fix on Imambargah incident footprint',
+        'CCTV vantage points mapped to building layout context',
+      ],
+      tags: ['URBAN NODE', 'SCENE FIX'],
+    },
+    cyberint: {
+      summary: 'CCTV and field media traced through OSINT channels; suspect faces extracted and run against identity databases.',
+      details: [
+        'AGEX IRIS: suspect frames isolated and AI-enhanced',
+        'CyberINT: OSINT trace on CCTV and field media sources',
+        'Match set compiled for multi-suspect identity review',
+      ],
+      flow: ['CCTV Extract', 'Face Isolate', 'Enhancement', 'Identity Review'],
+      tags: ['OSINT TRACE', 'SUSPECT SET'],
+    },
+  },
+  {
+    id: 'naukandi-b',
+    no: '04',
+    code: 'NAUKANDI',
+    name: 'Naukandi Case – 2ⁿᵈ Dec 2025',
+    img: '/agex-04-naukandi.png',
+    date: '02/12/2025',
+    tech: 'End-to-End Reconstruction',
+    summary: 'Full pipeline strip — four source-to-identity face pairs delivered in a single analyst-ready trace.',
+    outputs: ['4× source → match pairs', 'Before / after reconstruction trace', 'Final identity set delivered'],
+    geoint: {
+      region: 'Naukandi · Chagai District',
+      summary: 'Multi-subject engagement imagery from the Naukandi operation — all field frames tied to the same coordinate cluster.',
+      details: [
+        'Terrain: same Naukandi sector — 4 subjects from one coordinate cluster',
+        'GEOINT: all field frames locked to shared incident coordinates',
+        'Terrain cross-check confirms single engagement zone context',
+      ],
+      tags: ['4 SUBJECTS', 'SAME SECTOR'],
+    },
+    cyberint: {
+      summary: 'End-to-end FR/FE pipeline output — degraded field captures reconstructed and matched to NADRA-ready identity portraits.',
+      details: [
+        'AGEX IRIS: 4× source-to-match face pairs in analyst strip',
+        'CyberINT: full pipeline — field capture → GAN rebuild → ID portrait',
+        'All four subjects matched through NADRA-ready identity set',
+      ],
+      flow: ['Field Capture', 'GAN Rebuild', 'Face Match', 'ID Portrait'],
+      tags: ['FULL STRIP', '4× MATCHED'],
+    },
   },
 ]
 
-/* ---- SOLVED CASES ---- */
-const cases = [
-  {
-    code: 'IBO-PANJGUR', title: 'IBO Panjgur', date: '27 Dec 2025', subjects: 4,
-    verdict: 'Subjects reconstructed & identified',
-    tags: ['GAN Reconstruction', 'NADRA Match'],
-  },
-  {
-    code: 'NAUKANDI', title: 'Naukandi Case', date: '02 Dec 2025', subjects: 6,
-    verdict: 'Identities surfaced for review',
-    tags: ['Face Enhancement', 'FaceTrace'],
-  },
-  {
-    code: 'IMAMBARGAH', title: 'Imambargah Incident', date: '06 Feb 2026', subjects: 1,
-    verdict: 'Identity confirmed · ID matched',
-    tags: ['GAN Restore', 'NADRA Match', 'ID Confirmed'],
-  },
-]
-
-const REEL_MS = 6000
-
-const FaceGlyph = () => (
-  <svg className="cs-fallback" viewBox="0 0 320 200" aria-hidden="true">
-    <rect width="320" height="200" fill="#0e1913" />
-    <ellipse cx="160" cy="150" rx="70" ry="40" fill="#22402c" />
-    <ellipse cx="160" cy="92" rx="46" ry="54" fill="#2c5238" />
-    <circle cx="142" cy="94" r="5" fill="#0e1512" />
-    <circle cx="178" cy="94" r="5" fill="#0e1512" />
-    <path d="M146 124 q14 9 28 0" stroke="#0e1512" strokeWidth="3" fill="none" strokeLinecap="round" />
-  </svg>
-)
+const REEL_MS = 5200
 
 const Stage = ({ item }) => {
   const [failed, setFailed] = useState(false)
+  const isStrip = item.id === 'naukandi-b'
   return (
-    <div className="cs-stage__frame">
-      {!failed && <div className="cs-stage__bg" style={{ backgroundImage: `url(${item.img})` }} />}
-      <div className="cs-stage__media">
+    <div className={`iris-stage__frame ${isStrip ? 'iris-stage__frame--strip' : ''}`}>
+      {!failed && <div className={`iris-stage__bg ${isStrip ? 'iris-stage__bg--strip' : ''}`} style={{ backgroundImage: `url(${item.img})` }} />}
+      <div className={`iris-stage__media ${isStrip ? 'iris-stage__media--strip' : ''}`}>
         {failed
-          ? <FaceGlyph />
-          : <img src={item.img} alt={item.title} className="cs-stage__img" onError={() => setFailed(true)} />}
+          ? <div className="iris-stage__fallback" />
+          : (
+            <img
+              src={item.img}
+              alt={item.name}
+              className={`iris-stage__img ${isStrip ? 'iris-stage__img--strip' : ''}`}
+              onError={() => setFailed(true)}
+            />
+          )}
       </div>
-
-      <span className="cs-stage__kind">{item.kind}</span>
-      <span className="cs-stage__scan" />
-      <span className="cs-stage__stamp"><span className="cs-stage__stamp-tick">✓</span> SOLVED</span>
-
-      <span className="cs-stage__corner cs-stage__corner--tl" />
-      <span className="cs-stage__corner cs-stage__corner--tr" />
-      <span className="cs-stage__corner cs-stage__corner--bl" />
-      <span className="cs-stage__corner cs-stage__corner--br" />
+      <span className="iris-stage__scan" />
+      {!isStrip && (
+        <span className="iris-stage__stamp"><span className="iris-stage__stamp-tick">✓</span> SOLVED</span>
+      )}
+      <span className="iris-stage__corner iris-stage__corner--tl" />
+      <span className="iris-stage__corner iris-stage__corner--tr" />
+      <span className="iris-stage__corner iris-stage__corner--bl" />
+      <span className="iris-stage__corner iris-stage__corner--br" />
     </div>
   )
 }
@@ -135,39 +211,28 @@ const CasesSolved = () => {
   useEffect(() => {
     if (!visible || paused) return
     const iv = setTimeout(() => {
-      setActive((a) => (a + 1) % slides.length)
+      setActive((a) => (a + 1) % irisCases.length)
       setPlayKey((k) => k + 1)
     }, REEL_MS)
     return () => clearTimeout(iv)
   }, [visible, paused, active])
 
   const go = (i) => { setActive(i); setPlayKey((k) => k + 1) }
-  const item = slides[active]
+  const item = irisCases[active]
 
   return (
-    <section className="cases" id="cases-solved" ref={rootRef}>
+    <section className="cases" id="dividents" ref={rootRef}>
       <div className="cases__grid-bg" />
       <div className="cases__scan" />
       <div className="cases__vignette" />
 
       <div className="cases__inner">
-        {/* ===== HEADER ===== */}
         <header className={`cases__head ${visible ? 'cases__head--show' : ''}`}>
-          <div className="cases__head-row">
-            <span className="cases__eyebrow">
-              <span className="cases__eyebrow-dot" />
-              OPERATION · RAD-UL-FITNA
-            </span>
-            <span className="cases__sys">AGEX IRIS · FR / FE RECONSTRUCTION</span>
-          </div>
-          <h2 className="cases__title">Cases Solved</h2>
-          <p className="cases__lead">
-            Operational outcomes from the AGEX IRIS facial reconstruction &amp; enhancement pipeline -
-            degraded scene media restored, matched, and attributed to confirmed identities.
-          </p>
+          <h2 className="cases__title">Dividents</h2>
         </header>
 
-        {/* ===== IMPACT LEDGER ===== */}
+        <h3 className={`cases__subhead ${visible ? 'cases__subhead--show' : ''}`}>AGEX IRIS</h3>
+
         <div className={`cases__ledger ${visible ? 'cases__ledger--show' : ''}`}>
           {impact.map((m, i) => (
             <div className="cases__metric" key={m.code} style={{ '--m-i': i }}>
@@ -182,113 +247,117 @@ const CasesSolved = () => {
               <span className="cases__metric-sub">{m.sub}</span>
             </div>
           ))}
-          <div className="cases__ledger-seal">RAD-UL-FITNA</div>
         </div>
 
-        {/* ===== REEL ===== */}
         <div
-          className={`cases__reel ${visible ? 'cases__reel--show' : ''}`}
+          className={`iris-reel ${visible ? 'iris-reel--show' : ''}`}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          <div className="cases__stage">
-            <div className="cases__stage-bar">
-              <span className="cases__stage-count">FRAME {item.no} / {String(slides.length).padStart(2, '0')}</span>
-              <span className="cases__stage-code">{item.code}</span>
-              <span className={`cases__stage-state ${paused ? 'is-paused' : ''}`}>
+          <div className="iris-reel__stage">
+            <div className="iris-reel__bar">
+              <span className="iris-reel__count">CASE {item.no} / {String(irisCases.length).padStart(2, '0')}</span>
+              <span className="iris-reel__code">{item.code}</span>
+              <span className={`iris-reel__state ${paused ? 'is-paused' : ''}`}>
                 {paused ? '❚❚ PAUSED' : '▶ PLAYING'}
               </span>
             </div>
 
             <Stage key={playKey} item={item} />
 
-            <div className="cases__progress">
-              {slides.map((s, i) => (
-                <span key={s.id} className="cases__progress-track">
+            <div className="iris-reel__progress">
+              {irisCases.map((c, i) => (
+                <span key={c.id} className="iris-reel__progress-track">
                   <span
-                    className={`cases__progress-fill ${i === active ? 'is-active' : ''} ${i < active ? 'is-done' : ''}`}
-                    style={{ animationDuration: `${REEL_MS}ms`, animationPlayState: paused ? 'paused' : 'running' }}
+                    className={`iris-reel__progress-fill ${i === active ? 'is-active' : ''} ${i < active ? 'is-done' : ''}`}
+                    style={{
+                      animationDuration: `${REEL_MS}ms`,
+                      animationPlayState: paused ? 'paused' : 'running',
+                    }}
                   />
                 </span>
               ))}
             </div>
           </div>
 
-          <div className="cases__caption" key={`cap-${playKey}`}>
-            <span className="cases__caption-tag">{item.tag}</span>
-            <h3 className="cases__caption-title">
-              {item.title}
-              <span className="cases__caption-region">{item.region}</span>
-            </h3>
-            <p className="cases__caption-sub">{item.summary}</p>
-
-            <div className="cases__flow">
-              {item.flow.map((p, i) => (
-                <span key={p} className="cases__flow-step" style={{ '--f-i': i }}>
-                  {i > 0 && <span className="cases__flow-arrow">›</span>}
-                  <span className="cases__flow-chip">{p}</span>
-                </span>
-              ))}
+          <div className="iris-reel__caption" key={`cap-${playKey}`}>
+            <h4 className="iris-reel__case-name">{item.name}</h4>
+            <div className="iris-reel__meta">
+              <span className="iris-reel__meta-date">{item.date}</span>
+              <span className="iris-reel__meta-tech">{item.tech}</span>
             </div>
-
-            <div className="cases__tags">
-              {item.tags.map((t) => (
-                <span key={t} className="cases__tag">{t}</span>
+            <p className="iris-reel__summary">{item.summary}</p>
+            <ul className="iris-reel__outputs">
+              {item.outputs.map((o) => (
+                <li key={o}>{o}</li>
               ))}
-            </div>
-          </div>
-        </div>
+            </ul>
 
-        {/* ===== THUMBNAIL SCRUBBER ===== */}
-        <div className={`cases__thumbs ${visible ? 'cases__thumbs--show' : ''}`}>
-          {slides.map((s, i) => (
-            <button
-              key={s.id}
-              className={`cases__thumb ${i === active ? 'cases__thumb--active' : ''}`}
-              onClick={() => go(i)}
-              type="button"
-              style={{ backgroundImage: `url(${s.img})` }}
-            >
-              <span className="cases__thumb-shade" />
-              <span className="cases__thumb-no">{s.no}</span>
-              <span className="cases__thumb-title">{s.title}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* ===== SOLVED CASE LOG ===== */}
-        <div className={`cases__log ${visible ? 'cases__log--show' : ''}`}>
-          <div className="cases__log-head">
-            <span className="cases__eyebrow">
-              <span className="cases__eyebrow-dot" />
-              SOLVED CASE LOG
-            </span>
-            <span className="cases__sys">DATE · SUBJECTS · VERDICT</span>
-          </div>
-          <div className="cases__log-grid">
-            {cases.map((c, i) => (
-              <div className="cases__case" key={c.code} style={{ '--c-i': i }}>
-                <div className="cases__case-top">
-                  <span className="cases__case-code">{c.code}</span>
-                  <span className="cases__case-date">{c.date}</span>
+            <div className="iris-intel">
+              <div className="iris-intel__panel iris-intel__panel--terrain">
+                <div className="iris-intel__head">
+                  <span className="iris-intel__label">GEOINT · TERRAIN</span>
+                  <span className="iris-intel__region">{item.geoint.region}</span>
                 </div>
-                <h4 className="cases__case-title">{c.title}</h4>
-                <div className="cases__case-foot">
-                  <div className="cases__verdict">
-                    <span className="cases__verdict-dot" />
-                    {c.verdict}
-                  </div>
-                  <div className="cases__subjects">
-                    <span className="cases__subjects-val">{c.subjects}</span>
-                    <span className="cases__subjects-lbl">{c.subjects > 1 ? 'subjects' : 'subject'}</span>
-                  </div>
-                </div>
-                <div className="cases__tags cases__tags--sm">
-                  {c.tags.map((t) => (<span key={t} className="cases__tag">{t}</span>))}
+                <p className="iris-intel__text">{item.geoint.summary}</p>
+                {item.geoint.details?.length > 0 && (
+                  <ul className="iris-intel__detail">
+                    {item.geoint.details.map((d) => (
+                      <li key={d}>{d}</li>
+                    ))}
+                  </ul>
+                )}
+                <div className="iris-intel__tags">
+                  {item.geoint.tags.map((t) => (
+                    <span key={t} className="iris-intel__tag">{t}</span>
+                  ))}
                 </div>
               </div>
-            ))}
+
+              <div className="iris-intel__panel iris-intel__panel--cyber">
+                <div className="iris-intel__head">
+                  <span className="iris-intel__label">CYBERINT · AGEX</span>
+                </div>
+                <p className="iris-intel__text">{item.cyberint.summary}</p>
+                {item.cyberint.details?.length > 0 && (
+                  <ul className="iris-intel__detail">
+                    {item.cyberint.details.map((d) => (
+                      <li key={d}>{d}</li>
+                    ))}
+                  </ul>
+                )}
+                <div className="iris-intel__flow">
+                  {item.cyberint.flow.map((step, i) => (
+                    <span key={step} className="iris-intel__flow-step">
+                      {i > 0 && <span className="iris-intel__flow-arrow">›</span>}
+                      <span className="iris-intel__flow-chip">{step}</span>
+                    </span>
+                  ))}
+                </div>
+                <div className="iris-intel__tags">
+                  {item.cyberint.tags.map((t) => (
+                    <span key={t} className="iris-intel__tag iris-intel__tag--cyber">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
+
+        <div className={`iris-thumbs ${visible ? 'iris-thumbs--show' : ''}`}>
+          {irisCases.map((c, i) => (
+            <button
+              key={c.id}
+              type="button"
+              className={`iris-thumb ${i === active ? 'iris-thumb--active' : ''}`}
+              onClick={() => go(i)}
+              style={{ backgroundImage: `url(${c.img})` }}
+            >
+              <span className="iris-thumb__shade" />
+              <span className="iris-thumb__no">{c.no}</span>
+              <span className="iris-thumb__name">{c.name}</span>
+            </button>
+          ))}
         </div>
       </div>
     </section>

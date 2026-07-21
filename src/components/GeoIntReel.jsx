@@ -95,16 +95,6 @@ const slides = [
   },
 ]
 
-/* ---- GEOLOCATED SITES (from the training-video grid) ---- */
-const sites = [
-  { org: 'FITNA-TUL-KHWARIJ', name: 'Shangla', area: 'Chawga, Puran, Shangla', coord: '34.6976, 72.6375' },
-  { org: 'BLA HEROF2', name: 'Training Video', area: 'Near Gurruk (Ras Koh Hills)', coord: '28.5, 65.5' },
-  { org: 'BNA', name: 'Training Video', area: 'Dranjan', coord: '29°34′00.1″N 67°22′00.1″E' },
-  { org: 'FITNA-TUL-KHWARIJ', name: 'Training Video', area: 'Jabba near Bagh, KPK', coord: '33.816, 70.838' },
-  { org: 'BLA', name: 'Female Commander', area: 'Dalbandin & Chaghi', coord: '28.892, 64.40' },
-  { org: 'BLF', name: 'Training Video', area: 'Panjwayi, Afghanistan', coord: '31.066, 65.512' },
-]
-
 const REEL_MS = 5600
 
 const TerrainGlyph = () => (
@@ -270,30 +260,6 @@ const GeoIntReel = () => {
               <span className="geo__thumb-title">{s.title}</span>
             </button>
           ))}
-        </div>
-
-        {/* ===== GEOLOCATED SITES ===== */}
-        <div className={`geo__sites ${visible ? 'geo__sites--show' : ''}`}>
-          <div className="geo__sites-head">
-            <span className="geo__eyebrow">
-              <span className="geo__eyebrow-dot" />
-              GEOLOCATED SITES
-            </span>
-            <span className="geo__sys">LAT / LONG · CONFIRMED</span>
-          </div>
-          <div className="geo__sites-grid">
-            {sites.map((s, i) => (
-              <div className="geo__site" key={`${s.org}-${i}`} style={{ '--s-i': i }}>
-                <div className="geo__site-top">
-                  <span className="geo__site-org">{s.org}</span>
-                  <span className="geo__site-pin">◈</span>
-                </div>
-                <span className="geo__site-name">{s.name}</span>
-                <span className="geo__site-area">{s.area}</span>
-                <span className="geo__site-coord">{s.coord}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>

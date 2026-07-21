@@ -6,12 +6,12 @@ const SvgCheck = () => (
   <svg className="wf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
 )
 
-const SvgArrowDown = () => (
-  <svg className="wf-icon wf-icon--arrow" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2v16m0 0l-6-6m6 6l6-6"/></svg>
-)
-
 const SvgChevron = () => (
   <svg className="wf-icon wf-icon--chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+)
+
+const SvgArrowDown = () => (
+  <svg className="wf-icon wf-icon--arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="4" x2="12" y2="20"/><polyline points="6 14 12 20 18 14"/></svg>
 )
 
 const SvgDiamond = () => (
@@ -20,7 +20,7 @@ const SvgDiamond = () => (
 
 const phases = [
   {
-    id: 'phase1', num: '01', title: 'CYBERINT', system: 'NIGRAN', subtitle: 'Monitoring · NIGRAN',
+    id: 'phase1', num: '01', title: 'NIGRAN', system: 'NIGRAN', subtitle: 'Media Monitoring',
     sources: ['NEWS', 'TELEGRAM', 'X', 'FACEBOOK', 'INSTAGRAM', 'TIKTOK', 'YOUTUBE', 'RSS', 'FORUMS'],
     scanItems: ['Language Detection', 'Threat Score', 'Keywords', 'Audio Analysis', 'Sentiment Analysis'],
     output: 'Threat Detected', confidence: '93%',
@@ -579,8 +579,39 @@ const FaceScene = ({ variant }) => {
 }
 
 /* Glossy full-case explorer, opened from the phase's name in the workflow */
-const CaseExplorer = ({ name, stages, stage, setStage, paused, setPaused, onClose, renderBody }) => {
+const CaseExplorer = ({ name, stages, stage, setStage, paused, setPaused, onClose, renderBody, inline }) => {
   const s = stages[stage]
+
+  // Inline mode: the case file plays as a slideshow inside the product card
+  // itself instead of a fullscreen modal.
+  if (inline) {
+    return (
+      <div
+        className="wf-inline-reel"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        {name && <div className="wf-inline-reel__name">{name}</div>}
+        <div className="wf-explorer__tabs wf-inline-reel__tabs">
+          {stages.map((st, i) => (
+            <button
+              key={st.key} type="button"
+              className={`wf-explorer__tab ${i === stage ? 'wf-explorer__tab--active' : ''}`}
+              onClick={() => setStage(i)}
+            >
+              <span className="wf-explorer__tab-num">{st.num}</span>
+              {st.tab}
+              {i === stage && !paused && <span key={`p-${stage}`} className="wf-explorer__tab-progress" />}
+            </button>
+          ))}
+        </div>
+        <div key={s.key} className="wf-sat wf-sat--active wf-focus__card wf-explorer__card">
+          {renderBody(s, true)}
+        </div>
+      </div>
+    )
+  }
+
   return createPortal(
     <div className="wf-focus" onClick={onClose}>
       <div
@@ -628,7 +659,7 @@ const useCaseExplorer = (open, onClose, stageCount) => {
   }, [open, paused, stage, stageCount])
 
   useEffect(() => {
-    if (!open) return
+    if (!open || !onClose) return
     const onKey = (e) => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -637,9 +668,9 @@ const useCaseExplorer = (open, onClose, stageCount) => {
   return { stage, setStage, paused, setPaused }
 }
 
-const TerrainCase = ({ open, onClose }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open, onClose, caseStages.length)
-  const run = open
+const TerrainCase = ({ open, onClose, inline }) => {
+  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, caseStages.length)
+  const run = open || inline
 
   const renderBody = (s, active) => (
     <>
@@ -743,9 +774,10 @@ const TerrainCase = ({ open, onClose }) => {
     </>
   )
 
-  if (!open) return null
+  if (!open && !inline) return null
   return (
     <CaseExplorer
+      inline={inline}
       name="GEOINT - TERRAIN FEATURE ANALYSIS CASE"
       stages={caseStages}
       stage={stage} setStage={setStage}
@@ -756,16 +788,16 @@ const TerrainCase = ({ open, onClose }) => {
   )
 }
 
-const NigranCase = ({ open, onClose }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open, onClose, nigranStages.length)
+const NigranCase = ({ open, onClose, inline }) => {
+  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, nigranStages.length)
   const [plat, setPlat] = useState(0)
 
   // 3D platform stack keeps rotating while the case is open
   useEffect(() => {
-    if (!open) return
+    if (!open && !inline) return
     const t = setInterval(() => setPlat((p) => (p + 1) % nigranPlatforms.length), 2400)
     return () => clearInterval(t)
-  }, [open])
+  }, [open, inline])
 
   const renderBody = (s, active) => (
     <>
@@ -847,10 +879,11 @@ const NigranCase = ({ open, onClose }) => {
     </>
   )
 
-  if (!open) return null
+  if (!open && !inline) return null
   return (
     <CaseExplorer
-      name="NIGRAN - MEDIA MONITORING CASE"
+      inline={inline}
+      name={inline ? '' : 'NIGRAN - MEDIA MONITORING CASE'}
       stages={nigranStages}
       stage={stage} setStage={setStage}
       paused={paused} setPaused={setPaused}
@@ -860,8 +893,8 @@ const NigranCase = ({ open, onClose }) => {
   )
 }
 
-const AgexCase = ({ open, onClose }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open, onClose, agexStages.length)
+const AgexCase = ({ open, onClose, inline }) => {
+  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, agexStages.length)
 
   const renderBody = (s, active) => (
     <>
@@ -950,9 +983,10 @@ const AgexCase = ({ open, onClose }) => {
     </>
   )
 
-  if (!open) return null
+  if (!open && !inline) return null
   return (
     <CaseExplorer
+      inline={inline}
       name="AGEX IRIS - FR/FE RECONSTRUCTION CASE"
       stages={agexStages}
       stage={stage} setStage={setStage}
@@ -963,8 +997,8 @@ const AgexCase = ({ open, onClose }) => {
   )
 }
 
-const SocialCase = ({ open, onClose }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open, onClose, socialStages.length)
+const SocialCase = ({ open, onClose, inline }) => {
+  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, socialStages.length)
   const angle = 360 / socialPlatforms.length
 
   const renderBody = (s) => (
@@ -1039,7 +1073,7 @@ const SocialCase = ({ open, onClose }) => {
     </>
   )
 
-  if (!open) return null
+  if (!open && !inline) return null
   return (
     <CaseExplorer
       name="SOCIAL MEDIA RECON - OSINT CASE"
@@ -1048,12 +1082,13 @@ const SocialCase = ({ open, onClose }) => {
       paused={paused} setPaused={setPaused}
       onClose={onClose}
       renderBody={renderBody}
+      inline={inline}
     />
   )
 }
 
-const CyberCase = ({ open, onClose }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open, onClose, cyberStages.length)
+const CyberCase = ({ open, onClose, inline }) => {
+  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, cyberStages.length)
 
   const renderBody = (s) => {
     const angle = s.ring ? 360 / s.ring.length : 0
@@ -1130,9 +1165,10 @@ const CyberCase = ({ open, onClose }) => {
     )
   }
 
-  if (!open) return null
+  if (!open && !inline) return null
   return (
     <CaseExplorer
+      inline={inline}
       name="CYBERINT RECON - OSINT DATA HARVEST CASE"
       stages={cyberStages}
       stage={stage} setStage={setStage}
@@ -1192,8 +1228,8 @@ const darkovaStages = [
   },
 ]
 
-const DarkovaCase = ({ open, onClose }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open, onClose, darkovaStages.length)
+const DarkovaCase = ({ open, onClose, inline }) => {
+  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, darkovaStages.length)
 
   const renderBody = (s) => {
     const angle = s.ring ? 360 / s.ring.length : 0
@@ -1262,9 +1298,10 @@ const DarkovaCase = ({ open, onClose }) => {
     )
   }
 
-  if (!open) return null
+  if (!open && !inline) return null
   return (
     <CaseExplorer
+      inline={inline}
       name="DARKOVA - NOX DARK WEB MONITORING CASE"
       stages={darkovaStages}
       stage={stage} setStage={setStage}
@@ -1385,8 +1422,8 @@ const offensiveStages = [
   },
 ]
 
-const OffensiveCase = ({ open, onClose }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open, onClose, offensiveStages.length)
+const OffensiveCase = ({ open, onClose, inline }) => {
+  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, offensiveStages.length)
 
   const renderBody = (s) => (
     <>
@@ -1452,7 +1489,7 @@ const OffensiveCase = ({ open, onClose }) => {
     </>
   )
 
-  if (!open) return null
+  if (!open && !inline) return null
   return (
     <CaseExplorer
       name="OFFENSIVE HACKING - ONE-TAP BACKDOOR CASE"
@@ -1461,6 +1498,7 @@ const OffensiveCase = ({ open, onClose }) => {
       paused={paused} setPaused={setPaused}
       onClose={onClose}
       renderBody={renderBody}
+      inline={inline}
     />
   )
 }
@@ -1591,8 +1629,8 @@ const arieStages = [
   },
 ]
 
-const ArieCase = ({ open, onClose }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open, onClose, arieStages.length)
+const ArieCase = ({ open, onClose, inline }) => {
+  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, arieStages.length)
 
   const renderBody = (s) => (
     <>
@@ -1641,7 +1679,7 @@ const ArieCase = ({ open, onClose }) => {
     </>
   )
 
-  if (!open) return null
+  if (!open && !inline) return null
   return (
     <CaseExplorer
       name="ARIE - AUTO PENTESTING CONSOLE CASE"
@@ -1650,6 +1688,7 @@ const ArieCase = ({ open, onClose }) => {
       paused={paused} setPaused={setPaused}
       onClose={onClose}
       renderBody={renderBody}
+      inline={inline}
     />
   )
 }
@@ -1817,8 +1856,8 @@ const RavenFilter = () => (
   </div>
 )
 
-const RavenCase = ({ open, onClose }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open, onClose, ravenStages.length)
+const RavenCase = ({ open, onClose, inline }) => {
+  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, ravenStages.length)
 
   const renderBody = (s) => (
     <>
@@ -1856,9 +1895,10 @@ const RavenCase = ({ open, onClose }) => {
     </>
   )
 
-  if (!open) return null
+  if (!open && !inline) return null
   return (
     <CaseExplorer
+      inline={inline}
       name="RAVEN - ROUTE ANOMALY & VERIFICATION CASE"
       stages={ravenStages}
       stage={stage} setStage={setStage}
@@ -1956,8 +1996,8 @@ const defenseStages = [
   },
 ]
 
-const DefensiveCase = ({ open, onClose }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open, onClose, defenseStages.length)
+const DefensiveCase = ({ open, onClose, inline }) => {
+  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, defenseStages.length)
 
   const renderBody = (s) => {
     const angle = s.ring ? 360 / s.ring.length : 0
@@ -2042,9 +2082,10 @@ const DefensiveCase = ({ open, onClose }) => {
     )
   }
 
-  if (!open) return null
+  if (!open && !inline) return null
   return (
     <CaseExplorer
+      inline={inline}
       name="DEFENSIVE SUITE - SECURITY OPERATIONS CASE"
       stages={defenseStages}
       stage={stage} setStage={setStage}
@@ -2148,8 +2189,8 @@ const raiStages = [
   },
 ]
 
-const ResponsibleAiCase = ({ open, onClose }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open, onClose, raiStages.length)
+const ResponsibleAiCase = ({ open, onClose, inline }) => {
+  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, raiStages.length)
 
   const renderBody = (s) => {
     const angle = s.ring ? 360 / s.ring.length : 0
@@ -2232,9 +2273,10 @@ const ResponsibleAiCase = ({ open, onClose }) => {
     )
   }
 
-  if (!open) return null
+  if (!open && !inline) return null
   return (
     <CaseExplorer
+      inline={inline}
       name="RESPONSIBLE AI - ASSURANCE FRAMEWORK CASE"
       stages={raiStages}
       stage={stage} setStage={setStage}
@@ -2250,9 +2292,14 @@ const PhaseCard = ({ phase, index }) => {
   const [visible, setVisible] = useState(false)
   const [stepped, setStepped] = useState(false)
   const [openCaseId, setOpenCaseId] = useState(null)
+  const [showReel, setShowReel] = useState(false)
   const direction = index % 2 === 0 ? 'left' : 'right'
-  const hasCase = phase.id === 'phase1' || phase.id === 'phase2' || phase.id === 'ravenphase' || phase.id === 'defensivephase' || phase.id === 'raiphase'
+  // single-case phases now play their case inline in the card, so no header chip
+  const hasCase = false
   const closeCase = () => setOpenCaseId(null)
+  // phases that own a case reel swap workflow -> slideshow; others keep the workflow view
+  const hasReel = ['phase1', 'phase2', 'phase3', 'noxphase', 'ravenphase', 'defensivephase', 'raiphase'].includes(phase.id)
+  const reelActive = hasReel && showReel
 
   useEffect(() => {
     const el = ref.current
@@ -2270,8 +2317,15 @@ const PhaseCard = ({ phase, index }) => {
     return () => clearTimeout(t)
   }, [visible])
 
+  useEffect(() => {
+    if (!visible) { setShowReel(false); return }
+    if (!stepped || !hasReel) return
+    const t = setTimeout(() => setShowReel(true), 4200)
+    return () => clearTimeout(t)
+  }, [visible, stepped, hasReel])
+
   return (
-    <div ref={ref} className={`wf-phase wf-phase--from-${direction} ${visible ? 'wf-phase--visible' : ''}`}>
+    <div ref={ref} className={`wf-phase wf-phase--${phase.id} wf-phase--from-${direction} ${visible ? 'wf-phase--visible' : ''}`}>
 
       <div className="wf-phase__header">
         <span className="wf-phase__num">{phase.num}</span>
@@ -2290,9 +2344,11 @@ const PhaseCard = ({ phase, index }) => {
         {visible && stepped && <span className="wf-phase__status-live"><span className="wf-phase__status-dot" /> ACTIVE</span>}
       </div>
 
-      <div className="wf-phase__body">
+      <div className={`wf-phase__body ${reelActive ? 'wf-phase__body--reel' : ''}`}>
         {visible && <div className="wf-phase__scan-line" />}
 
+        <div className={`wf-phase__swap ${reelActive ? 'wf-phase__swap--reel' : 'wf-phase__swap--workflow'}`}>
+          <div className="wf-phase__workflow">
         {phase.id === 'phase1' && (
           <>
             <div className="wf-sources">
@@ -2312,13 +2368,6 @@ const PhaseCard = ({ phase, index }) => {
                   <span className="wf-scan-item__check"><SvgCheck /></span><span>{item}</span>
                 </div>
               ))}
-            </div>
-            <div className="wf-confidence">
-              <span className="wf-confidence__label">Threat Confidence</span>
-              <span className={`wf-confidence__value ${stepped ? 'wf-confidence__value--show' : ''}`}>{phase.confidence}</span>
-            </div>
-            <div className={`wf-output ${stepped ? 'wf-output--active' : ''}`}>
-              <span className="wf-output__pulse" /><span className="wf-output__text">{phase.output}</span>
             </div>
           </>
         )}
@@ -2383,11 +2432,6 @@ const PhaseCard = ({ phase, index }) => {
                 <div key={mi} className={`wf-module ${stepped ? 'wf-module--done' : ''}`} style={{ transitionDelay: `${0.8 + mi * 0.3}s` }}>
                   <div className="wf-module__header">
                     {mod.name}
-                    {mod.caseId && (
-                      <button type="button" className="wf-phase__case-chip wf-module__case-chip" onClick={() => setOpenCaseId(mod.caseId)}>
-                        {mod.caseLabel || 'CASE FILE ▸'}
-                      </button>
-                    )}
                   </div>
                   <div className="wf-module__items">
                     {(mod.steps || mod.items).map((item, i) => (<span key={i} className="wf-module__item">{item}</span>))}
@@ -2488,19 +2532,26 @@ const PhaseCard = ({ phase, index }) => {
             </div>
           </>
         )}
-      </div>
 
-      {phase.id === 'phase1' && <NigranCase open={openCaseId === 'main'} onClose={closeCase} />}
-      {phase.id === 'phase2' && <TerrainCase open={openCaseId === 'main'} onClose={closeCase} />}
-      {phase.id === 'phase3' && <AgexCase open={openCaseId === 'agex'} onClose={closeCase} />}
-      {phase.id === 'phase3' && <SocialCase open={openCaseId === 'social'} onClose={closeCase} />}
-      {phase.id === 'phase3' && <CyberCase open={openCaseId === 'cyber'} onClose={closeCase} />}
-      {phase.id === 'noxphase' && <DarkovaCase open={openCaseId === 'nox-darkweb'} onClose={closeCase} />}
-      {phase.id === 'noxphase' && <OffensiveCase open={openCaseId === 'nox-offensive'} onClose={closeCase} />}
-      {phase.id === 'noxphase' && <ArieCase open={openCaseId === 'nox-arie'} onClose={closeCase} />}
-      {phase.id === 'ravenphase' && <RavenCase open={openCaseId === 'main'} onClose={closeCase} />}
-      {phase.id === 'defensivephase' && <DefensiveCase open={openCaseId === 'main'} onClose={closeCase} />}
-      {phase.id === 'raiphase' && <ResponsibleAiCase open={openCaseId === 'main'} onClose={closeCase} />}
+          </div>
+
+          {hasReel && (
+            <div className="wf-phase__reel">
+              {phase.id === 'phase1' && <NigranCase inline={visible && reelActive} />}
+              {phase.id === 'phase2' && <TerrainCase inline={visible && reelActive} />}
+              {phase.id === 'phase3' && <AgexCase inline={visible && reelActive} />}
+              {phase.id === 'phase3' && <SocialCase inline={visible && reelActive} />}
+              {phase.id === 'phase3' && <CyberCase inline={visible && reelActive} />}
+              {phase.id === 'noxphase' && <DarkovaCase inline={visible && reelActive} />}
+              {phase.id === 'noxphase' && <OffensiveCase inline={visible && reelActive} />}
+              {phase.id === 'noxphase' && <ArieCase inline={visible && reelActive} />}
+              {phase.id === 'ravenphase' && <RavenCase inline={visible && reelActive} />}
+              {phase.id === 'defensivephase' && <DefensiveCase inline={visible && reelActive} />}
+              {phase.id === 'raiphase' && <ResponsibleAiCase inline={visible && reelActive} />}
+            </div>
+          )}
+        </div>
+      </div>
 
       {index < phases.length - 1 && !['03', '04', '05', '06'].includes(phase.num) && (
         <div className={`wf-connector ${stepped ? 'wf-connector--active' : ''}`}>
