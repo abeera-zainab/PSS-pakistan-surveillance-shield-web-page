@@ -76,7 +76,7 @@ const projectCards = [
     subtitle: 'Facial Reconstruction',
     icon: 'eye',
     logo: '/agex-logo.png',
-    logoRaw: true,
+    logoClass: 'agex',
     port: 8120,
     bgImage: '/bg-agex-iris.png',
     desc: 'Restores degraded facial imagery — noise reduction, detail recovery, and AI reconstruction.',
@@ -617,7 +617,7 @@ const Hero = () => {
                                 bg={card.logoBg === 'light' ? 'light' : 'dark'}
                                 raw={!!card.logoRaw}
                                 alt={`${card.title} logo`}
-                                className={`hero__project-logo${card.logoRaw ? ' hero__project-logo--raw' : ''}`}
+                                className={`hero__project-logo${card.logoClass ? ` hero__project-logo--${card.logoClass}` : ''}${card.logoRaw ? ' hero__project-logo--raw' : ''}`}
                               />
                             )
                           : ICONS[card.icon]}

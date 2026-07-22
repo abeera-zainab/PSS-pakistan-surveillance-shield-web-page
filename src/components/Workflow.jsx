@@ -18,6 +18,24 @@ const SvgDiamond = () => (
   <svg className="wf-icon wf-icon--diamond" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l4 8-4 8-4-8z"/></svg>
 )
 
+const SvgBack = () => (
+  <svg className="wf-icon wf-icon--media" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+)
+
+const SvgForward = () => (
+  <svg className="wf-icon wf-icon--media" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+)
+
+/* Phase → inline case stage nav (back / forward from workflow controls) */
+const reelNavBus = {
+  listeners: new Set(),
+  emit(dir) { this.listeners.forEach((fn) => fn(dir)) },
+  subscribe(fn) {
+    this.listeners.add(fn)
+    return () => this.listeners.delete(fn)
+  },
+}
+
 const phases = [
   {
     id: 'phase1', num: '01', title: 'NIGRAN', system: 'NIGRAN', subtitle: 'Media Monitoring',
@@ -142,27 +160,12 @@ const nigranPlatforms = [
 
 const nigranStages = [
   {
-    key: 'summary', tab: 'SUMMARY', num: '00',
-    tag: 'OVERVIEW - WHAT THIS DOES',
+    key: 'overview', tab: 'OVERVIEW', num: '00',
+    tag: 'SUMMARY · PIPELINE',
     title: 'NIGRAN · Real-Time Media Monitoring',
-    sub: 'A centralized platform that monitors, analyzes and generates intelligence from multiple social media platforms in real time.',
+    sub: 'A centralized platform that monitors, analyzes and generates intelligence from multiple social media platforms in real time — then turns raw feeds into alerts and reports.',
     flow: ['SOCIAL FEEDS IN', 'MONITOR · ANALYZE', 'ALERTS & REPORTS OUT'],
     meta: ['5 PLATFORMS', '24/7 LIVE', 'REAL-TIME ALERTS'],
-  },
-  {
-    key: 'console', tab: 'CONSOLE', num: '01',
-    tag: 'DASHBOARD + MULTI-PLATFORM FEEDS',
-    title: 'Media Intelligence Console',
-    sub: 'Unified monitoring console — alert volume, sentiment, activity trends, plus live feeds across Twitter/X, Facebook, Instagram, YouTube and All Feeds.',
-    img: '/nigran-dashboard.png',
-    stack: true,
-    meta: ['1.7K ALERTS', '5 PLATFORMS', 'LIVE FEEDS'],
-  },
-  {
-    key: 'pipeline', tab: 'PIPELINE', num: '02',
-    tag: 'HOW IT WORKS',
-    title: 'From Raw Feeds to Intelligence',
-    sub: 'A seamless, automated pipeline:',
     steps: [
       'Social media platforms monitored continuously',
       'Data collection - mentions fetched & stored',
@@ -171,6 +174,22 @@ const nigranStages = [
       'Real-time alerts on relevant events',
       'Analytics & intelligence reports',
     ],
+  },
+  {
+    key: 'dashboard', tab: 'DASHBOARD', num: '01',
+    tag: 'LIVE MEDIA INTELLIGENCE',
+    title: 'Operations Dashboard',
+    img: '/nigran-dashboard.png',
+    enhance: true,
+    visualOnly: true,
+  },
+  {
+    key: 'platforms', tab: 'PLATFORMS', num: '02',
+    tag: 'MULTI-PLATFORM FEEDS',
+    title: 'Live Platform Coverage',
+    sub: 'Continuous monitoring across Twitter/X, Facebook, Instagram, YouTube and combined feeds — tap a card to focus that stream.',
+    stack: true,
+    meta: ['5 FEEDS', '24/7 LIVE', 'REAL-TIME'],
   },
 ]
 
@@ -559,34 +578,57 @@ const FaceScene = ({ variant }) => {
   )
 }
 
-/* Manual stage explorer — Back / Next only (no auto slideshow) */
-const CaseExplorer = ({ name, stages, stage, setStage, onClose, renderBody, inline }) => {
+/* Stage explorer — Back / Forward only (inside the card) */
+const CaseExplorer = ({ name, stages, stage, setStage, onClose, renderBody, inline, onExitToWorkflow }) => {
   const s = stages[stage]
   const atStart = stage <= 0
   const atEnd = stage >= stages.length - 1
-  const previousStage = () => { if (!atStart) setStage(stage - 1) }
+  const previousStage = () => {
+    if (!atStart) {
+      setStage(stage - 1)
+      return
+    }
+    if (onExitToWorkflow) onExitToWorkflow()
+  }
   const nextStage = () => { if (!atEnd) setStage(stage + 1) }
+
+  useEffect(() => {
+    if (!inline) return undefined
+    return reelNavBus.subscribe((dir) => {
+      setStage((cur) => {
+        if (dir < 0) {
+          if (cur <= 0) {
+            onExitToWorkflow?.()
+            return cur
+          }
+          return cur - 1
+        }
+        if (dir > 0) return Math.min(stages.length - 1, cur + 1)
+        return cur
+      })
+    })
+  }, [inline, stages.length, setStage, onExitToWorkflow])
 
   const nav = (
     <div className="wf-reel-controls">
       <button
         type="button"
-        className="wf-reel-control wf-reel-control--label"
+        className="wf-media-btn"
         onClick={previousStage}
-        disabled={atStart}
+        disabled={atStart && !onExitToWorkflow}
         aria-label="Back"
       >
-        Back
+        <SvgBack />
       </button>
       <span className="wf-reel-controls__count">{stage + 1}/{stages.length}</span>
       <button
         type="button"
-        className="wf-reel-control wf-reel-control--label"
+        className="wf-media-btn"
         onClick={nextStage}
         disabled={atEnd}
-        aria-label="Next"
+        aria-label="Forward"
       >
-        Next
+        <SvgForward />
       </button>
     </div>
   )
@@ -661,7 +703,7 @@ const useCaseExplorer = (open, onClose) => {
   return { stage, setStage }
 }
 
-const TerrainCase = ({ open, onClose, inline }) => {
+const TerrainCase = ({ open, onClose, inline, onExitToWorkflow }) => {
   const { stage, setStage } = useCaseExplorer(open || inline, onClose)
   const run = open || inline
 
@@ -776,157 +818,104 @@ const TerrainCase = ({ open, onClose, inline }) => {
       stage={stage} setStage={setStage}
       onClose={onClose}
       renderBody={renderBody}
+      onExitToWorkflow={onExitToWorkflow}
     />
   )
 }
 
-const NigranCase = ({ open, onClose, inline }) => {
+const NigranCase = ({ open, onClose, inline, onExitToWorkflow }) => {
   const { stage, setStage } = useCaseExplorer(open || inline, onClose)
   const [plat, setPlat] = useState(0)
+  const onPlatforms = nigranStages[stage]?.stack
 
-  // 3D platform stack keeps rotating while the case is open
+  // Platform stack rotates while the Platforms stage is showing
   useEffect(() => {
-    if (!open && !inline) return
+    if ((!open && !inline) || !onPlatforms) return
     const t = setInterval(() => setPlat((p) => (p + 1) % nigranPlatforms.length), 2400)
     return () => clearInterval(t)
-  }, [open, inline])
+  }, [open, inline, onPlatforms])
 
-  const renderBody = (s, active) => (
+  const renderBody = (s) => (
     <>
-          {s.img && s.stack ? (
-            <div className="wf-nigran-merge">
-              <div className="wf-nigran-merge__dash">
-                {!failedCaseImgs.has(s.img) && (
+      {s.img && (
+        <div className={`wf-case__visual wf-case__visual--tall${s.enhance ? ' wf-case__visual--nigran-dash' : ''}${s.visualOnly ? ' wf-case__visual--fill' : ''}`}>
+          {!failedCaseImgs.has(s.img) && (
+            <img
+              src={s.img} alt={s.title}
+              className={`wf-case__photo wf-case__photo--top${s.enhance ? ' wf-case__photo--nigran-enhance' : ''}`}
+              onError={(e) => { failedCaseImgs.add(s.img); e.currentTarget.style.display = 'none' }}
+            />
+          )}
+          <span className="wf-case__rec"><span className="wf-case__rec-dot wf-case__rec-dot--live" /> LIVE</span>
+          <span className="wf-case__beam" />
+          {s.enhance && <span className="wf-nigran-dash-chip">DASHBOARD</span>}
+        </div>
+      )}
+
+      {s.stack && (
+        <div className="wf-case__visual wf-case__visual--stack wf-case__visual--nigran-stack">
+          {nigranPlatforms.map((p, pi) => {
+            const off = (pi - plat + nigranPlatforms.length) % nigranPlatforms.length
+            return (
+              <div
+                key={p.key}
+                className={`wf-stack__card wf-stack__card--o${off}`}
+                onClick={(e) => { e.stopPropagation(); setPlat(pi) }}
+              >
+                {!failedCaseImgs.has(p.img) && (
                   <img
-                    src={s.img} alt={s.title}
-                    className="wf-nigran-merge__dash-img"
-                    onError={(e) => { failedCaseImgs.add(s.img); e.currentTarget.style.display = 'none' }}
+                    src={p.img} alt={p.label}
+                    className="wf-stack__img wf-stack__img--enhance"
+                    onError={(e) => { failedCaseImgs.add(p.img); e.currentTarget.style.display = 'none' }}
                   />
                 )}
-                <span className="wf-case__rec"><span className="wf-case__rec-dot wf-case__rec-dot--live" /> LIVE</span>
-                <span className="wf-nigran-merge__dash-label">DASHBOARD</span>
+                <span className="wf-stack__label">
+                  <span className="wf-stack__dot" style={{ background: p.color }} />
+                  {p.label}
+                </span>
               </div>
-              <div className="wf-nigran-merge__feeds">
-                <div className="wf-nigran-merge__feeds-head">PLATFORM FEEDS</div>
-                <div className="wf-nigran-merge__feeds-row">
-                  {nigranPlatforms.map((p) => (
-                    <button
-                      key={p.key}
-                      type="button"
-                      className={`wf-nigran-merge__feed ${plat === nigranPlatforms.indexOf(p) ? 'wf-nigran-merge__feed--active' : ''}`}
-                      onClick={(e) => { e.stopPropagation(); setPlat(nigranPlatforms.indexOf(p)) }}
-                    >
-                      <span className="wf-nigran-merge__feed-frame">
-                        {!failedCaseImgs.has(p.img) && (
-                          <img
-                            src={p.img} alt={p.label}
-                            className="wf-nigran-merge__feed-img"
-                            onError={(e) => { failedCaseImgs.add(p.img); e.currentTarget.style.display = 'none' }}
-                          />
-                        )}
-                      </span>
-                      <span className="wf-nigran-merge__feed-label">
-                        <span className="wf-stack__dot" style={{ background: p.color }} />
-                        {p.label}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-                <div className="wf-nigran-merge__focus">
-                  {!failedCaseImgs.has(nigranPlatforms[plat].img) && (
-                    <img
-                      src={nigranPlatforms[plat].img}
-                      alt={nigranPlatforms[plat].label}
-                      className="wf-nigran-merge__focus-img"
-                      onError={(e) => { failedCaseImgs.add(nigranPlatforms[plat].img); e.currentTarget.style.display = 'none' }}
-                    />
-                  )}
-                  <span className="wf-nigran-merge__focus-chip">
-                    <span className="wf-stack__dot" style={{ background: nigranPlatforms[plat].color }} />
-                    {nigranPlatforms[plat].label}
-                  </span>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <>
-              {s.img && (
-                <div className="wf-case__visual wf-case__visual--tall">
-                  {!failedCaseImgs.has(s.img) && (
-                    <img
-                      src={s.img} alt={s.title}
-                      className="wf-case__photo wf-case__photo--top"
-                      onError={(e) => { failedCaseImgs.add(s.img); e.currentTarget.style.display = 'none' }}
-                    />
-                  )}
-                  <span className="wf-case__rec"><span className="wf-case__rec-dot wf-case__rec-dot--live" /> LIVE</span>
-                  <span className="wf-case__beam" />
-                </div>
-              )}
+            )
+          })}
+        </div>
+      )}
 
-              {s.stack && (
-                <div className="wf-case__visual wf-case__visual--stack">
-                  {nigranPlatforms.map((p, pi) => {
-                    const off = (pi - plat + nigranPlatforms.length) % nigranPlatforms.length
-                    return (
-                      <div
-                        key={p.key}
-                        className={`wf-stack__card wf-stack__card--o${off}`}
-                        onClick={(e) => { e.stopPropagation(); setPlat(pi) }}
-                      >
-                        {!failedCaseImgs.has(p.img) && (
-                          <img
-                            src={p.img} alt={p.label} className="wf-stack__img"
-                            onError={(e) => { failedCaseImgs.add(p.img); e.currentTarget.style.display = 'none' }}
-                          />
-                        )}
-                        <span className="wf-stack__label">
-                          <span className="wf-stack__dot" style={{ background: p.color }} />
-                          {p.label}
-                        </span>
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
-            </>
+      {!s.visualOnly && (
+        <div className={`wf-case__info${s.key === 'overview' ? ' wf-case__info--nigran-overview' : ''}`}>
+          <span className="wf-case__stage-tag">{s.tag}</span>
+          <h4 className="wf-case__title">{s.title}</h4>
+          <p className="wf-case__sub">{s.sub}</p>
+
+          {s.flow && (
+            <div className="wf-case__flow">
+              {s.flow.map((f, fi) => (
+                <span key={fi} className="wf-case__flow-step">
+                  {fi > 0 && <span className="wf-case__flow-arrow"><SvgChevron /></span>}
+                  <span className="wf-case__flow-chip">{f}</span>
+                </span>
+              ))}
+            </div>
           )}
 
-          <div className="wf-case__info">
-            <span className="wf-case__stage-tag">{s.tag}</span>
-            <h4 className="wf-case__title">{s.title}</h4>
-            <p className="wf-case__sub">{s.sub}</p>
+          {s.meta && (
+            <div className="wf-case__meta">
+              {s.meta.map((m, mi) => (
+                <span key={mi} className="wf-case__meta-chip">{m}</span>
+              ))}
+            </div>
+          )}
 
-            {s.flow && (
-              <div className="wf-case__flow">
-                {s.flow.map((f, fi) => (
-                  <span key={fi} className="wf-case__flow-step">
-                    {fi > 0 && <span className="wf-case__flow-arrow"><SvgChevron /></span>}
-                    <span className="wf-case__flow-chip">{f}</span>
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {s.meta && (
-              <div className="wf-case__meta">
-                {s.meta.map((m, mi) => (
-                  <span key={mi} className="wf-case__meta-chip" style={{ animationDelay: `${0.3 + mi * 0.18}s` }}>{m}</span>
-                ))}
-              </div>
-            )}
-
-            {s.steps && (
-              <div className="wf-case__list">
-                {s.steps.map((item, si) => (
-                  <div key={si} className="wf-case__list-item" style={{ animationDelay: `${0.2 + si * 0.22}s` }}>
-                    <span className="wf-case__step-num">{si + 1}</span>
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          {s.steps && (
+            <div className="wf-case__list">
+              {s.steps.map((item, si) => (
+                <div key={si} className="wf-case__list-item">
+                  <span className="wf-case__step-num">{si + 1}</span>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </>
   )
 
@@ -939,11 +928,12 @@ const NigranCase = ({ open, onClose, inline }) => {
       stage={stage} setStage={setStage}
       onClose={onClose}
       renderBody={renderBody}
+      onExitToWorkflow={onExitToWorkflow}
     />
   )
 }
 
-const AgexCase = ({ open, onClose, inline }) => {
+const AgexCase = ({ open, onClose, inline, onExitToWorkflow }) => {
   const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s, active) => (
@@ -1042,11 +1032,12 @@ const AgexCase = ({ open, onClose, inline }) => {
       stage={stage} setStage={setStage}
       onClose={onClose}
       renderBody={renderBody}
+      onExitToWorkflow={onExitToWorkflow}
     />
   )
 }
 
-const SocialCase = ({ open, onClose, inline }) => {
+const SocialCase = ({ open, onClose, inline, onExitToWorkflow }) => {
   const { stage, setStage } = useCaseExplorer(open || inline, onClose)
   const angle = 360 / socialPlatforms.length
 
@@ -1131,11 +1122,12 @@ const SocialCase = ({ open, onClose, inline }) => {
       onClose={onClose}
       renderBody={renderBody}
       inline={inline}
+      onExitToWorkflow={onExitToWorkflow}
     />
   )
 }
 
-const CyberCase = ({ open, onClose, inline }) => {
+const CyberCase = ({ open, onClose, inline, onExitToWorkflow }) => {
   const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s) => {
@@ -1222,6 +1214,7 @@ const CyberCase = ({ open, onClose, inline }) => {
       stage={stage} setStage={setStage}
       onClose={onClose}
       renderBody={renderBody}
+      onExitToWorkflow={onExitToWorkflow}
     />
   )
 }
@@ -1275,7 +1268,7 @@ const darkovaStages = [
   },
 ]
 
-const DarkovaCase = ({ open, onClose, inline }) => {
+const DarkovaCase = ({ open, onClose, inline, onExitToWorkflow }) => {
   const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s) => {
@@ -1354,6 +1347,7 @@ const DarkovaCase = ({ open, onClose, inline }) => {
       stage={stage} setStage={setStage}
       onClose={onClose}
       renderBody={renderBody}
+      onExitToWorkflow={onExitToWorkflow}
     />
   )
 }
@@ -1468,7 +1462,7 @@ const offensiveStages = [
   },
 ]
 
-const OffensiveCase = ({ open, onClose, inline }) => {
+const OffensiveCase = ({ open, onClose, inline, onExitToWorkflow }) => {
   const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s) => (
@@ -1544,6 +1538,7 @@ const OffensiveCase = ({ open, onClose, inline }) => {
       onClose={onClose}
       renderBody={renderBody}
       inline={inline}
+      onExitToWorkflow={onExitToWorkflow}
     />
   )
 }
@@ -1674,7 +1669,7 @@ const arieStages = [
   },
 ]
 
-const ArieCase = ({ open, onClose, inline }) => {
+const ArieCase = ({ open, onClose, inline, onExitToWorkflow }) => {
   const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s) => (
@@ -1733,6 +1728,7 @@ const ArieCase = ({ open, onClose, inline }) => {
       onClose={onClose}
       renderBody={renderBody}
       inline={inline}
+      onExitToWorkflow={onExitToWorkflow}
     />
   )
 }
@@ -1900,7 +1896,7 @@ const RavenFilter = () => (
   </div>
 )
 
-const RavenCase = ({ open, onClose, inline }) => {
+const RavenCase = ({ open, onClose, inline, onExitToWorkflow }) => {
   const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s) => (
@@ -1948,6 +1944,7 @@ const RavenCase = ({ open, onClose, inline }) => {
       stage={stage} setStage={setStage}
       onClose={onClose}
       renderBody={renderBody}
+      onExitToWorkflow={onExitToWorkflow}
     />
   )
 }
@@ -2068,7 +2065,7 @@ const defenseStages = [
   },
 ]
 
-const DefensiveCase = ({ open, onClose, inline }) => {
+const DefensiveCase = ({ open, onClose, inline, onExitToWorkflow }) => {
   const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s) => {
@@ -2163,6 +2160,7 @@ const DefensiveCase = ({ open, onClose, inline }) => {
       stage={stage} setStage={setStage}
       onClose={onClose}
       renderBody={renderBody}
+      onExitToWorkflow={onExitToWorkflow}
     />
   )
 }
@@ -2260,7 +2258,7 @@ const raiStages = [
   },
 ]
 
-const ResponsibleAiCase = ({ open, onClose, inline }) => {
+const ResponsibleAiCase = ({ open, onClose, inline, onExitToWorkflow }) => {
   const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s) => {
@@ -2353,6 +2351,7 @@ const ResponsibleAiCase = ({ open, onClose, inline }) => {
       stage={stage} setStage={setStage}
       onClose={onClose}
       renderBody={renderBody}
+      onExitToWorkflow={onExitToWorkflow}
     />
   )
 }
@@ -2390,11 +2389,8 @@ const PhaseCard = ({ phase, index }) => {
   }, [visible])
 
   useEffect(() => {
-    if (!active) { setShowReel(false); return }
-    if (!stepped || !hasReel) return
-    const t = setTimeout(() => setShowReel(true), 4200)
-    return () => clearTimeout(t)
-  }, [active, stepped, hasReel])
+    if (!active) setShowReel(false)
+  }, [active])
 
   return (
     <div ref={ref} className={`wf-phase wf-phase--${phase.id} wf-phase--from-${direction} ${visible ? 'wf-phase--visible' : ''} ${active ? 'wf-phase--active' : ''}`}>
@@ -2421,6 +2417,26 @@ const PhaseCard = ({ phase, index }) => {
 
         <div className={`wf-phase__swap ${reelActive ? 'wf-phase__swap--reel' : 'wf-phase__swap--workflow'}`}>
           <div className="wf-phase__workflow">
+            {hasReel && !reelActive && (
+              <div className="wf-media-bar wf-media-bar--workflow">
+                <button
+                  type="button"
+                  className="wf-media-btn"
+                  aria-label="Back"
+                  disabled
+                >
+                  <SvgBack />
+                </button>
+                <button
+                  type="button"
+                  className="wf-media-btn"
+                  aria-label="Forward"
+                  onClick={() => setShowReel(true)}
+                >
+                  <SvgForward />
+                </button>
+              </div>
+            )}
         {phase.id === 'phase1' && (
           <>
             <div className="wf-sources">
@@ -2567,15 +2583,15 @@ const PhaseCard = ({ phase, index }) => {
 
           {hasReel && (
             <div className="wf-phase__reel">
-              {phase.id === 'phase1' && <NigranCase inline={active && reelActive} />}
-              {phase.id === 'phase2' && <TerrainCase inline={active && reelActive} />}
-              {phase.id === 'agexphase' && <AgexCase inline={active && reelActive} />}
-              {phase.id === 'noxphase' && <DarkovaCase inline={active && reelActive} />}
-              {phase.id === 'noxphase' && <OffensiveCase inline={active && reelActive} />}
-              {phase.id === 'noxphase' && <ArieCase inline={active && reelActive} />}
-              {phase.id === 'ravenphase' && <RavenCase inline={active && reelActive} />}
-              {phase.id === 'defensivephase' && <DefensiveCase inline={active && reelActive} />}
-              {phase.id === 'raiphase' && <ResponsibleAiCase inline={active && reelActive} />}
+              {phase.id === 'phase1' && <NigranCase inline={active && reelActive} onExitToWorkflow={() => setShowReel(false)} />}
+              {phase.id === 'phase2' && <TerrainCase inline={active && reelActive} onExitToWorkflow={() => setShowReel(false)} />}
+              {phase.id === 'agexphase' && <AgexCase inline={active && reelActive} onExitToWorkflow={() => setShowReel(false)} />}
+              {phase.id === 'noxphase' && <DarkovaCase inline={active && reelActive} onExitToWorkflow={() => setShowReel(false)} />}
+              {phase.id === 'noxphase' && <OffensiveCase inline={active && reelActive} onExitToWorkflow={() => setShowReel(false)} />}
+              {phase.id === 'noxphase' && <ArieCase inline={active && reelActive} onExitToWorkflow={() => setShowReel(false)} />}
+              {phase.id === 'ravenphase' && <RavenCase inline={active && reelActive} onExitToWorkflow={() => setShowReel(false)} />}
+              {phase.id === 'defensivephase' && <DefensiveCase inline={active && reelActive} onExitToWorkflow={() => setShowReel(false)} />}
+              {phase.id === 'raiphase' && <ResponsibleAiCase inline={active && reelActive} onExitToWorkflow={() => setShowReel(false)} />}
             </div>
           )}
         </div>
