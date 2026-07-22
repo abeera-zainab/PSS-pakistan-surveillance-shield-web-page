@@ -232,14 +232,14 @@ const CasesSolved = () => {
   const item = irisCases[active]
 
   return (
-    <section className="cases" id="dividents" ref={rootRef}>
+    <section className="cases" id="dividends" ref={rootRef}>
       <div className="cases__grid-bg" />
       <div className="cases__scan" />
       <div className="cases__vignette" />
 
       <div className="cases__inner">
         <header className={`cases__head ${visible ? 'cases__head--show' : ''}`}>
-          <h2 className="cases__title">Dividents</h2>
+          <h2 className="cases__title">Dividends</h2>
         </header>
 
         <h3 className={`cases__subhead ${visible ? 'cases__subhead--show' : ''}`}>AGEX IRIS</h3>

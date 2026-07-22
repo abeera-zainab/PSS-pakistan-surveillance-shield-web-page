@@ -35,21 +35,14 @@ const phases = [
     output: 'Coordinates Confirmed',
   },
   {
-    id: 'phase3', num: '03', title: 'CYBERINT', system: 'CYBERINT', subtitle: 'Cyber Intelligence Engine',
-    modules: [
-      { name: 'SOCIAL MEDIA RECON', caseId: 'social', items: ['Facebook', 'Instagram', 'TikTok', 'Telegram', 'LinkedIn', 'Twitter/X', 'YouTube'], result: 'Relationship Graph Built' },
-      { name: 'CYBERINT RECON', caseId: 'cyber', items: ['Gov Records', 'Public Databases', 'Domains', 'Emails', 'Phone Numbers', 'Leaked Databases'], result: 'Recon Intelligence Compiled' },
-    ],
-  },
-  {
-    id: 'agexphase', num: '04', title: 'AGEX IRIS', system: 'AGEX IRIS', subtitle: 'Facial Reconstruction & Recognition',
+    id: 'agexphase', num: '03', title: 'AGEX IRIS', system: 'AGEX IRIS', subtitle: 'Facial Reconstruction & Recognition',
     systemSub: 'FR/FE Reconstruction & Matching',
     modules: [
       { name: 'AGEX IRIS · FR/FE', caseId: 'agex', steps: ['Frame Extraction', 'AI Face Enhancement', 'GAN Reconstruction', 'Face Recognition', 'Identity Matching'], result: 'Identity Candidate Found' },
     ],
   },
   {
-    id: 'noxphase', num: '05', title: 'NOX CYBERINT', system: 'NOX', subtitle: 'Dark Web & Offensive Cyber',
+    id: 'noxphase', num: '04', title: 'NOX CYBERINT', system: 'NOX', subtitle: 'Dark Web & Offensive Cyber',
     systemSub: 'Cyber Operations',
     modules: [
       { name: 'DARKOVA · DARK WEB MONITORING', caseId: 'nox-darkweb', items: ['TOR Network', 'Dark Web Portals', 'Marketplaces', 'Threat Actor Channels', 'Credential Dumps', 'Leaked Databases'], result: 'Dark Web Intel Harvested' },
@@ -58,12 +51,12 @@ const phases = [
     ],
   },
   {
-    id: 'ravenphase', num: '06', title: 'RAVEN', system: 'RAVEN', subtitle: 'Route Anomaly & Verification',
+    id: 'ravenphase', num: '05', title: 'RAVEN', system: 'RAVEN', subtitle: 'Route Anomaly & Verification',
     units: ['CAPTURE', 'STITCH', 'COMPARE', 'FILTER', 'REPORT'],
     output: 'Change Sites Confirmed',
   },
   {
-    id: 'defensivephase', num: '07', title: 'DEFENSIVE SUITE', system: 'DEFENSIVE SUITE', subtitle: 'See · Control · Respond',
+    id: 'defensivephase', num: '06', title: 'DEFENSIVE SUITE', system: 'DEFENSIVE SUITE', subtitle: 'See · Control · Respond',
     systemSub: 'Security Operations Platform',
     modules: [
       { name: 'SECURITY · SEE', items: ['Wazuh', 'Prometheus', 'Exporters', 'Grafana', 'Axn Telemetry'], result: 'Full Visibility' },
@@ -72,7 +65,7 @@ const phases = [
     ],
   },
   {
-    id: 'raiphase', num: '08', title: 'TRUSTWORTHY AI', system: 'TRUSTWORTHY AI', subtitle: 'Secure, Responsible, Ethical',
+    id: 'raiphase', num: '07', title: 'TRUSTWORTHY AI', system: 'TRUSTWORTHY AI', subtitle: 'Secure, Responsible, Ethical',
     systemSub: 'Ethical by Design · Trusted by Default',
     units: ['FAIRNESS', 'TRANSPARENCY', 'PRIVACY', 'ACCOUNTABILITY'],
     output: 'Signed Assurance Evidence',
@@ -88,8 +81,6 @@ const FlowArrow = () => (
 )
 
 /* ===== GEOINT CASE FILE - Terrain Feature Analysis ===== */
-
-const CASE_STAGE_MS = 4200
 
 const caseStages = [
   {
@@ -159,22 +150,16 @@ const nigranStages = [
     meta: ['5 PLATFORMS', '24/7 LIVE', 'REAL-TIME ALERTS'],
   },
   {
-    key: 'dashboard', tab: 'DASHBOARD', num: '01',
-    tag: 'COMMAND VIEW',
-    title: 'Media Intelligence Dashboard',
-    sub: 'Unified real-time monitoring - alert volume, sentiment distribution, activity trends and source health in one console.',
+    key: 'console', tab: 'CONSOLE', num: '01',
+    tag: 'DASHBOARD + MULTI-PLATFORM FEEDS',
+    title: 'Media Intelligence Console',
+    sub: 'Unified monitoring console — alert volume, sentiment, activity trends, plus live feeds across Twitter/X, Facebook, Instagram, YouTube and All Feeds.',
     img: '/nigran-dashboard.png',
-    meta: ['1.7K ALERTS', 'SOURCES 5/5', 'UPTIME 100%'],
-  },
-  {
-    key: 'platforms', tab: 'PLATFORMS', num: '02',
-    tag: 'MULTI-PLATFORM SURVEILLANCE',
-    title: 'One Live Feed per Platform',
-    sub: 'Dedicated activity feeds for Twitter/X, Facebook, Instagram, TikTok and YouTube - tracked accounts, keywords and hashtags.',
     stack: true,
+    meta: ['1.7K ALERTS', '5 PLATFORMS', 'LIVE FEEDS'],
   },
   {
-    key: 'pipeline', tab: 'PIPELINE', num: '03',
+    key: 'pipeline', tab: 'PIPELINE', num: '02',
     tag: 'HOW IT WORKS',
     title: 'From Raw Feeds to Intelligence',
     sub: 'A seamless, automated pipeline:',
@@ -574,21 +559,41 @@ const FaceScene = ({ variant }) => {
   )
 }
 
-/* Glossy full-case explorer, opened from the phase's name in the workflow */
-const CaseExplorer = ({ name, stages, stage, setStage, paused, setPaused, onClose, renderBody, inline }) => {
+/* Manual stage explorer — Back / Next only (no auto slideshow) */
+const CaseExplorer = ({ name, stages, stage, setStage, onClose, renderBody, inline }) => {
   const s = stages[stage]
-  const previousStage = () => setStage((stage - 1 + stages.length) % stages.length)
-  const nextStage = () => setStage((stage + 1) % stages.length)
+  const atStart = stage <= 0
+  const atEnd = stage >= stages.length - 1
+  const previousStage = () => { if (!atStart) setStage(stage - 1) }
+  const nextStage = () => { if (!atEnd) setStage(stage + 1) }
 
-  // Inline mode: the case file plays as a slideshow inside the product card
-  // itself instead of a fullscreen modal.
+  const nav = (
+    <div className="wf-reel-controls">
+      <button
+        type="button"
+        className="wf-reel-control wf-reel-control--label"
+        onClick={previousStage}
+        disabled={atStart}
+        aria-label="Back"
+      >
+        Back
+      </button>
+      <span className="wf-reel-controls__count">{stage + 1}/{stages.length}</span>
+      <button
+        type="button"
+        className="wf-reel-control wf-reel-control--label"
+        onClick={nextStage}
+        disabled={atEnd}
+        aria-label="Next"
+      >
+        Next
+      </button>
+    </div>
+  )
+
   if (inline) {
     return (
-      <div
-        className="wf-inline-reel"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-      >
+      <div className="wf-inline-reel">
         {name && <div className="wf-inline-reel__name">{name}</div>}
         <div className="wf-inline-reel__nav">
           <div className="wf-explorer__tabs wf-inline-reel__tabs">
@@ -600,15 +605,10 @@ const CaseExplorer = ({ name, stages, stage, setStage, paused, setPaused, onClos
               >
                 <span className="wf-explorer__tab-num">{st.num}</span>
                 {st.tab}
-                {i === stage && !paused && <span key={`p-${stage}`} className="wf-explorer__tab-progress" />}
               </button>
             ))}
           </div>
-          <div className="wf-reel-controls">
-            <button type="button" className="wf-reel-control" onClick={previousStage} aria-label="Previous slide">‹</button>
-            <span className="wf-reel-controls__count">{stage + 1}/{stages.length}</span>
-            <button type="button" className="wf-reel-control" onClick={nextStage} aria-label="Next slide">›</button>
-          </div>
+          {nav}
         </div>
         <div key={s.key} className="wf-sat wf-sat--active wf-focus__card wf-explorer__card">
           {renderBody(s, true)}
@@ -619,12 +619,7 @@ const CaseExplorer = ({ name, stages, stage, setStage, paused, setPaused, onClos
 
   return createPortal(
     <div className="wf-focus" onClick={onClose}>
-      <div
-        className="wf-explorer"
-        onClick={(e) => e.stopPropagation()}
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-      >
+      <div className="wf-explorer" onClick={(e) => e.stopPropagation()}>
         <div className="wf-explorer__head">
           <span className="wf-explorer__name">{name}</span>
           <button className="wf-focus__close" onClick={onClose} aria-label="Close">✕</button>
@@ -638,14 +633,9 @@ const CaseExplorer = ({ name, stages, stage, setStage, paused, setPaused, onClos
             >
               <span className="wf-explorer__tab-num">{st.num}</span>
               {st.tab}
-              {i === stage && !paused && <span key={`p-${stage}`} className="wf-explorer__tab-progress" />}
             </button>
           ))}
-          <div className="wf-reel-controls wf-reel-controls--modal">
-            <button type="button" className="wf-reel-control" onClick={previousStage} aria-label="Previous slide">‹</button>
-            <span className="wf-reel-controls__count">{stage + 1}/{stages.length}</span>
-            <button type="button" className="wf-reel-control" onClick={nextStage} aria-label="Next slide">›</button>
-          </div>
+          <div className="wf-reel-controls--modal">{nav}</div>
         </div>
         <div key={s.key} className="wf-sat wf-sat--active wf-focus__card wf-explorer__card">
           {renderBody(s, true)}
@@ -656,17 +646,10 @@ const CaseExplorer = ({ name, stages, stage, setStage, paused, setPaused, onClos
   )
 }
 
-const useCaseExplorer = (open, onClose, stageCount) => {
+const useCaseExplorer = (open, onClose) => {
   const [stage, setStage] = useState(0)
-  const [paused, setPaused] = useState(false)
 
-  useEffect(() => { if (open) { setStage(0); setPaused(false) } }, [open])
-
-  useEffect(() => {
-    if (!open || paused) return
-    const t = setTimeout(() => setStage((s) => (s + 1) % stageCount), CASE_STAGE_MS)
-    return () => clearTimeout(t)
-  }, [open, paused, stage, stageCount])
+  useEffect(() => { if (open) setStage(0) }, [open])
 
   useEffect(() => {
     if (!open || !onClose) return
@@ -675,11 +658,11 @@ const useCaseExplorer = (open, onClose, stageCount) => {
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])
 
-  return { stage, setStage, paused, setPaused }
+  return { stage, setStage }
 }
 
 const TerrainCase = ({ open, onClose, inline }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, caseStages.length)
+  const { stage, setStage } = useCaseExplorer(open || inline, onClose)
   const run = open || inline
 
   const renderBody = (s, active) => (
@@ -791,7 +774,6 @@ const TerrainCase = ({ open, onClose, inline }) => {
       name="GEOINT - TERRAIN FEATURE ANALYSIS CASE"
       stages={caseStages}
       stage={stage} setStage={setStage}
-      paused={paused} setPaused={setPaused}
       onClose={onClose}
       renderBody={renderBody}
     />
@@ -799,7 +781,7 @@ const TerrainCase = ({ open, onClose, inline }) => {
 }
 
 const NigranCase = ({ open, onClose, inline }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, nigranStages.length)
+  const { stage, setStage } = useCaseExplorer(open || inline, onClose)
   const [plat, setPlat] = useState(0)
 
   // 3D platform stack keeps rotating while the case is open
@@ -811,44 +793,103 @@ const NigranCase = ({ open, onClose, inline }) => {
 
   const renderBody = (s, active) => (
     <>
-          {s.img && (
-            <div className="wf-case__visual wf-case__visual--tall">
-              {!failedCaseImgs.has(s.img) && (
-                <img
-                  src={s.img} alt={s.title}
-                  className="wf-case__photo wf-case__photo--top"
-                  onError={(e) => { failedCaseImgs.add(s.img); e.currentTarget.style.display = 'none' }}
-                />
+          {s.img && s.stack ? (
+            <div className="wf-nigran-merge">
+              <div className="wf-nigran-merge__dash">
+                {!failedCaseImgs.has(s.img) && (
+                  <img
+                    src={s.img} alt={s.title}
+                    className="wf-nigran-merge__dash-img"
+                    onError={(e) => { failedCaseImgs.add(s.img); e.currentTarget.style.display = 'none' }}
+                  />
+                )}
+                <span className="wf-case__rec"><span className="wf-case__rec-dot wf-case__rec-dot--live" /> LIVE</span>
+                <span className="wf-nigran-merge__dash-label">DASHBOARD</span>
+              </div>
+              <div className="wf-nigran-merge__feeds">
+                <div className="wf-nigran-merge__feeds-head">PLATFORM FEEDS</div>
+                <div className="wf-nigran-merge__feeds-row">
+                  {nigranPlatforms.map((p) => (
+                    <button
+                      key={p.key}
+                      type="button"
+                      className={`wf-nigran-merge__feed ${plat === nigranPlatforms.indexOf(p) ? 'wf-nigran-merge__feed--active' : ''}`}
+                      onClick={(e) => { e.stopPropagation(); setPlat(nigranPlatforms.indexOf(p)) }}
+                    >
+                      <span className="wf-nigran-merge__feed-frame">
+                        {!failedCaseImgs.has(p.img) && (
+                          <img
+                            src={p.img} alt={p.label}
+                            className="wf-nigran-merge__feed-img"
+                            onError={(e) => { failedCaseImgs.add(p.img); e.currentTarget.style.display = 'none' }}
+                          />
+                        )}
+                      </span>
+                      <span className="wf-nigran-merge__feed-label">
+                        <span className="wf-stack__dot" style={{ background: p.color }} />
+                        {p.label}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+                <div className="wf-nigran-merge__focus">
+                  {!failedCaseImgs.has(nigranPlatforms[plat].img) && (
+                    <img
+                      src={nigranPlatforms[plat].img}
+                      alt={nigranPlatforms[plat].label}
+                      className="wf-nigran-merge__focus-img"
+                      onError={(e) => { failedCaseImgs.add(nigranPlatforms[plat].img); e.currentTarget.style.display = 'none' }}
+                    />
+                  )}
+                  <span className="wf-nigran-merge__focus-chip">
+                    <span className="wf-stack__dot" style={{ background: nigranPlatforms[plat].color }} />
+                    {nigranPlatforms[plat].label}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              {s.img && (
+                <div className="wf-case__visual wf-case__visual--tall">
+                  {!failedCaseImgs.has(s.img) && (
+                    <img
+                      src={s.img} alt={s.title}
+                      className="wf-case__photo wf-case__photo--top"
+                      onError={(e) => { failedCaseImgs.add(s.img); e.currentTarget.style.display = 'none' }}
+                    />
+                  )}
+                  <span className="wf-case__rec"><span className="wf-case__rec-dot wf-case__rec-dot--live" /> LIVE</span>
+                  <span className="wf-case__beam" />
+                </div>
               )}
-              <span className="wf-case__rec"><span className="wf-case__rec-dot wf-case__rec-dot--live" /> LIVE</span>
-              <span className="wf-case__beam" />
-            </div>
-          )}
 
-          {s.stack && (
-            <div className="wf-case__visual wf-case__visual--stack">
-              {nigranPlatforms.map((p, pi) => {
-                const off = (pi - plat + nigranPlatforms.length) % nigranPlatforms.length
-                return (
-                  <div
-                    key={p.key}
-                    className={`wf-stack__card wf-stack__card--o${off}`}
-                    onClick={(e) => { e.stopPropagation(); setPlat(pi) }}
-                  >
-                    {!failedCaseImgs.has(p.img) && (
-                      <img
-                        src={p.img} alt={p.label} className="wf-stack__img"
-                        onError={(e) => { failedCaseImgs.add(p.img); e.currentTarget.style.display = 'none' }}
-                      />
-                    )}
-                    <span className="wf-stack__label">
-                      <span className="wf-stack__dot" style={{ background: p.color }} />
-                      {p.label}
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
+              {s.stack && (
+                <div className="wf-case__visual wf-case__visual--stack">
+                  {nigranPlatforms.map((p, pi) => {
+                    const off = (pi - plat + nigranPlatforms.length) % nigranPlatforms.length
+                    return (
+                      <div
+                        key={p.key}
+                        className={`wf-stack__card wf-stack__card--o${off}`}
+                        onClick={(e) => { e.stopPropagation(); setPlat(pi) }}
+                      >
+                        {!failedCaseImgs.has(p.img) && (
+                          <img
+                            src={p.img} alt={p.label} className="wf-stack__img"
+                            onError={(e) => { failedCaseImgs.add(p.img); e.currentTarget.style.display = 'none' }}
+                          />
+                        )}
+                        <span className="wf-stack__label">
+                          <span className="wf-stack__dot" style={{ background: p.color }} />
+                          {p.label}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </>
           )}
 
           <div className="wf-case__info">
@@ -896,7 +937,6 @@ const NigranCase = ({ open, onClose, inline }) => {
       name={inline ? '' : 'NIGRAN - MEDIA MONITORING CASE'}
       stages={nigranStages}
       stage={stage} setStage={setStage}
-      paused={paused} setPaused={setPaused}
       onClose={onClose}
       renderBody={renderBody}
     />
@@ -904,7 +944,7 @@ const NigranCase = ({ open, onClose, inline }) => {
 }
 
 const AgexCase = ({ open, onClose, inline }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, agexStages.length)
+  const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s, active) => (
     <>
@@ -1000,7 +1040,6 @@ const AgexCase = ({ open, onClose, inline }) => {
       name="AGEX IRIS - FR/FE RECONSTRUCTION CASE"
       stages={agexStages}
       stage={stage} setStage={setStage}
-      paused={paused} setPaused={setPaused}
       onClose={onClose}
       renderBody={renderBody}
     />
@@ -1008,7 +1047,7 @@ const AgexCase = ({ open, onClose, inline }) => {
 }
 
 const SocialCase = ({ open, onClose, inline }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, socialStages.length)
+  const { stage, setStage } = useCaseExplorer(open || inline, onClose)
   const angle = 360 / socialPlatforms.length
 
   const renderBody = (s) => (
@@ -1089,7 +1128,6 @@ const SocialCase = ({ open, onClose, inline }) => {
       name="SOCIAL MEDIA RECON - OSINT CASE"
       stages={socialStages}
       stage={stage} setStage={setStage}
-      paused={paused} setPaused={setPaused}
       onClose={onClose}
       renderBody={renderBody}
       inline={inline}
@@ -1098,7 +1136,7 @@ const SocialCase = ({ open, onClose, inline }) => {
 }
 
 const CyberCase = ({ open, onClose, inline }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, cyberStages.length)
+  const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s) => {
     const angle = s.ring ? 360 / s.ring.length : 0
@@ -1182,7 +1220,6 @@ const CyberCase = ({ open, onClose, inline }) => {
       name="CYBERINT RECON - OSINT DATA HARVEST CASE"
       stages={cyberStages}
       stage={stage} setStage={setStage}
-      paused={paused} setPaused={setPaused}
       onClose={onClose}
       renderBody={renderBody}
     />
@@ -1239,7 +1276,7 @@ const darkovaStages = [
 ]
 
 const DarkovaCase = ({ open, onClose, inline }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, darkovaStages.length)
+  const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s) => {
     const angle = s.ring ? 360 / s.ring.length : 0
@@ -1315,7 +1352,6 @@ const DarkovaCase = ({ open, onClose, inline }) => {
       name="DARKOVA - NOX DARK WEB MONITORING CASE"
       stages={darkovaStages}
       stage={stage} setStage={setStage}
-      paused={paused} setPaused={setPaused}
       onClose={onClose}
       renderBody={renderBody}
     />
@@ -1433,7 +1469,7 @@ const offensiveStages = [
 ]
 
 const OffensiveCase = ({ open, onClose, inline }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, offensiveStages.length)
+  const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s) => (
     <>
@@ -1505,7 +1541,6 @@ const OffensiveCase = ({ open, onClose, inline }) => {
       name="OFFENSIVE HACKING - ONE-TAP BACKDOOR CASE"
       stages={offensiveStages}
       stage={stage} setStage={setStage}
-      paused={paused} setPaused={setPaused}
       onClose={onClose}
       renderBody={renderBody}
       inline={inline}
@@ -1640,7 +1675,7 @@ const arieStages = [
 ]
 
 const ArieCase = ({ open, onClose, inline }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, arieStages.length)
+  const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s) => (
     <>
@@ -1695,7 +1730,6 @@ const ArieCase = ({ open, onClose, inline }) => {
       name="ARIE - AUTO PENTESTING CONSOLE CASE"
       stages={arieStages}
       stage={stage} setStage={setStage}
-      paused={paused} setPaused={setPaused}
       onClose={onClose}
       renderBody={renderBody}
       inline={inline}
@@ -1867,7 +1901,7 @@ const RavenFilter = () => (
 )
 
 const RavenCase = ({ open, onClose, inline }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, ravenStages.length)
+  const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s) => (
     <>
@@ -1912,7 +1946,6 @@ const RavenCase = ({ open, onClose, inline }) => {
       name="RAVEN - ROUTE ANOMALY & VERIFICATION CASE"
       stages={ravenStages}
       stage={stage} setStage={setStage}
-      paused={paused} setPaused={setPaused}
       onClose={onClose}
       renderBody={renderBody}
     />
@@ -2036,7 +2069,7 @@ const defenseStages = [
 ]
 
 const DefensiveCase = ({ open, onClose, inline }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, defenseStages.length)
+  const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s) => {
     const angle = s.ring ? 360 / s.ring.length : 0
@@ -2128,7 +2161,6 @@ const DefensiveCase = ({ open, onClose, inline }) => {
       name="DEFENSIVE SUITE - SECURITY OPERATIONS CASE"
       stages={defenseStages}
       stage={stage} setStage={setStage}
-      paused={paused} setPaused={setPaused}
       onClose={onClose}
       renderBody={renderBody}
     />
@@ -2229,7 +2261,7 @@ const raiStages = [
 ]
 
 const ResponsibleAiCase = ({ open, onClose, inline }) => {
-  const { stage, setStage, paused, setPaused } = useCaseExplorer(open || inline, onClose, raiStages.length)
+  const { stage, setStage } = useCaseExplorer(open || inline, onClose)
 
   const renderBody = (s) => {
     const angle = s.ring ? 360 / s.ring.length : 0
@@ -2319,7 +2351,6 @@ const ResponsibleAiCase = ({ open, onClose, inline }) => {
       name="RESPONSIBLE AI - ASSURANCE FRAMEWORK CASE"
       stages={raiStages}
       stage={stage} setStage={setStage}
-      paused={paused} setPaused={setPaused}
       onClose={onClose}
       renderBody={renderBody}
     />
@@ -2338,7 +2369,7 @@ const PhaseCard = ({ phase, index }) => {
   const hasCase = false
   const closeCase = () => setOpenCaseId(null)
   // phases that own a case reel swap workflow -> slideshow; others keep the workflow view
-  const hasReel = ['phase1', 'phase2', 'phase3', 'agexphase', 'noxphase', 'ravenphase', 'defensivephase', 'raiphase'].includes(phase.id)
+  const hasReel = ['phase1', 'phase2', 'agexphase', 'noxphase', 'ravenphase', 'defensivephase', 'raiphase'].includes(phase.id)
   const reelActive = hasReel && showReel
 
   useEffect(() => {
@@ -2538,8 +2569,6 @@ const PhaseCard = ({ phase, index }) => {
             <div className="wf-phase__reel">
               {phase.id === 'phase1' && <NigranCase inline={active && reelActive} />}
               {phase.id === 'phase2' && <TerrainCase inline={active && reelActive} />}
-              {phase.id === 'phase3' && <SocialCase inline={active && reelActive} />}
-              {phase.id === 'phase3' && <CyberCase inline={active && reelActive} />}
               {phase.id === 'agexphase' && <AgexCase inline={active && reelActive} />}
               {phase.id === 'noxphase' && <DarkovaCase inline={active && reelActive} />}
               {phase.id === 'noxphase' && <OffensiveCase inline={active && reelActive} />}
@@ -2552,14 +2581,14 @@ const PhaseCard = ({ phase, index }) => {
         </div>
       </div>
 
-      {index < phases.length - 1 && !['03', '04', '05', '06', '07'].includes(phase.num) && (
+      {index < phases.length - 1 && !['03', '04', '05', '06'].includes(phase.num) && (
         <div className={`wf-connector ${stepped ? 'wf-connector--active' : ''}`}>
           <div className="wf-connector__line" />
           <div className="wf-connector__beam" />
         </div>
       )}
 
-      {['03', '04', '05', '06', '07'].includes(phase.num) && (
+      {['03', '04', '05', '06'].includes(phase.num) && (
         <div className={`wf-separator ${stepped ? 'wf-separator--active' : ''}`}>
           <span className="wf-separator__line" />
           <span className="wf-separator__node">

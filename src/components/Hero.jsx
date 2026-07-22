@@ -18,36 +18,55 @@ const useTypewriter = (text, delay = 60, startDelay = 0) => {
 // Keys out a solid near-black or near-white logo background into transparency
 // at runtime, so the logo merges cleanly with the card's background image.
 const logoCache = {}
-const ProjectLogo = ({ src, bg = 'dark', alt, className }) => {
-  const [url, setUrl] = useState(logoCache[src] || null)
+const ProjectLogo = ({ src, bg = 'dark', alt, className, raw = false }) => {
+  const cacheKey = `${src}|${bg}`
+  // Always start with a visible source so cards never flash empty while processing.
+  const [url, setUrl] = useState(() => (raw ? src : (logoCache[cacheKey] || src)))
+
   useEffect(() => {
-    if (logoCache[src]) { setUrl(logoCache[src]); return }
+    if (raw) {
+      setUrl(src)
+      return
+    }
+    if (logoCache[cacheKey]) {
+      setUrl(logoCache[cacheKey])
+      return
+    }
+
     let cancelled = false
     const img = new Image()
+    img.decoding = 'async'
     img.src = src
     img.onload = () => {
-      const c = document.createElement('canvas')
-      c.width = img.naturalWidth
-      c.height = img.naturalHeight
-      const ctx = c.getContext('2d')
-      ctx.drawImage(img, 0, 0)
-      const data = ctx.getImageData(0, 0, c.width, c.height)
-      const p = data.data
-      for (let i = 0; i < p.length; i += 4) {
-        const L = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2]
-        // Soft alpha ramp keeps edges antialiased instead of hard-cut.
-        const t = bg === 'light' ? (231 - L) / 66 : (L - 34) / 56
-        p[i + 3] *= Math.max(0, Math.min(1, t))
+      try {
+        const c = document.createElement('canvas')
+        c.width = img.naturalWidth
+        c.height = img.naturalHeight
+        const ctx = c.getContext('2d', { willReadFrequently: true })
+        ctx.drawImage(img, 0, 0)
+        const data = ctx.getImageData(0, 0, c.width, c.height)
+        const p = data.data
+        for (let i = 0; i < p.length; i += 4) {
+          const L = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2]
+          // Soft alpha ramp keeps edges antialiased instead of hard-cut.
+          const t = bg === 'light' ? (231 - L) / 66 : (L - 18) / 40
+          p[i + 3] *= Math.max(0, Math.min(1, t))
+        }
+        ctx.putImageData(data, 0, 0)
+        const out = c.toDataURL('image/png')
+        logoCache[cacheKey] = out
+        if (!cancelled) setUrl(out)
+      } catch {
+        if (!cancelled) setUrl(src)
       }
-      ctx.putImageData(data, 0, 0)
-      const out = c.toDataURL('image/png')
-      logoCache[src] = out
-      if (!cancelled) setUrl(out)
+    }
+    img.onerror = () => {
+      if (!cancelled) setUrl(src)
     }
     return () => { cancelled = true }
-  }, [src, bg])
-  if (!url) return null
-  return <img src={url} alt={alt} className={className} />
+  }, [src, bg, raw, cacheKey])
+
+  return <img src={url || src} alt={alt} className={className} draggable={false} />
 }
 
 // Each capability panel maps to a live app (opened on click at the current host + port).
@@ -57,6 +76,7 @@ const projectCards = [
     subtitle: 'Facial Reconstruction',
     icon: 'eye',
     logo: '/agex-logo.png',
+    logoRaw: true,
     port: 8120,
     bgImage: '/bg-agex-iris.png',
     desc: 'Restores degraded facial imagery — noise reduction, detail recovery, and AI reconstruction.',
@@ -595,8 +615,9 @@ const Hero = () => {
                               <ProjectLogo
                                 src={card.logo}
                                 bg={card.logoBg === 'light' ? 'light' : 'dark'}
+                                raw={!!card.logoRaw}
                                 alt={`${card.title} logo`}
-                                className="hero__project-logo"
+                                className={`hero__project-logo${card.logoRaw ? ' hero__project-logo--raw' : ''}`}
                               />
                             )
                           : ICONS[card.icon]}

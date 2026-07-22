@@ -30,7 +30,7 @@ const Header = () => {
   }, [])
 
   useEffect(() => {
-    const sectionIds = ['home', 'capabilities', 'workflow', 'about', 'dividents']
+    const sectionIds = ['home', 'capabilities', 'workflow', 'about', 'dividends']
 
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
@@ -63,7 +63,7 @@ const Header = () => {
     { id: 'capabilities', label: 'Capabilities' },
     { id: 'workflow', label: 'Workflow' },
     { id: 'about', label: 'About Us' },
-    { id: 'dividents', label: 'Dividents' },
+    { id: 'dividends', label: 'Dividends' },
   ]
 
   return (
