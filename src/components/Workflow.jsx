@@ -77,16 +77,6 @@ const phases = [
     units: ['FAIRNESS', 'TRANSPARENCY', 'PRIVACY', 'ACCOUNTABILITY'],
     output: 'Signed Assurance Evidence',
   },
-  {
-    id: 'phase5', num: '09', title: 'INTELLIGENCE FUSION', system: 'FUSION', subtitle: 'Command Dashboard',
-    widgets: ['Target Identity', 'Face Match', 'Geo Coordinates', 'Social Accounts', 'Threat Network', 'Timeline', 'Vehicle', 'Device', 'Communication Pattern', 'Heatmaps', 'Routes', 'Link Analysis'],
-    output: 'Predicting Future Activity',
-  },
-  {
-    id: 'phase6', num: '10', title: 'MISSION INTELLIGENCE REPORT', system: 'PSS', subtitle: 'Final Output',
-    reportItems: ['Identity', 'Location', 'Threat Score', 'Timeline', 'Known Associates', 'Face Evidence', 'Media', 'Maps', 'Dark Web Intel', 'Social Intel', 'Geo Intel', 'Recommendations'],
-    output: 'Pakistan Surveillance Shield', final: true,
-  },
 ]
 
 const FlowArrow = () => (
@@ -2538,48 +2528,6 @@ const PhaseCard = ({ phase, index }) => {
             </div>
             <div className={`wf-output ${stepped ? 'wf-output--active' : ''}`}>
               <span className="wf-output__pulse" /><span className="wf-output__text">{phase.output}</span>
-            </div>
-          </>
-        )}
-
-        {phase.id === 'phase5' && (
-          <>
-            <div className="wf-system-box"><div className="wf-system-box__label">{phase.system}</div><div className="wf-system-box__sub">{phase.subtitle}</div></div>
-            <FlowArrow />
-            <div className="wf-widget-grid">
-              {phase.widgets.map((w, i) => (
-                <div key={i} className={`wf-widget ${stepped ? 'wf-widget--active' : ''}`} style={{ transitionDelay: `${0.8 + i * 0.1}s` }}>
-                  <span className="wf-widget__check"><SvgCheck /></span><span>{w}</span>
-                </div>
-              ))}
-            </div>
-            <div className={`wf-output wf-output--predict ${stepped ? 'wf-output--active' : ''}`}>
-              <span className="wf-output__pulse" /><span className="wf-output__text">{phase.output}</span>
-            </div>
-          </>
-        )}
-
-        {phase.id === 'phase6' && (
-          <>
-            <div className="wf-report-grid">
-              {phase.reportItems.map((item, i) => (
-                <div key={i} className={`wf-report-item ${stepped ? 'wf-report-item--done' : ''}`} style={{ transitionDelay: `${0.6 + i * 0.1}s` }}>
-                  <span className="wf-report-item__bar" /><span>{item}</span>
-                </div>
-              ))}
-            </div>
-            <FlowArrow />
-            <div className={`wf-final-shield ${stepped ? 'wf-final-shield--active' : ''}`}>
-              <div className="wf-final-shield__glow" />
-              <div className="wf-final-shield__content">
-                <div className="wf-final-shield__title">PAKISTAN</div>
-                <div className="wf-final-shield__title">SURVEILLANCE</div>
-                <div className="wf-final-shield__title">SHIELD</div>
-                <div className="wf-final-shield__sub">ACTIONABLE INTELLIGENCE DELIVERED</div>
-              </div>
-              <div className="wf-final-shield__ring wf-final-shield__ring--1" />
-              <div className="wf-final-shield__ring wf-final-shield__ring--2" />
-              <div className="wf-final-shield__ring wf-final-shield__ring--3" />
             </div>
           </>
         )}

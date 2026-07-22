@@ -167,13 +167,24 @@ const irisCases = [
       tags: ['FULL STRIP', '4× MATCHED'],
     },
   },
+  {
+    id: 'radulfitna',
+    no: '05',
+    code: 'RAD-UL-FITNA',
+    name: 'Rad-ul-Fitna – Face Reconstruction',
+    img: '/face-radulfitna.png',
+    date: '2025',
+    tech: 'Before / After Reconstruction',
+    summary: 'Multi-subject before-and-after face reconstruction strip — degraded field captures matched to identity portraits.',
+    outputs: ['10× before → after pairs', 'Full reconstruction trace', 'Identity set delivered'],
+  },
 ]
 
 const REEL_MS = 2800
 
 const Stage = ({ item }) => {
   const [failed, setFailed] = useState(false)
-  const isStrip = item.id === 'naukandi-b'
+  const isStrip = item.id === 'naukandi-b' || item.id === 'radulfitna'
   return (
     <div className={`iris-stage__frame ${isStrip ? 'iris-stage__frame--strip' : ''}`}>
       {!failed && <div className={`iris-stage__bg ${isStrip ? 'iris-stage__bg--strip' : ''}`} style={{ backgroundImage: `url(${item.img})` }} />}
