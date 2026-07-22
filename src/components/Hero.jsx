@@ -107,6 +107,14 @@ const projectCards = [
     desc: 'Dark-web monitoring, ethical hacking, and automated penetration testing.',
   },
   {
+    title: 'RAVEN',
+    subtitle: 'Route Anomaly & Verification',
+    icon: 'radar',
+    logo: '/raven-logo.png',
+    bgImage: '/bg-raven.png',
+    desc: 'Aerial route clearance — captures, stitches and compares road imagery to flag what changed overnight.',
+  },
+  {
     title: 'DEFENSIVE SUITE',
     subtitle: 'All-in-One Cyber Defense',
     icon: 'defend',
