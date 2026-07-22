@@ -123,7 +123,7 @@ const osintCases = [
   },
 ]
 
-const REEL_MS = 5600
+const REEL_MS = 2800
 
 const OsintGlyph = () => (
   <svg className="os-fallback" viewBox="0 0 320 200" aria-hidden="true">

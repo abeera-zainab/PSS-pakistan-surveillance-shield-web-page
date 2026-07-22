@@ -95,7 +95,7 @@ const slides = [
   },
 ]
 
-const REEL_MS = 5600
+const REEL_MS = 2800
 
 const TerrainGlyph = () => (
   <svg className="geo-fallback" viewBox="0 0 320 200" aria-hidden="true">
