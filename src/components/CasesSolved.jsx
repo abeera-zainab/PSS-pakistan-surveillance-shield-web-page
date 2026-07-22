@@ -169,7 +169,7 @@ const irisCases = [
   },
 ]
 
-const REEL_MS = 5200
+const REEL_MS = 2800
 
 const Stage = ({ item }) => {
   const [failed, setFailed] = useState(false)

@@ -1943,28 +1943,57 @@ const defenseTools = [
   { name: 'SHUFFLE', color: '#34d399' },
 ]
 
-// Animated See → Control → Respond closed loop
+// Animated See → Control → Respond closed loop, with Axn capabilities around the hub
+const axnLoopCaps = [
+  { label: 'HARDWARE', sub: 'USB · Storage · Adapters', x: 52, y: 22 },
+  { label: 'SOFTWARE', sub: 'Install · Run · Policy', x: 248, y: 22 },
+  { label: 'DATA LOSS', sub: 'Clipboard · Browser · Egress', x: 248, y: 228 },
+  { label: 'REMEDIATE', sub: 'Tasks · Timers · Lock-out', x: 52, y: 228 },
+]
+
 const DefenseLoop = () => (
-  <svg className="wf-case__scene" viewBox="0 0 300 250" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-    <rect width="300" height="250" fill="#0a1424" />
-    <circle className="wf-def__outer" cx="150" cy="118" r="106" fill="none" stroke="rgba(34,211,238,0.18)" strokeWidth="1" strokeDasharray="3 9" />
-    <circle className="wf-def__loop-base" cx="150" cy="118" r="84" fill="none" stroke="rgba(34,211,238,0.22)" strokeWidth="2" />
-    <circle className="wf-def__loop-comet" cx="150" cy="118" r="84" fill="none" stroke="#5ee7f5" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="24 530" />
-    {/* central shield hub */}
-    <g className="wf-def__hub">
-      <circle cx="150" cy="118" r="34" fill="none" stroke="rgba(45,212,191,0.4)" strokeWidth="1" className="wf-def__hub-ring" />
-      <path d="M150 96 L168 104 V120 Q168 138 150 146 Q132 138 132 120 V104 Z" fill="rgba(45,212,191,0.18)" stroke="#2dd4bf" strokeWidth="1.4" />
-      <circle cx="150" cy="120" r="3" fill="#5ee7f5" />
-    </g>
-    {/* nodes */}
-    {[['SEE', 150, 34], ['CONTROL', 224, 161], ['RESPOND', 76, 161]].map(([lbl, x, y], i) => (
-      <g key={lbl}>
-        <circle className="wf-def__node" cx={x} cy={y} r="7" style={{ animationDelay: `${i * 0.5}s` }} />
-        <circle cx={x} cy={y} r="3" fill="#0a1424" />
-        <text className="wf-def__nodelbl" x={x} y={y - 13} textAnchor="middle">{lbl}</text>
+  <div className="wf-def-loop">
+    <svg className="wf-case__scene wf-def-loop__svg" viewBox="0 0 300 250" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <rect width="300" height="250" fill="#0a1424" />
+      <circle className="wf-def__outer" cx="150" cy="118" r="98" fill="none" stroke="rgba(34,211,238,0.18)" strokeWidth="1" strokeDasharray="3 9" />
+      <circle className="wf-def__loop-base" cx="150" cy="118" r="78" fill="none" stroke="rgba(34,211,238,0.22)" strokeWidth="2" />
+      <circle className="wf-def__loop-comet" cx="150" cy="118" r="78" fill="none" stroke="#5ee7f5" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="24 490" />
+
+      {/* connector rays from AXN hub to each capability */}
+      {axnLoopCaps.map((c) => (
+        <line
+          key={`ray-${c.label}`}
+          className="wf-def__cap-ray"
+          x1="150" y1="118" x2={c.x} y2={c.y}
+        />
+      ))}
+
+      {/* AXN as the endpoint-control hub */}
+      <g className="wf-def__hub">
+        <circle cx="150" cy="118" r="36" fill="rgba(8, 20, 36, 0.95)" stroke="rgba(45,212,191,0.55)" strokeWidth="1.4" className="wf-def__hub-ring" />
+        <path d="M150 98 L166 105 V120 Q166 136 150 143 Q134 136 134 120 V105 Z" fill="rgba(45,212,191,0.18)" stroke="#2dd4bf" strokeWidth="1.4" />
+        <text className="wf-def__hub-name" x="150" y="123" textAnchor="middle">AXN</text>
       </g>
-    ))}
-  </svg>
+
+      {/* See → Control → Respond */}
+      {[['SEE', 150, 48], ['CONTROL', 216, 156], ['RESPOND', 84, 156]].map(([lbl, x, y], i) => (
+        <g key={lbl}>
+          <circle className="wf-def__node" cx={x} cy={y} r="7" style={{ animationDelay: `${i * 0.5}s` }} />
+          <circle cx={x} cy={y} r="3" fill="#0a1424" />
+          <text className="wf-def__nodelbl" x={x} y={y - 12} textAnchor="middle">{lbl}</text>
+        </g>
+      ))}
+
+      {/* Axn capability chips in the four corners */}
+      {axnLoopCaps.map((c, i) => (
+        <g key={c.label} className="wf-def__cap" style={{ animationDelay: `${i * 0.85}s` }}>
+          <rect x={c.x - 44} y={c.y - 15} width="88" height="30" rx="6" className="wf-def__cap-box" />
+          <text className="wf-def__cap-lbl" x={c.x} y={c.y - 1} textAnchor="middle">{c.label}</text>
+          <text className="wf-def__cap-sub" x={c.x} y={c.y + 11} textAnchor="middle">{c.sub}</text>
+        </g>
+      ))}
+    </svg>
+  </div>
 )
 
 const defenseStages = [
@@ -1977,11 +2006,11 @@ const defenseStages = [
     meta: ['UNIFIED STACK', 'CENTRALLY MANAGED', 'FULLY AUDITABLE'],
   },
   {
-    key: 'loop', tab: 'LOOP', num: '01', loop: true, badge: 'ONE CLOSED LOOP',
-    tag: 'ONE CLOSED LOOP',
+    key: 'loop', tab: 'LOOP', num: '01', loop: true, badge: 'AXN · CLOSED LOOP',
+    tag: 'AXN CORE · CLOSED LOOP',
     title: 'See → Control → Respond',
-    sub: 'Monitoring surfaces what’s happening, the control layer enforces the rules, and automation drives a fast, consistent, auditable response - all from one place.',
-    meta: ['CLOSED LOOP', 'ONE PLATFORM'],
+    sub: 'Axn sits at the center — hardware, software, DLP and remediation — feeding See, driving Control, and powering Respond.',
+    meta: ['HARDWARE', 'SOFTWARE', 'DLP', 'REMEDIATE'],
   },
   {
     key: 'pillars', tab: 'PILLARS', num: '02',
