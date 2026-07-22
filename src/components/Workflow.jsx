@@ -428,119 +428,6 @@ const MapScene = () => (
   </svg>
 )
 
-/* Wireframe threat globe (Darkova console) */
-const GLOBE_ARCS = [
-  { d: 'M70 128 Q150 20 244 96', hot: false },
-  { d: 'M110 66 Q170 150 214 236', hot: true },
-  { d: 'M96 190 Q150 120 236 150', hot: false },
-  { d: 'M244 96 Q210 40 150 42', hot: false },
-]
-const GLOBE_NODES = [[92, 96], [150, 42], [236, 150], [110, 200], [214, 96], [160, 250]]
-
-const DarkGlobe = () => (
-  <svg className="wf-globe" viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-    <defs>
-      <radialGradient id="dovaGlobeGlow" cx="48%" cy="42%" r="60%">
-        <stop offset="0%" stopColor="rgba(70,110,180,0.3)" />
-        <stop offset="100%" stopColor="rgba(10,14,30,0)" />
-      </radialGradient>
-      <clipPath id="dovaGlobeClip"><circle cx="150" cy="150" r="118" /></clipPath>
-    </defs>
-    <circle cx="150" cy="150" r="126" fill="url(#dovaGlobeGlow)" />
-    {/* wireframe sphere */}
-    <g stroke="rgba(96,140,210,0.4)" strokeWidth="0.8" fill="none">
-      <circle cx="150" cy="150" r="118" />
-      <ellipse cx="150" cy="100" rx="98" ry="16" />
-      <ellipse cx="150" cy="150" rx="118" ry="24" />
-      <ellipse cx="150" cy="200" rx="98" ry="16" />
-      <ellipse cx="150" cy="150" rx="42" ry="118" />
-      <ellipse cx="150" cy="150" rx="84" ry="118" />
-    </g>
-    {/* continents (clipped to sphere) */}
-    <g clipPath="url(#dovaGlobeClip)" fill="rgba(150,190,240,0.1)" stroke="rgba(190,215,255,0.5)" strokeWidth="0.9">
-      <path d="M70 96 Q104 78 120 100 Q128 124 104 138 Q78 140 68 118 Q62 104 70 96 Z" />
-      <path d="M150 70 Q196 66 214 92 Q220 118 190 128 Q158 126 150 100 Q146 82 150 70 Z" />
-      <path d="M120 180 Q150 168 168 190 Q172 214 148 224 Q124 220 116 200 Q114 188 120 180 Z" />
-      <path d="M206 156 Q232 150 240 172 Q238 192 216 194 Q200 184 206 156 Z" />
-    </g>
-    {/* attack arcs - comet pulse */}
-    <g clipPath="url(#dovaGlobeClip)">
-      {GLOBE_ARCS.map((a, i) => <path key={`b${i}`} className="wf-tm__arc-base" d={a.d} />)}
-      {GLOBE_ARCS.map((a, i) => (
-        <path key={`p${i}`} className={`wf-tm__arc-pulse ${a.hot ? 'wf-tm__arc-pulse--hot' : ''}`} d={a.d} style={{ animationDelay: `${i * 0.55}s` }} />
-      ))}
-    </g>
-    {/* glowing threat nodes */}
-    <g clipPath="url(#dovaGlobeClip)">
-      {GLOBE_NODES.map(([x, y], i) => (
-        <g key={i}>
-          <circle className="wf-tm__ring" cx={x} cy={y} r="3.5" style={{ animationDelay: `${i * 0.35}s` }} />
-          <circle className="wf-tm__node" cx={x} cy={y} r="2.4" />
-        </g>
-      ))}
-    </g>
-  </svg>
-)
-
-const DOVA_STATS = [
-  { label: 'LIVE ARCS', val: '10', c: '#4fd88a' },
-  { label: 'TOTAL ALERTS', val: '129', c: '#e8913a' },
-  { label: 'UNACK', val: '37', c: '#b78bff' },
-  { label: 'WATCHLIST', val: '8', c: '#5aa9e6' },
-  { label: 'SOURCES', val: '8', c: '#3fc9b0' },
-]
-const DOVA_CONSOLE_TABS = ['THREAT MAP', 'SHADOW LEDGER', 'SPECTRAL SIEVE', 'FINGERPRINT']
-const DOVA_FEED = [
-  { t: '14:51:14.589', sev: 'CRITICAL', from: 'SA', to: 'CN' },
-  { t: '14:51:13.091', sev: 'CRITICAL', from: 'US', to: 'MX' },
-  { t: '14:51:11.588', sev: 'MEDIUM', from: 'IR', to: 'IT' },
-  { t: '14:51:10.105', sev: 'MEDIUM', from: 'NG', to: 'AF' },
-]
-
-const DarkovaDashboard = () => (
-  <div className="wf-dova">
-    <div className="wf-dova__top">
-      <span className="wf-dova__brand">◑ DARKOVA WATCH <em>· Onion Crawler v3</em></span>
-      <span className="wf-dova__ops"><span className="wf-dova__ops-dot" /> OPERATIONAL · 8 SOURCES</span>
-    </div>
-
-    <div className="wf-dova__stats">
-      {DOVA_STATS.map((s, i) => (
-        <div key={i} className="wf-dova-stat">
-          <span className="wf-dova-stat__label">{s.label}</span>
-          <span className="wf-dova-stat__val" style={{ color: s.c }}>{s.val}</span>
-        </div>
-      ))}
-    </div>
-
-    <div className="wf-dova__tabs">
-      {DOVA_CONSOLE_TABS.map((t, i) => (
-        <span key={i} className={`wf-dova__ctab ${i === 0 ? 'wf-dova__ctab--active' : ''}`}>
-          {t}{i === 0 && <em className="wf-dova__ctab-badge">10</em>}
-        </span>
-      ))}
-    </div>
-
-    <div className="wf-dova__body">
-      <div className="wf-dova__globe">
-        <span className="wf-dova__globe-label"><span className="wf-dova__ops-dot" /> LIVE · GLOBAL THREAT GLOBE</span>
-        <span className="wf-dova__globe-arcs">ACTIVE ARCS · 10</span>
-        <DarkGlobe />
-      </div>
-      <div className="wf-dova__feed">
-        <div className="wf-dova__feed-head">LIVE ATTACK FEED <span className="wf-dova__ops-dot" /></div>
-        {DOVA_FEED.map((f, i) => (
-          <div key={i} className={`wf-dova-feed__row wf-dova-feed__row--${f.sev.toLowerCase()}`}>
-            <span className="wf-dova-feed__ts">{f.t} <em>{f.sev}</em></span>
-            <span className="wf-dova-feed__route">{f.from} → {f.to}</span>
-            <span className="wf-dova-feed__tag">vector logged</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-)
-
 const FaceScene = ({ variant }) => {
   const skin = variant === 'degraded' ? '#6a6258' : variant === 'gan' ? '#7a8b6a' : '#c9baa5'
   return (
@@ -1240,15 +1127,7 @@ const darkovaStages = [
     meta: ['ONION SURVEILLANCE', 'LEAK HARVESTING', 'THREAT-ACTOR MAPPING'],
   },
   {
-    key: 'dashboard', tab: 'DASHBOARD', num: '01',
-    tag: 'MODULE 03 · DARKOVA - NOX LAB ENGINE',
-    title: 'Darkova Threat Console',
-    sub: 'Live global threat globe with realtime attack arcs, alert triage and an onion-crawler source feed.',
-    dashboard: true,
-    meta: ['GLOBAL THREAT GLOBE', 'LIVE ATTACK FEED'],
-  },
-  {
-    key: 'harvest', tab: 'HARVEST', num: '02',
+    key: 'harvest', tab: 'HARVEST', num: '01',
     tag: 'WHAT NOX HARVESTS',
     title: 'Dark Web Harvest at Scale',
     sub: 'Leaked records, hostile accounts and infiltrated markets - the yield of continuous dark-web surveillance.',
@@ -1259,7 +1138,7 @@ const darkovaStages = [
     ],
   },
   {
-    key: 'sources', tab: 'SOURCES', num: '03',
+    key: 'sources', tab: 'SOURCES', num: '02',
     tag: 'SOURCES MONITORED',
     title: 'Monitored Hostile Sources',
     sub: 'Six hostile source families under continuous surveillance and correlation.',
@@ -1275,8 +1154,6 @@ const DarkovaCase = ({ open, onClose, inline, onExitToWorkflow }) => {
     const angle = s.ring ? 360 / s.ring.length : 0
     return (
     <>
-          {s.dashboard && <DarkovaDashboard />}
-
           {s.ring && (
             <div className="wf-case__visual wf-case__visual--3d wf-case__visual--dark">
               <div className="wf-social3d">
