@@ -41,9 +41,9 @@ const CountUp = ({ target, duration = 1500, start = false }) => {
   return <span>{n}</span>
 }
 
-/* ---- OSINT IMPACT LEDGER ---- */
+/* ---- CYBER INT IMPACT LEDGER ---- */
 const impact = [
-  { code: 'OS-01', val: 3, mult: true, label: 'OSINT Cases', sub: 'Parallel tracks' },
+  { code: 'OS-01', val: 3, mult: true, label: 'Cyber Int Cases', sub: 'Parallel tracks' },
   { code: 'OS-02', val: 8, mult: true, label: 'Faces Extracted', sub: 'Candidate crops' },
   { code: 'OS-03', val: 3, mult: true, label: 'Upload Traces', sub: 'X reposts' },
   { code: 'OS-04', val: 2, mult: true, label: 'Platforms', sub: 'X · YouTube' },
@@ -53,61 +53,51 @@ const impact = [
 /* ---- REEL SLIDES (case screenshots + short detail) ---- */
 const slides = [
   {
-    id: 'o1', no: '01', img: '/osint-source-frame.png', kind: 'OSINT', code: 'IO110',
-    title: 'Source Frame / Video Context', region: '04/06/2026 · Social Media Analysis',
-    tag: 'SOURCE FRAME · VIDEO CONTEXT',
-    summary: 'Chaos video source frame retained for OSINT tracing.',
-    detail: 'Starting frame for face extraction and dissemination review.',
-    flow: ['Source Frame', 'Extract Faces', 'Reconstruction', 'Recognition'],
-    outputs: ['Source frame retained', 'Trace path opened', 'Ready for face extract'],
+    id: 'o1', no: '01', img: '/osint-source-frame.png', kind: 'CYBER INT', code: 'IO110',
+    title: 'Source Frame', region: 'Social Media',
+    tag: 'VIDEO CONTEXT',
+    summary: 'Video source frame retained.',
+    detail: 'Starting point for facial extraction.',
+    flow: ['Source Frame', 'Extract Faces', 'Recognition'],
+    outputs: ['Frame retained', 'Trace opened'],
     tags: ['SOURCE FRAME', 'CHAOS'],
   },
   {
     id: 'o2', no: '02', img: '/osint-faces.png', kind: 'FACES', code: 'IO110',
-    title: 'Faces Extracted from Video', region: '04/06/2026 · Social Media Analysis',
-    tag: 'FACES EXTRACTED FROM VIDEO',
-    summary: 'Candidate face crops prepared for reconstruction / recognition.',
-    detail: 'Eight faces extracted for downstream recognition.',
-    flow: ['Source Frame', 'Extract Faces', 'Reconstruction', 'Recognition'],
-    outputs: ['FACE 01–08 prepared', 'Queued for reconstruction', 'Recognition ready'],
-    tags: ['FACE 01–08', 'RECOGNITION'],
+    title: 'Faces Extracted', region: 'Social Media',
+    tag: 'FACE EXTRACTION',
+    summary: 'Face crops ready for recognition.',
+    detail: '8 faces extracted.',
+    flow: ['Extract Faces', 'Recognition'],
+    outputs: ['Faces prepared', 'Recognition ready'],
+    tags: ['FACES', 'RECOGNITION'],
   },
   {
     id: 'o3', no: '03', img: '/osint-io111.png', kind: 'CCTV', code: 'IO111',
-    title: 'IO111 — CCTV Enhancement', region: 'Field Surveillance · Image Extraction',
-    tag: 'RECEIVE → EXTRACT → ENHANCE',
-    summary: 'CCTV frames extracted and enhanced for ID support.',
-    detail: 'Clearer facial views prepared for analyst review.',
-    flow: ['Receive', 'Extract', 'Enhance'],
-    outputs: ['CCTV frames isolated', 'Faces enhanced', 'Analyst-ready set'],
-    tags: ['CCTV', 'AI ENHANCE'],
+    title: 'CCTV Enhancement', region: 'Field Surveillance',
+    tag: 'ENHANCE',
+    summary: 'CCTV frames enhanced.',
+    detail: 'Prepared for analyst review.',
+    flow: ['Extract', 'Enhance'],
+    outputs: ['Faces enhanced', 'Analyst-ready'],
+    tags: ['CCTV', 'ENHANCED'],
   },
   {
-    id: 'o4', no: '04', img: '/osint-io111-enhance.png', kind: 'CCTV', code: 'IO111',
-    title: 'Source → Enhanced Faces', region: 'AI Enhancement Pipeline',
-    tag: 'SOURCE FRAME → ENHANCED FACE VIEWS',
-    summary: 'Source CCTV frame enhanced into clearer face views.',
-    detail: 'Before/after pair for facial review.',
-    flow: ['Source CCTV', 'AI Enhance', 'Face Views'],
-    outputs: ['Source frame kept', 'Enhanced faces generated', 'ID clarity improved'],
-    tags: ['BEFORE / AFTER', 'ENHANCED'],
-  },
-  {
-    id: 'o5', no: '05', img: '/osint-io106.png', kind: 'OSINT', code: 'IO106',
-    title: 'BNM Protest OSINT', region: 'Amsterdam · Social Media Analysis',
-    tag: 'SOURCE TRAIL · PARTICIPANT EXTRACTION',
-    summary: 'Initial clip led to Amsterdam news package confirming the protest.',
-    detail: 'Participant frames, channel tracing, and social-link mapping.',
-    flow: ['Clip Review', 'News Trace', 'Frame Extract', 'Link Map'],
-    outputs: ['News package confirmed', 'P01–P06 extracted', 'Social links mapped'],
-    tags: ['AMSTERDAM', 'BNM', 'P01–P06'],
+    id: 'o4', no: '04', img: '/osint-io106.png', kind: 'CYBER INT', code: 'IO106',
+    title: 'BNM Protest', region: 'Amsterdam',
+    tag: 'SOURCE TRAIL',
+    summary: 'Amsterdam protest confirmed.',
+    detail: 'Participants and links mapped.',
+    flow: ['Clip Review', 'Link Map'],
+    outputs: ['News confirmed', 'Links mapped'],
+    tags: ['AMSTERDAM', 'PROTEST'],
   },
 ]
 
-/* ---- OSINT CASES ---- */
+/* ---- CYBER INT CASES ---- */
 const osintCases = [
   {
-    code: 'IO110', title: 'BLF “Chaos” OSINT', date: '04/06/2026', tech: 'Social Media Analysis',
+    code: 'IO110', title: 'BLF “Chaos” Cyber Int', date: '04/06/2026', tech: 'Social Media Analysis',
     outputs: ['Multiple uploads identified', 'Source posts & screenshots retained', 'Extracted face set prepared'],
     leads: ['X lead 1', 'X lead 2'],
   },
@@ -117,7 +107,7 @@ const osintCases = [
     leads: ['Internal evidence'],
   },
   {
-    code: 'IO106', title: 'BNM Protest OSINT', date: '01/06/2026', tech: 'Social Media Analysis',
+    code: 'IO106', title: 'BNM Protest Cyber Int', date: '01/06/2026', tech: 'Social Media Analysis',
     outputs: ['Amsterdam news package confirmed', 'Participant frames extracted', 'Social-link mapping completed'],
     leads: ['Zrumbesh TV', 'ZBC News'],
   },
@@ -189,15 +179,11 @@ const OsintReel = () => {
           <div className="os__head-row">
             <span className="os__eyebrow">
               <span className="os__eyebrow-dot" />
-              OPERATION · OSINT TECHNIQUE
+              OPERATION · CYBER INT TECHNIQUE
             </span>
-            <span className="os__sys">OSINT · TRACE &amp; EXTRACT</span>
+            <span className="os__sys">CYBER INT · TRACE &amp; EXTRACT</span>
           </div>
           <h2 className="os__title">Cyber Int</h2>
-          <p className="os__lead">
-            Open-source tracing across social platforms and CCTV - video dissemination mapped,
-            frames extracted and enhanced, and candidate faces surfaced for the recognition pipeline.
-          </p>
         </header>
 
         {/* ===== IMPACT LEDGER ===== */}
@@ -215,7 +201,7 @@ const OsintReel = () => {
               <span className="os__metric-sub">{m.sub}</span>
             </div>
           ))}
-          <div className="os__ledger-seal">OSINT</div>
+          <div className="os__ledger-seal">CYBER INT</div>
         </div>
 
         {/* ===== REEL ===== */}
@@ -301,43 +287,6 @@ const OsintReel = () => {
           ))}
         </div>
 
-        {/* ===== OSINT CASES ===== */}
-        <div className={`os__cases ${visible ? 'os__cases--show' : ''}`}>
-          <div className="os__cases-head">
-            <span className="os__eyebrow">
-              <span className="os__eyebrow-dot" />
-              OSINT CASE LOG
-            </span>
-            <span className="os__sys">TECHNIQUE · OUTPUTS · LEADS</span>
-          </div>
-          <div className="os__cases-grid">
-            {osintCases.map((c, i) => (
-              <div className="os__case" key={c.code} style={{ '--c-i': i }}>
-                <div className="os__case-top">
-                  <span className="os__case-code">{c.code}</span>
-                  <span className="os__case-date">{c.date}</span>
-                </div>
-                <h4 className="os__case-title">{c.title}</h4>
-                <span className="os__case-tech">{c.tech}</span>
-                <div className="os__case-outputs">
-                  {c.outputs.map((o) => (
-                    <span key={o} className="os__case-output">
-                      <span className="os__case-bullet">›</span>{o}
-                    </span>
-                  ))}
-                </div>
-                <div className="os__case-leads">
-                  {c.leads.map((l) => (
-                    <span
-                      key={l}
-                      className={`os__case-lead ${/^no /i.test(l) ? 'is-muted' : ''}`}
-                    >{l}</span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   )

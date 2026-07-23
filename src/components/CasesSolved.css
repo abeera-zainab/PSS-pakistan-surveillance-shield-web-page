@@ -11,7 +11,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding: clamp(56px, 7vw, 104px) clamp(18px, 5vw, 80px);
+  padding: 0 clamp(18px, 5vw, 80px) clamp(56px, 7vw, 104px);
   background:
     radial-gradient(120% 90% at 80% -10%, rgba(0, 200, 83, 0.08), transparent 60%),
     linear-gradient(180deg, #0c1c14 0%, #102a1c 45%, #0b1811 100%);
@@ -57,17 +57,17 @@
 .cases__head--show { opacity: 1; transform: none; }
 .cases__title {
   font-family: 'Orbitron', monospace;
-  font-size: clamp(30px, 5vw, 58px); font-weight: 800; letter-spacing: 1px;
+  font-size: clamp(22px, 3.6vw, 40px); font-weight: 800; letter-spacing: 1px;
   margin: 0; color: #fff; text-shadow: 0 4px 30px rgba(0, 200, 83, 0.18);
 }
 .cases__subhead {
   font-family: 'Orbitron', monospace;
-  font-size: clamp(24px, 3.2vw, 40px);
+  font-size: clamp(16px, 2.2vw, 26px);
   font-weight: 800;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   color: #fff;
   text-align: left;
-  margin: 0 0 clamp(18px, 2.2vw, 28px);
+  margin: 0 0 clamp(14px, 1.8vw, 22px);
   opacity: 0;
   transform: translateY(18px);
   transition: opacity 0.65s ease 0.12s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.12s;
@@ -102,43 +102,44 @@
 .cases__metric-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .cases__metric-code {
   font-family: 'Orbitron', monospace;
-  font-size: clamp(11px, 1vw, 13px);
-  letter-spacing: 1.5px;
+  font-size: clamp(9px, 0.85vw, 11px);
+  letter-spacing: 1.2px;
   font-weight: 700;
   color: #c8a84e;
 }
 .cases__metric-live { width: 8px; height: 8px; border-radius: 50%; background: var(--emerald); animation: casesPulse 2s ease-out infinite; }
 .cases__metric-val {
   display: block; font-family: 'Orbitron', monospace;
-  font-size: clamp(30px, 3.4vw, 46px); font-weight: 800; line-height: 1; color: #fff; margin-bottom: 10px;
+  font-size: clamp(22px, 2.6vw, 32px); font-weight: 800; line-height: 1; color: #fff; margin-bottom: 8px;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
 }
 .cases__metric-val em { font-style: normal; color: #e6c766; font-size: 0.58em; margin-left: 2px; }
 .cases__metric-label {
   display: block; font-family: 'Orbitron', monospace;
-  font-size: clamp(13px, 1.2vw, 16px); font-weight: 700; letter-spacing: 0.6px;
-  color: #ffffff; margin-bottom: 6px; line-height: 1.3;
+  font-size: clamp(10px, 0.95vw, 12px); font-weight: 700; letter-spacing: 0.5px;
+  color: #ffffff; margin-bottom: 4px; line-height: 1.3;
 }
 .cases__metric-sub {
   font-family: 'Rajdhani', sans-serif;
-  font-size: clamp(14px, 1.25vw, 17px);
+  font-size: clamp(11px, 1vw, 13px);
   font-weight: 600;
   color: rgba(234, 242, 236, 0.82);
-  line-height: 1.35;
+  line-height: 1.3;
 }
 
-/* ===== AGEX IRIS REEL (stage + side details) ===== */
+/* ===== AGEX IRIS REEL (wide stage + corner details) ===== */
 .iris-reel {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(240px, 0.75fr);
-  gap: clamp(24px, 3.2vw, 44px);
-  align-items: stretch;
+  grid-template-columns: minmax(0, 1fr) minmax(350px, 600px);
+  gap: clamp(16px, 2.2vw, 28px);
+  align-items: start;
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: 0.12s;
   margin-bottom: clamp(20px, 2.6vw, 32px);
-  max-width: 1200px;
+  max-width: 100%;
+  width: 100%;
 }
 .iris-reel--show { opacity: 1; transform: none; }
 
@@ -165,7 +166,7 @@
 .iris-stage__frame:not(.iris-stage__frame--strip) {
   aspect-ratio: 16 / 10;
   min-height: 0;
-  max-height: 320px;
+  max-height: 500px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,7 +174,7 @@
 .iris-stage__frame--strip {
   aspect-ratio: auto;
   min-height: 0;
-  max-height: 300px;
+  max-height: 340px;
   height: auto;
   display: flex;
   align-items: center;
@@ -214,7 +215,7 @@
 .iris-stage__img {
   width: 100%;
   height: 100%;
-  max-height: 320px;
+  max-height: 500px;
   object-fit: contain;
   object-position: center;
   display: block;
@@ -224,7 +225,7 @@
   width: 100%;
   height: auto;
   max-width: 100%;
-  max-height: 290px;
+  max-height: 330px;
   object-fit: contain;
   object-position: center;
   display: block;
@@ -292,14 +293,20 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
+  align-self: center;
+  justify-self: end;
+  width: 100%;
+  max-width: 600px;
   gap: 10px;
-  padding: clamp(14px, 1.8vw, 22px) clamp(16px, 2vw, 24px);
+  margin-top: 28px;
+  padding: 12px 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(200, 168, 78, 0.18);
   border-left: 3px solid var(--gold);
   animation: irisCapIn 0.55s ease both;
   min-width: 0;
+  box-sizing: border-box;
 }
 @keyframes irisCapIn {
   from { opacity: 0; transform: translateX(10px); }
@@ -307,41 +314,41 @@
 }
 .iris-reel__case-name {
   font-family: 'Orbitron', monospace;
-  font-size: clamp(14px, 1.4vw, 18px);
+  font-size: clamp(14px, 1.5vw, 18px);
   font-weight: 800;
-  line-height: 1.3;
+  line-height: 1.25;
   color: #fff;
   margin: 0;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.3px;
 }
 .iris-reel__meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 .iris-reel__meta-date {
   font-family: 'Orbitron', monospace;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 1.2px;
+  letter-spacing: 1px;
   color: var(--gold);
 }
 .iris-reel__meta-tech {
   font-family: 'Rajdhani', sans-serif;
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.3px;
   color: rgba(234, 242, 236, 0.75);
-  padding: 3px 8px;
+  padding: 2px 6px;
   border: 1px solid rgba(200, 168, 78, 0.25);
   background: rgba(0, 0, 0, 0.2);
 }
 .iris-reel__summary {
   font-family: 'Rajdhani', sans-serif;
-  font-size: clamp(14px, 1.2vw, 16px);
+  font-size: clamp(14px, 1.2vw, 15px);
   font-weight: 600;
-  line-height: 1.45;
+  line-height: 1.4;
   color: rgba(234, 242, 236, 0.9);
   margin: 0;
 }
@@ -354,21 +361,21 @@
 }
 .iris-reel__outputs {
   list-style: none;
-  margin: 4px 0 0;
+  margin: 2px 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   width: 100%;
 }
 .iris-reel__outputs li {
   position: relative;
   padding-left: 14px;
   font-family: 'Rajdhani', sans-serif;
-  font-size: clamp(13px, 1.1vw, 15px);
+  font-size: clamp(12px, 1.1vw, 14px);
   font-weight: 700;
   color: #eaf2ec;
-  line-height: 1.3;
+  line-height: 1.35;
 }
 .iris-reel__outputs li::before {
   content: '▸';
@@ -380,18 +387,18 @@
 .iris-reel__tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 4px;
   margin-top: 2px;
 }
 .iris-reel__tag {
   font-family: 'Orbitron', monospace;
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.6px;
   color: #c8a84e;
-  padding: 3px 7px;
+  padding: 3px 6px;
   border: 1px solid rgba(200, 168, 78, 0.35);
-  background: rgba(200, 168, 78, 0.08);
+  background: rgba(200, 168, 78, 0.1);
 }
 .iris-reel__tag--cyber {
   color: var(--emerald);
@@ -535,7 +542,7 @@
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: clamp(8px, 1vw, 12px);
-  max-width: 1200px;
+  max-width: 1320px;
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
@@ -586,18 +593,18 @@
   position: static;
   align-self: flex-start;
   font-family: 'Orbitron', monospace;
-  font-size: 9px; font-weight: 800;
+  font-size: 8px; font-weight: 800;
   color: #04120a;
   background: var(--gold);
-  padding: 1px 6px;
+  padding: 1px 5px;
   border-radius: 2px;
   line-height: 1.4;
 }
 .iris-thumb__code {
   font-family: 'Orbitron', monospace;
-  font-size: 8px;
+  font-size: 7px;
   font-weight: 700;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.7px;
   color: rgba(200, 168, 78, 0.85);
   white-space: nowrap;
   overflow: hidden;
@@ -606,7 +613,7 @@
 .iris-thumb__name {
   position: static;
   font-family: 'Rajdhani', sans-serif;
-  font-size: clamp(11px, 1vw, 13px);
+  font-size: clamp(10px, 0.9vw, 11px);
   font-weight: 700;
   line-height: 1.25;
   color: #eaf2ec;
@@ -622,9 +629,16 @@
   .iris-reel {
     grid-template-columns: 1fr;
     max-width: none;
+    gap: 14px;
   }
-  .iris-stage__frame:not(.iris-stage__frame--strip) { max-height: 300px; }
-  .iris-stage__img { max-height: 300px; }
+  .iris-reel__caption {
+    justify-self: stretch;
+    max-width: none;
+    margin-top: 0;
+    width: 100%;
+  }
+  .iris-stage__frame:not(.iris-stage__frame--strip) { max-height: 320px; }
+  .iris-stage__img { max-height: 320px; }
   .iris-thumbs { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: none; }
   .iris-intel { grid-template-columns: 1fr; }
   .iris-reel__caption { animation-name: irisCapInStack; }

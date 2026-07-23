@@ -100,14 +100,7 @@ const projectCards = [
     bgImage: '/bg-terrain.png',
     desc: 'Estimates image and video locations from terrain, landmarks, and environmental cues.',
   },
-  {
-    title: 'CYBER INT',
-    subtitle: 'Cyber Intelligence Platform',
-    icon: 'cyber',
-    logo: '/cyberint-logo.png',
-    bgImage: '/bg-cyberint.png',
-    desc: 'OSINT tracing across social platforms with hostile account mapping and profiling.',
-  },
+
   {
     title: 'Pakistan Surveillance Shield',
     subtitle: 'PSS Technology Portfolio',
