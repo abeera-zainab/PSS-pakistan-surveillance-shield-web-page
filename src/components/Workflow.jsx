@@ -145,6 +145,7 @@ const caseStages = [
     place: 'Chawga, Puran, Shangla',
     note: 'Similar terrain found in the same area',
     img: '/geoint-location.png',
+    confirm: true,
   },
 ]
 
@@ -597,23 +598,23 @@ const TerrainCase = ({ open, onClose, inline, onExitToWorkflow }) => {
   const renderBody = (s, active) => (
     <>
           {s.key !== 'summary' && (
-            <div className="wf-case__visual">
+            <div className={`wf-case__visual wf-case__visual--tall wf-case__visual--geoint${s.confirm ? ' wf-case__visual--confirm' : ''}`}>
               {s.img && !failedCaseImgs.has(s.img) && (
                 <img
-                  src={s.img} alt=""
-                  className={`wf-case__photo ${s.key === 'input' ? 'wf-case__photo--blur' : ''} ${s.key === 'enhance' ? 'wf-case__photo--enhance' : ''}`}
+                  src={s.img}
+                  alt={s.title || ''}
+                  className={`wf-case__photo wf-case__photo--geoint${s.key === 'enhance' || s.key === 'analysis' ? ' wf-case__photo--geoint-boost' : ''}${s.key === 'input' ? ' wf-case__photo--geoint-source' : ''}${s.confirm ? ' wf-case__photo--confirm' : ''}`}
                   onError={(e) => { failedCaseImgs.add(s.img); e.currentTarget.style.display = 'none' }}
                 />
               )}
 
-              {s.key === 'output'
+              {!s.img && (s.confirm
                 ? <MapScene />
-                : <TerrainScene variant={s.key === 'input' ? 'blur' : s.key === 'enhance' ? 'enhance' : undefined} />}
+                : <TerrainScene variant={s.key === 'input' ? 'blur' : s.key === 'enhance' ? 'enhance' : undefined} />)}
 
               {s.key === 'input' && (
                 <>
                   <span className="wf-case__rec"><span className="wf-case__rec-dot" /> REC</span>
-                  <span className="wf-case__play" />
                   <span className="wf-case__timecode">00:14:07 &nbsp;·&nbsp; 1920×1080</span>
                 </>
               )}
@@ -625,7 +626,7 @@ const TerrainCase = ({ open, onClose, inline, onExitToWorkflow }) => {
                   <span className="wf-case__bracket wf-case__bracket--tr" />
                   <span className="wf-case__bracket wf-case__bracket--bl" />
                   <span className="wf-case__bracket wf-case__bracket--br" />
-                  <span className="wf-case__badge">AI ENHANCING…</span>
+                  <span className="wf-case__badge">AI ENHANCED</span>
                 </>
               )}
 
@@ -634,14 +635,6 @@ const TerrainCase = ({ open, onClose, inline, onExitToWorkflow }) => {
                   <span className="wf-case__box wf-case__box--trail">TRAIL</span>
                   <span className="wf-case__box wf-case__box--ridge">RIDGE LINE</span>
                   <span className="wf-case__box wf-case__box--veg">VEGETATION</span>
-                </>
-              )}
-
-              {s.key === 'output' && (
-                <>
-                  <span className="wf-case__ripple" />
-                  <span className="wf-case__pin" />
-                  <span className="wf-case__coord-chip">{s.coords}</span>
                 </>
               )}
             </div>
@@ -666,7 +659,7 @@ const TerrainCase = ({ open, onClose, inline, onExitToWorkflow }) => {
             {s.meta && (
               <div className="wf-case__meta">
                 {s.meta.map((m, mi) => (
-                  <span key={mi} className="wf-case__meta-chip" style={{ animationDelay: `${0.3 + mi * 0.18}s` }}>{m}</span>
+                  <span key={mi} className="wf-case__meta-chip">{m}</span>
                 ))}
               </div>
             )}
@@ -700,7 +693,7 @@ const TerrainCase = ({ open, onClose, inline, onExitToWorkflow }) => {
   return (
     <CaseExplorer
       inline={inline}
-      name="GEOINT - TERRAIN FEATURE ANALYSIS CASE"
+      name={inline ? '' : 'GEOINT - TERRAIN FEATURE ANALYSIS CASE'}
       stages={caseStages}
       stage={stage} setStage={setStage}
       onClose={onClose}
@@ -1295,14 +1288,14 @@ const offensiveStages = [
     key: 'summary', tab: 'SUMMARY', num: '00',
     tag: 'OVERVIEW - HOW NOX DELIVERS A BACKDOOR',
     title: 'Offensive Hacking · One-Tap Backdoor',
-    sub: 'A pixel-perfect Daraz clone delivered via WhatsApp - silent backdoor, full Android device access via C2.',
+    sub: 'A pixel-perfect Daraz clone delivered via WhatsApp — silent backdoor, full Android device access via C2.',
     flow: ['DELIVERY', 'INFECTION', 'PERSISTENCE', 'EXFILTRATION'],
     meta: ['WHATSAPP DELIVERY', 'SILENT BACKDOOR', 'C2 DEVICE ACCESS'],
   },
   {
     key: 'delivery', tab: 'DELIVERY', num: '01',
     tag: 'STEP 01 / 04 - DELIVERY',
-    title: 'WhatsApp',
+    title: 'WhatsApp Delivery',
     sub: 'Victim receives a crafted link disguised as a Daraz special offer via WhatsApp message.',
     img: '/offensive-whatsapp.png', scene: 'whatsapp', badge: 'DELIVERY',
   },
@@ -1310,21 +1303,21 @@ const offensiveStages = [
     key: 'infection', tab: 'INFECTION', num: '02',
     tag: 'STEP 02 / 04 - INFECTION',
     title: 'Clone Installed',
-    sub: 'Victim clicks and installs a pixel-perfect Daraz clone APK with one tap - no suspicion.',
+    sub: 'Victim clicks and installs a pixel-perfect Daraz clone APK with one tap — no suspicion.',
     img: '/offensive-clone.png', scene: 'clone', badge: 'INFECTION',
   },
   {
     key: 'persistence', tab: 'PERSISTENCE', num: '03',
     tag: 'STEP 03 / 04 - PERSISTENCE',
-    title: 'Back Door Opens',
-    sub: 'App silently opens a persistent backdoor upon launch, granting remote C2 access 24/7.',
+    title: 'Backdoor Opens',
+    sub: 'App silently opens a persistent backdoor on launch, granting remote C2 access 24/7.',
     img: '/offensive-c2.png', scene: 'terminal', badge: 'PERSISTENCE', live: 'C2 LIVE',
   },
   {
     key: 'exfiltration', tab: 'EXFILTRATION', num: '04',
     tag: 'STEP 04 / 04 - EXFILTRATION',
     title: 'Full Access',
-    sub: 'Camera · Microphone · GPS · Messages · Files · Call logs - all live-streamed to C2 server.',
+    sub: 'Camera · Microphone · GPS · Messages · Files · Call logs — all live-streamed to the C2 server.',
     img: '/offensive-app.png', scene: 'app', badge: 'EXFILTRATION',
     access: ['Camera', 'Microphone', 'GPS', 'Messages', 'Files', 'Call logs'],
     c2note: 'All live-streamed to C2 server',
@@ -1333,7 +1326,7 @@ const offensiveStages = [
     key: 'next', tab: 'NEXT', num: '05',
     tag: 'FUTURE NOVELTY - NEXT VERSION',
     title: 'One-Click Compromise',
-    sub: 'The next version collapses the entire chain into a single click - delivery, install and backdoor in one action, with zero further victim interaction.',
+    sub: 'The next version collapses the entire chain into a single click — delivery, install and backdoor in one action, with zero further victim interaction.',
     novelty: true,
     flow: ['ONE CLICK', 'AUTO-INSTALL', 'INSTANT C2'],
   },
@@ -1346,14 +1339,15 @@ const OffensiveCase = ({ open, onClose, inline, onExitToWorkflow }) => {
     <>
           {s.scene && (
             <div className="wf-case__visual wf-case__visual--tall wf-case__visual--attack">
-              {s.img && !failedCaseImgs.has(s.img) && (
+              {s.img && !failedCaseImgs.has(s.img) ? (
                 <img
                   src={s.img} alt={s.title}
-                  className="wf-case__photo wf-case__photo--top"
+                  className="wf-case__photo wf-case__photo--attack"
                   onError={(e) => { failedCaseImgs.add(s.img); e.currentTarget.style.display = 'none' }}
                 />
+              ) : (
+                <AttackScene variant={s.scene} />
               )}
-              <AttackScene variant={s.scene} />
               {s.badge && <span className="wf-case__badge wf-case__badge--red">{s.badge}</span>}
               {s.live && <span className="wf-case__rec"><span className="wf-case__rec-dot" /> {s.live}</span>}
             </div>

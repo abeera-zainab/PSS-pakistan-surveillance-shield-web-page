@@ -879,6 +879,267 @@
 .wf-case__photo--top { object-position: top; }
 .wf-case__rec-dot--live { background: #00c853; }
 
+/* GEO INT — show full frame, soft clarity (no pixel-burst sharpen) */
+.wf-case__visual--geoint {
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(122, 139, 106, 0.16), transparent 55%),
+    linear-gradient(180deg, #f0f3ea, #dce4d0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wf-case__photo--geoint {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  z-index: 1;
+  background: transparent;
+  filter: none;
+  image-rendering: auto;
+}
+.wf-case__photo--geoint-source {
+  filter: contrast(1.04) saturate(1.04) brightness(1.02);
+}
+.wf-case__photo--geoint-boost {
+  filter: contrast(1.08) saturate(1.1) brightness(1.03);
+}
+
+/* GEO INT — Location Confirmation: map + terrain picture side-by-side plate */
+.wf-case__visual--confirm {
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(122, 139, 106, 0.12), transparent 55%),
+    linear-gradient(180deg, #f0f3ea, #e4ead8);
+  padding: 10px;
+  box-sizing: border-box;
+}
+.wf-case__photo--confirm {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  filter: contrast(1.1) saturate(1.15) brightness(1.04);
+  border-radius: 6px;
+}
+.wf-phase--phase2 .wf-inline-reel .wf-sat.wf-focus__card .wf-case__visual--confirm {
+  flex: 0 0 auto;
+  width: calc(100% - 24px);
+  height: 440px;
+  min-height: 440px;
+  max-height: 440px;
+  margin: 12px 12px 0;
+}
+@media (max-width: 900px) {
+  .wf-phase--phase2 .wf-inline-reel .wf-sat.wf-focus__card .wf-case__visual--confirm {
+    height: 320px;
+    min-height: 320px;
+    max-height: 320px;
+  }
+}
+
+/* GEO INT — Location Confirmation: map + side panel */
+.wf-geoint-confirm {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(122, 139, 106, 0.14), transparent 55%),
+    linear-gradient(180deg, #f0f3ea, #dce4d0);
+  overflow: hidden;
+}
+.wf-geoint-confirm__map {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(26, 58, 42, 0.2);
+  background: #e7e0cf;
+}
+.wf-geoint-confirm__map-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  filter: contrast(1.12) saturate(1.2) brightness(1.04);
+}
+.wf-geoint-confirm__map .wf-case__scene {
+  position: absolute;
+  inset: 0;
+}
+.wf-geoint-confirm__panel {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(26, 58, 42, 0.18);
+  background: #f4f1e8;
+  padding: 8px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.wf-geoint-confirm__terrain {
+  position: relative;
+  flex: 0 0 42%;
+  min-height: 110px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(26, 58, 42, 0.16);
+  background: #e7e0cf;
+}
+.wf-geoint-confirm__terrain-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  filter: contrast(1.14) saturate(1.22) brightness(1.05);
+}
+.wf-geoint-confirm__terrain-cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 6px 8px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(transparent, rgba(10, 26, 18, 0.75));
+}
+.wf-geoint-confirm__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+  padding: 4px 6px 2px;
+  min-height: 0;
+}
+.wf-geoint-confirm__pin {
+  width: 14px;
+  height: 20px;
+  position: relative;
+  margin-bottom: 2px;
+}
+.wf-geoint-confirm__pin::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50% 50% 50% 0;
+  background: #c0392b;
+  transform: rotate(-45deg);
+}
+.wf-geoint-confirm__pin::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+.wf-geoint-confirm__label {
+  font-family: 'Orbitron', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #b2452f;
+}
+.wf-geoint-confirm__coords {
+  font-family: 'Orbitron', monospace;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #b2452f;
+  line-height: 1.15;
+}
+.wf-geoint-confirm__place {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--forest-green, #1a3a2a);
+}
+.wf-geoint-confirm__sub {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark, #1a2a1f);
+  line-height: 1.35;
+  margin-top: 2px;
+}
+
+.wf-phase--phase2 .wf-inline-reel .wf-sat.wf-focus__card .wf-geoint-confirm {
+  flex: 0 0 auto;
+  width: calc(100% - 24px);
+  height: 440px;
+  min-height: 440px;
+  max-height: 440px;
+  margin: 12px 12px 0;
+}
+
+@media (max-width: 900px) {
+  .wf-geoint-confirm {
+    grid-template-columns: 1fr;
+  }
+  .wf-geoint-confirm__terrain { flex-basis: 120px; min-height: 100px; }
+  .wf-phase--phase2 .wf-inline-reel .wf-sat.wf-focus__card .wf-geoint-confirm {
+    height: auto;
+    min-height: 420px;
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .wf-phase--phase2 .wf-inline-reel .wf-sat.wf-focus__card .wf-geoint-confirm {
+    min-height: 320px;
+  }
+  .wf-geoint-confirm__coords { font-size: 16px; }
+  .wf-geoint-confirm__place { font-size: 13px; }
+  .wf-geoint-confirm__sub { font-size: 11px; }
+}
+
+.wf-phase--phase2 .wf-inline-reel .wf-sat.wf-focus__card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.wf-phase--phase2 .wf-inline-reel .wf-sat.wf-focus__card .wf-case__visual--geoint {
+  flex: 0 0 auto;
+  width: calc(100% - 24px);
+  height: 400px;
+  min-height: 400px;
+  max-height: 400px;
+  margin: 12px 12px 0;
+  aspect-ratio: auto;
+}
+.wf-phase--phase2 .wf-inline-reel .wf-case__info {
+  flex-shrink: 0;
+}
+.wf-phase--phase2 .wf-inline-reel .wf-sat.wf-focus__card .wf-case__visual--geoint .wf-case__photo--geoint {
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .wf-phase--phase2 .wf-inline-reel .wf-sat.wf-focus__card .wf-case__visual--geoint {
+    height: 260px;
+    min-height: 260px;
+    max-height: 260px;
+  }
+}
+
 .wf-case__visual--nigran-dash {
   background: linear-gradient(165deg, #edf1e8 0%, #e2e8d8 55%, #d5dcc8 100%);
   border: 1px solid rgba(26, 58, 42, 0.18);
@@ -1172,7 +1433,38 @@
 .wf-stat3d__note { font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 500; font-style: italic; color: var(--text-light, #6a7a6f); text-align: center; }
 
 /* ===== OFFENSIVE HACKING (NOX) - one-tap backdoor ===== */
-.wf-case__visual--attack { background: radial-gradient(circle at 50% 40%, #2a1414 0%, #120708 82%) !important; border-color: #3a1e1e; }
+.wf-case__visual--attack {
+  background: radial-gradient(circle at 50% 40%, #2a1414 0%, #120708 82%) !important;
+  border-color: #3a1e1e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wf-case__photo--attack {
+  object-fit: contain;
+  object-position: center;
+  image-rendering: auto;
+  filter: none;
+  background: transparent;
+  padding: 8px;
+  box-sizing: border-box;
+}
+.wf-phase--noxphase .wf-inline-reel .wf-sat.wf-focus__card .wf-case__visual--attack,
+.wf-inline-reel .wf-sat.wf-focus__card .wf-case__visual--attack {
+  flex: 0 0 auto;
+  width: calc(100% - 24px);
+  height: 400px;
+  min-height: 400px;
+  max-height: 400px;
+  margin: 12px 12px 0;
+}
+@media (max-width: 768px) {
+  .wf-inline-reel .wf-sat.wf-focus__card .wf-case__visual--attack {
+    height: 260px;
+    min-height: 260px;
+    max-height: 260px;
+  }
+}
 
 .wf-case__badge--red { background: rgba(178, 45, 45, 0.85); border: 1px solid rgba(224, 87, 74, 0.6); }
 .wf-case__visual--attack .wf-case__rec { color: #ffe6e2; background: rgba(178, 45, 45, 0.35); border: 1px solid rgba(224, 87, 74, 0.6); }
