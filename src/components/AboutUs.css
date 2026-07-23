@@ -1372,3 +1372,21 @@
     padding: 16px 20px;
   }
 }
+
+@media (max-width: 420px) {
+  .about__teams {
+    grid-template-columns: 1fr;
+  }
+
+  .about__stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about__title {
+    font-size: clamp(24px, 8vw, 34px);
+  }
+
+  .about__subtitle {
+    font-size: clamp(18px, 5.5vw, 26px);
+  }
+}

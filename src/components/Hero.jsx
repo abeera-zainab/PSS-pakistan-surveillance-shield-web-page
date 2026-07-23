@@ -18,9 +18,36 @@ const useTypewriter = (text, delay = 60, startDelay = 0) => {
 // Keys out a solid near-black or near-white logo background into transparency
 // at runtime, so the logo merges cleanly with the card's background image.
 const logoCache = {}
+
+const processLogo = (src, bg) => new Promise((resolve) => {
+  const img = new Image()
+  img.decoding = 'async'
+  img.onload = () => {
+    try {
+      const c = document.createElement('canvas')
+      c.width = img.naturalWidth
+      c.height = img.naturalHeight
+      const ctx = c.getContext('2d', { willReadFrequently: true })
+      ctx.drawImage(img, 0, 0)
+      const data = ctx.getImageData(0, 0, c.width, c.height)
+      const p = data.data
+      for (let i = 0; i < p.length; i += 4) {
+        const L = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2]
+        const t = bg === 'light' ? (231 - L) / 66 : (L - 18) / 40
+        p[i + 3] *= Math.max(0, Math.min(1, t))
+      }
+      ctx.putImageData(data, 0, 0)
+      resolve(c.toDataURL('image/png'))
+    } catch {
+      resolve(src)
+    }
+  }
+  img.onerror = () => resolve(src)
+  img.src = src
+})
+
 const ProjectLogo = ({ src, bg = 'dark', alt, className, raw = false }) => {
   const cacheKey = `${src}|${bg}`
-  // Always start with a visible source so cards never flash empty while processing.
   const [url, setUrl] = useState(() => (raw ? src : (logoCache[cacheKey] || src)))
 
   useEffect(() => {
@@ -34,39 +61,28 @@ const ProjectLogo = ({ src, bg = 'dark', alt, className, raw = false }) => {
     }
 
     let cancelled = false
-    const img = new Image()
-    img.decoding = 'async'
-    img.src = src
-    img.onload = () => {
-      try {
-        const c = document.createElement('canvas')
-        c.width = img.naturalWidth
-        c.height = img.naturalHeight
-        const ctx = c.getContext('2d', { willReadFrequently: true })
-        ctx.drawImage(img, 0, 0)
-        const data = ctx.getImageData(0, 0, c.width, c.height)
-        const p = data.data
-        for (let i = 0; i < p.length; i += 4) {
-          const L = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2]
-          // Soft alpha ramp keeps edges antialiased instead of hard-cut.
-          const t = bg === 'light' ? (231 - L) / 66 : (L - 18) / 40
-          p[i + 3] *= Math.max(0, Math.min(1, t))
-        }
-        ctx.putImageData(data, 0, 0)
-        const out = c.toDataURL('image/png')
-        logoCache[cacheKey] = out
-        if (!cancelled) setUrl(out)
-      } catch {
-        if (!cancelled) setUrl(src)
-      }
-    }
-    img.onerror = () => {
-      if (!cancelled) setUrl(src)
-    }
+    processLogo(src, bg).then((out) => {
+      logoCache[cacheKey] = out
+      if (cancelled || out === src) return
+      // Decode before swap to avoid one-frame flicker.
+      const ready = new Image()
+      ready.onload = () => { if (!cancelled) setUrl(out) }
+      ready.onerror = () => { if (!cancelled) setUrl(out) }
+      ready.src = out
+    })
     return () => { cancelled = true }
   }, [src, bg, raw, cacheKey])
 
-  return <img src={url || src} alt={alt} className={className} draggable={false} />
+  return (
+    <img
+      src={url}
+      alt={alt}
+      className={className}
+      draggable={false}
+      decoding="async"
+      loading="eager"
+    />
+  )
 }
 
 // Each capability panel maps to a live app (opened on click at the current host + port).
@@ -146,6 +162,18 @@ const projectCards = [
     desc: 'AI governance, data protection, prompt security, and adversarial testing for safe AI use.',
   },
 ]
+
+// Warm logo cache once so carousel clones don't re-key and flicker.
+if (typeof window !== 'undefined') {
+  projectCards.forEach((card) => {
+    if (!card.logo || card.logoRaw) return
+    const key = `${card.logo}|${card.logoBg === 'light' ? 'light' : 'dark'}`
+    if (logoCache[key]) return
+    processLogo(card.logo, card.logoBg === 'light' ? 'light' : 'dark').then((out) => {
+      logoCache[key] = out
+    })
+  })
+}
 
 // Artistic, theme-matched emblem icons (forest-green + gold intelligence palette).
 const SV = { viewBox: '0 0 24 24', fill: 'none' }
@@ -254,7 +282,8 @@ const ICONS = {
 
 const APP_URL = (port) => `${window.location.protocol}//${window.location.hostname}:${port}`
 
-const CENTER = Math.floor(projectCards.length / 2)
+// PSS is always the visual centre for assemble / stack / spread.
+const CENTER = Math.max(0, projectCards.findIndex((c) => c.isPss))
 const SLIDE_SPEED = 0.22
 const CARD_GAP = 56
 
@@ -269,7 +298,7 @@ const Hero = () => {
 
   // hidden → assembling → stacked → spreading → dissolving → sliding
   const [phase, setPhase] = useState('hidden')
-  const [cardH, setCardH] = useState(300)
+  const [cardH, setCardH] = useState(420)
 
   const wrapRef = useRef(null)
   const cardRefs = useRef([])
@@ -297,22 +326,36 @@ const Hero = () => {
     return () => timers.forEach(clearTimeout)
   }, [line1.done])
 
+  // Tall cards: fill available vertical space in the cards section (no aspect-ratio).
   useEffect(() => {
     const measure = () => {
-      // Measure the real space the cards section gets; the 36px buffer keeps
-      // hover lift/tilt from ever clipping at the section edges.
       const section = wrapRef.current ? wrapRef.current.parentElement : null
       const available = section
-        ? section.offsetHeight - 32
-        : window.innerHeight - 64 - 250
-      // Cap scales with display: larger LED walls need taller cards.
+        ? section.offsetHeight - 28
+        : window.innerHeight - 64 - 220
       const w = window.innerWidth
-      const maxH = w >= 3840 ? 800 : w >= 2560 ? 680 : w >= 1920 ? 580 : w >= 1600 ? 520 : 480
-      setCardH(Math.max(220, Math.min(maxH, available)))
+      const h = window.visualViewport?.height ?? window.innerHeight
+      let maxH = 560
+      if (w >= 3840) maxH = 820
+      else if (w >= 2560) maxH = 700
+      else if (w >= 1920) maxH = 600
+      else if (w >= 1600) maxH = 540
+      else if (w <= 480) maxH = 380
+      else if (w <= 768) maxH = 440
+      if (h <= 560) maxH = Math.min(maxH, Math.max(200, h - 100))
+      else if (h <= 900 && w >= 900 && w > h) maxH = Math.min(maxH, Math.max(240, h - 160))
+      const minH = h <= 560 ? 200 : w <= 480 ? 280 : 340
+      setCardH(Math.max(minH, Math.min(maxH, available)))
     }
     measure()
     window.addEventListener('resize', measure)
-    return () => window.removeEventListener('resize', measure)
+    window.addEventListener('orientationchange', measure)
+    window.visualViewport?.addEventListener('resize', measure)
+    return () => {
+      window.removeEventListener('resize', measure)
+      window.removeEventListener('orientationchange', measure)
+      window.visualViewport?.removeEventListener('resize', measure)
+    }
   }, [line1.done])
 
   // Left / right scroll only - horizontal wheel, shift+wheel, or touch swipe
@@ -618,7 +661,9 @@ const Hero = () => {
                     <h3 className="hero__card-title">{card.title}</h3>
                     <span className="hero__card-subtitle">{card.subtitle}</span>
                     <p className="hero__card-desc">{card.desc}</p>
-                    {!isPss && (
+                    {isPss ? (
+                      <span className="hero__card-cta-spacer" aria-hidden="true" />
+                    ) : (
                       <button
                         className="hero__card-cta"
                         onClick={(e) => { e.stopPropagation(); openApp(card) }}

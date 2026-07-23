@@ -145,10 +145,8 @@
   position: absolute;
   inset: 1px;
   border-radius: 50%;
-  border: 1.5px dashed rgba(0, 200, 83, 0.4);
-  animation: ringRotateReverse 11s linear infinite;
+  border: 1px solid rgba(26, 58, 42, 0.14);
 }
-@keyframes ringRotateReverse { to { transform: rotate(-360deg); } }
 
 .header__logo-scan {
   position: absolute;
@@ -158,15 +156,7 @@
   z-index: 1;
 }
 
-.header__logo-scan::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, rgba(0, 200, 83, 0.32), rgba(0, 200, 83, 0.06) 55deg, transparent 90deg, transparent 360deg);
-  animation: logoRadar 2.8s linear infinite;
-}
-@keyframes logoRadar { to { transform: rotate(360deg); } }
+/* radar sweep removed — it flickered green; keep the logo clean */
 
 .header__logo-img {
   width: 48px;
@@ -183,36 +173,20 @@
   position: absolute;
   inset: -6px;
   border-radius: 50%;
-  border: 1px solid rgba(0, 200, 83, 0.25);
+  border: 1px solid rgba(26, 58, 42, 0.12);
   animation: logoPulse 3s ease-in-out infinite;
 }
 
 .header__logo-pulse--delayed {
   inset: -10px;
-  border-color: rgba(45, 90, 61, 0.12);
+  border-color: rgba(45, 90, 61, 0.08);
   animation-delay: 1.5s;
 }
 
-/* techy orbiting satellite dot */
-.header__logo-ring::after {
-  content: '';
-  position: absolute; top: -4px; left: 50%;
-  width: 5px; height: 5px; margin-left: -2.5px;
-  border-radius: 50%; background: #00c853;
-  box-shadow: 0 0 8px rgba(0, 200, 83, 0.9);
-  transform-origin: 2.5px 32px;   /* orbit the ring centre */
-  animation: logoOrbit 5.5s linear infinite;
-  z-index: 3;
-}
-@keyframes logoOrbit { to { transform: rotate(360deg); } }
-
-/* subtle glow + snappy hover response */
-.header__logo-ring { filter: drop-shadow(0 0 6px rgba(0, 200, 83, 0.12)); transition: filter 0.35s ease; }
-.header__logo-group:hover .header__logo-ring { filter: drop-shadow(0 0 12px rgba(0, 200, 83, 0.35)); }
-.header__logo-group:hover .header__logo-ring-outer { animation-duration: 3.5s; }
-.header__logo-group:hover .header__logo-ring-inner { animation-duration: 5s; }
-.header__logo-group:hover .header__logo-scan::after { animation-duration: 1.3s; }
-.header__logo-group:hover .header__logo-img { filter: drop-shadow(0 2px 12px rgba(0, 200, 83, 0.4)); }
+/* subtle, professional hover response — no green flicker */
+.header__logo-ring { transition: filter 0.35s ease; }
+.header__logo-group:hover .header__logo-ring-outer { animation-duration: 5s; }
+.header__logo-group:hover .header__logo-img { filter: drop-shadow(0 2px 10px rgba(26, 58, 42, 0.25)); }
 
 /* Brand */
 .header__brand {
@@ -532,8 +506,11 @@
 }
 
 @media (max-width: 768px) {
+  .header {
+    padding-top: max(8px, env(safe-area-inset-top, 0px));
+  }
   .header__container {
-    padding: 0 16px;
+    padding: 0 12px;
   }
   .header__brand-name {
     font-size: 15px;
@@ -549,10 +526,27 @@
   .header__nav {
     gap: 2px;
     padding: 3px;
+    max-width: 100%;
   }
   .header__nav-item {
     padding: 7px 12px;
     font-size: 11px;
     letter-spacing: 1px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header__nav {
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .header__nav::-webkit-scrollbar { display: none; }
+  .header__nav-item {
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    font-size: 10px;
   }
 }

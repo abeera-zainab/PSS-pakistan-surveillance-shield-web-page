@@ -1912,9 +1912,11 @@
 }
 
 @media (max-width: 480px) {
+  .workflow { padding: 48px 0 32px; }
   .workflow__title { font-size: 18px; letter-spacing: 3px; }
   .workflow__desc { font-size: 13px; letter-spacing: 1px; }
   .workflow__header { padding: 0 16px 30px; }
+  .workflow__timeline { width: calc(100% - 24px); }
   .wf-phase__header { gap: 10px; flex-wrap: wrap; }
   .wf-phase__num { font-size: 22px; min-width: 40px; }
   .wf-phase__title { font-size: 16px; }

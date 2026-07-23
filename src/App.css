@@ -1,7 +1,34 @@
 .app {
   min-height: 100vh;
   min-height: 100dvh;
+  min-height: 100svh;
   position: relative;
   width: 100%;
+  max-width: 100%;
   overflow-x: clip;
+}
+
+img,
+video,
+svg,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+section,
+.hero,
+.workflow,
+.about,
+.cases,
+.geo,
+.os {
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (max-width: 900px) {
+  .app {
+    overflow-x: hidden;
+  }
 }

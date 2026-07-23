@@ -51,8 +51,8 @@ html {
   .hero__cards-section--sliding .hero__card {
     margin-left: calc(clamp(250px, 15vw, 340px) / -2);
   }
-  .hero__card-icon { width: clamp(72px, 4.8vw, 96px); height: clamp(72px, 4.8vw, 96px); }
-  .hero__card-title { font-size: clamp(16px, 1.15vw, 21px); }
+  .hero__card-icon { width: clamp(56px, 26cqw, 96px); height: clamp(56px, 26cqw, 96px); }
+  .hero__card-title { font-size: clamp(14px, 5.5cqw, 21px); }
   .hero__card-subtitle { font-size: clamp(14px, 1vw, 18px); }
   .hero__card-desc { font-size: clamp(14px, 0.95vw, 17px); }
   .hero__card-cta { font-size: clamp(12px, 0.8vw, 14px); padding: 10px 20px; }
@@ -150,8 +150,8 @@ html {
       rotateY(0deg)
       scale(calc(1 - var(--slide-dist) * 0.017));
   }
-  .hero__card-icon { width: clamp(80px, 4.2vw, 108px); height: clamp(80px, 4.2vw, 108px); }
-  .hero__card-title { font-size: clamp(17px, 1.1vw, 22px); letter-spacing: 2px; }
+  .hero__card-icon { width: clamp(64px, 26cqw, 108px); height: clamp(64px, 26cqw, 108px); }
+  .hero__card-title { font-size: clamp(15px, 5.5cqw, 22px); letter-spacing: 2px; }
   .hero__card-subtitle { font-size: clamp(15px, 0.95vw, 19px); }
   .hero__card-desc { font-size: clamp(15px, 0.9vw, 18px); line-height: 1.55; }
   .hero__card-cta { font-size: 13px; padding: 11px 24px; }
@@ -257,8 +257,8 @@ html {
       rotateY(0deg)
       scale(calc(1 - var(--slide-dist) * 0.017));
   }
-  .hero__card-icon { width: clamp(92px, 3.8vw, 120px); height: clamp(92px, 3.8vw, 120px); }
-  .hero__card-title { font-size: clamp(18px, 1vw, 24px); }
+  .hero__card-icon { width: clamp(72px, 26cqw, 120px); height: clamp(72px, 26cqw, 120px); }
+  .hero__card-title { font-size: clamp(16px, 5.5cqw, 24px); }
   .hero__card-subtitle { font-size: clamp(16px, 0.85vw, 20px); }
   .hero__card-desc { font-size: clamp(16px, 0.8vw, 19px); }
   .hero__card-cta { font-size: 14px; padding: 13px 28px; }
@@ -347,8 +347,8 @@ html {
       rotateY(0deg)
       scale(calc(1 - var(--slide-dist) * 0.017));
   }
-  .hero__card-icon { width: clamp(110px, 3.2vw, 150px); height: clamp(110px, 3.2vw, 150px); }
-  .hero__card-title { font-size: clamp(22px, 0.95vw, 30px); }
+  .hero__card-icon { width: clamp(88px, 26cqw, 150px); height: clamp(88px, 26cqw, 150px); }
+  .hero__card-title { font-size: clamp(18px, 5.5cqw, 30px); }
   .hero__card-desc { font-size: clamp(18px, 0.75vw, 22px); }
   .hero__card-cta { font-size: 16px; padding: 15px 32px; }
 

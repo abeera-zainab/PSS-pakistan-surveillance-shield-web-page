@@ -5,7 +5,6 @@ import AboutUs from './components/AboutUs'
 import CasesSolved from './components/CasesSolved'
 import GeoIntReel from './components/GeoIntReel'
 import OsintReel from './components/OsintReel'
-import Footer from './components/Footer'
 import './App.css'
 
 function App() {
@@ -18,7 +17,6 @@ function App() {
       <CasesSolved />
       <GeoIntReel />
       <OsintReel />
-      <Footer />
     </div>
   )
 }

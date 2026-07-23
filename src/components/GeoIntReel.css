@@ -11,7 +11,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding: clamp(28px, 3.5vw, 48px) clamp(18px, 5vw, 80px);
+  padding: clamp(28px, 3.5vw, 48px) clamp(18px, 5vw, 80px) clamp(32px, 4vw, 56px);
   background:
     linear-gradient(
       180deg,
@@ -459,10 +459,22 @@
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
+  .geo__ledger { grid-template-columns: repeat(3, 1fr) auto; }
+  .geo__reel {
+    grid-template-columns: minmax(0, min(640px, 1fr)) minmax(160px, 200px);
+  }
+  .geo__stage,
+  .geo-stage__frame,
+  .geo__progress { max-width: 640px; }
+}
+@media (max-width: 900px) {
+  .geo {
+    padding: clamp(18px, 2.5vw, 28px) clamp(12px, 3vw, 24px) clamp(24px, 3vw, 36px);
+  }
   .geo__reel {
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 12px;
   }
   .geo__caption {
     justify-self: stretch;
@@ -470,18 +482,32 @@
     margin-top: 0;
     width: 100%;
   }
-  .geo-stage__frame { max-height: 240px; }
-  .geo-stage__img { max-height: 240px; }
+  .geo__stage,
+  .geo-stage__frame,
+  .geo__progress { max-width: 100%; }
+  .geo-stage__frame { max-height: 220px; }
+  .geo-stage__img { max-height: 220px; }
   .geo__ledger { grid-template-columns: repeat(3, 1fr); }
   .geo__ledger-seal {
-    grid-column: 1 / -1; writing-mode: horizontal-tb; padding: 10px; letter-spacing: 6px;
+    grid-column: 1 / -1; writing-mode: horizontal-tb; padding: 8px; letter-spacing: 5px;
   }
   .geo__thumbs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 640px) {
-  .geo__ledger { grid-template-columns: repeat(2, 1fr); }
-  .geo__thumbs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .geo__thumb-media { max-height: 64px; }
+  .geo__title { font-size: clamp(18px, 5.5vw, 26px); }
+  .geo__ledger { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .geo__metric { padding: 8px 10px; }
+  .geo__thumbs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .geo__thumb-media { max-height: 52px; }
+  .geo-stage__frame { max-height: 180px; }
+  .geo-stage__img { max-height: 180px; }
+}
+@media (max-width: 420px) {
+  .geo__ledger { grid-template-columns: 1fr 1fr; }
+  .geo__thumbs { grid-template-columns: 1fr 1fr; }
+  .geo-stage__frame { max-height: 150px; }
+  .geo-stage__img { max-height: 150px; }
+  .geo__metric-val { font-size: clamp(16px, 6vw, 22px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .geo__scan, .geo-stage__scan, .geo-stage__stamp, .geo__progress-fill.is-active { animation: none; }
